@@ -44,8 +44,8 @@ class Solution {
     public int trap(int[] height) {
         // l,r是将要计算雨水格数的索引
         int l = 1, r = height.length - 2, lmax = height[0], rmax = height[height.length - 1], res = 0;
-        //双指针启动
-        while (l < =r) {
+        // 双指针启动
+        while (l <= r) {
             if (lmax <= rmax) {// 此时真实的rmax必然大于等于这个rmax，即lmax必然比真实的rmax小
                 res += Math.max(0, lmax - height[l]);
                 lmax = Math.max(lmax, height[l]);
