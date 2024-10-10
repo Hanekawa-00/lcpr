@@ -15,6 +15,7 @@ class Solution {
         int r = height.length - 1;
         int res = 0;
         while (l < r) {
+            // 该题有短板效应
             int area = Math.min(height[l], height[r]) * (r - l);
             res = Math.max(area, res);
             if (height[l] < height[r]) {
