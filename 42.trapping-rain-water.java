@@ -49,7 +49,7 @@ class Solution {
             if (lmax <= rmax) {// 此时真实的rmax必然大于等于这个rmax，即lmax必然比真实的rmax小
                 res += Math.max(0, lmax - height[l]);
                 lmax = Math.max(lmax, height[l]);
-                l++;
+                l++;// l处已计算，故++
             } else {
                 res += Math.max(0, rmax - height[r]);
                 rmax = Math.max(rmax, height[r]);
