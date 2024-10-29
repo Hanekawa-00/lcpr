@@ -37,7 +37,6 @@ class Solution {
             }
         }
         return answer == Integer.MAX_VALUE ? 0 : answer;
-
     }
 }
 // @lc code=end
