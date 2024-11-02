@@ -36,14 +36,14 @@ class Solution {
             char c = s.charAt(i);
             hashMap.put(c, hashMap.getOrDefault(c, 0) + 1);
         }
-        // 记录欠款
+        // 记录需要去除的各个字符的个数
         int dept = 0;
         for (Character key : hashMap.keySet()) {
             if (hashMap.get(key) > s.length() / 4) {
                 dept += hashMap.get(key) - s.length() / 4;
                 hashMap.put(key, hashMap.get(key) - s.length() / 4);
             } else {
-                hashMap.put(key, 0);
+                hashMap.put(key, 0);// 题目只要求返回需要替换的字符串长度，所以只要记录需要替换的字符就可以，其他一律置零
             }
         }
 
@@ -57,15 +57,15 @@ class Solution {
         while (r < s.length()) {
             char current = s.charAt(r);
             if (hashMap.get(current) > 0) {// 说明这个字符是多余的（即这个字符的数量大于s.length() / 4）
-                dept--;
+                dept--;// dept--是因为将多余的字符包含在窗口中了（这个子串要被替换）
             }
-            hashMap.put(current, hashMap.get(current) - 1);
+            hashMap.put(current, hashMap.get(current) - 1);// 既然这个字符将要被替换，那么减少原记录
             r++;
-
-            while (dept == 0) {
+            // dept==0 说明已经找到了所有多余字符组成的窗口，但有可能不是最短
+            while (dept == 0) {// 自循,在这个情况下的窗口
                 ans = Math.min(ans, r - l);
                 char leftChar = s.charAt(l);
-                hashMap.put(leftChar, hashMap.get(leftChar) + 1);
+                hashMap.put(leftChar, hashMap.get(leftChar) + 1);//看第62行
                 if (hashMap.get(leftChar) > 0) {
                     dept++;
                 }
