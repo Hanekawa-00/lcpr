@@ -12,7 +12,7 @@
 class Solution {
 
     /**
-     * 重点：结合两数组，环形数组
+     * 重点：结合两数组，环形数组。
      * 
      * @param gas
      * @param cost
