@@ -21,6 +21,7 @@ class Solution {
      * 
      * 
      * 给你一个这样的字符串 s，请通过「替换一个子串」的方式，使原字符串 s 变成一个「平衡字符串」。
+     * tip:转化为最小覆盖子串（找出多余的字符组成的子串）
      * 
      * @param s
      * @return 请返回待替换子串的最小可能长度。
@@ -65,7 +66,7 @@ class Solution {
             while (dept == 0) {// 自循,在这个情况下的窗口
                 ans = Math.min(ans, r - l);
                 char leftChar = s.charAt(l);
-                hashMap.put(leftChar, hashMap.get(leftChar) + 1);//看第62行
+                hashMap.put(leftChar, hashMap.get(leftChar) + 1);// 看第62行
                 if (hashMap.get(leftChar) > 0) {
                     dept++;
                 }
