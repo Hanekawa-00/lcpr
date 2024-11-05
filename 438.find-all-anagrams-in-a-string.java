@@ -17,34 +17,32 @@ import java.util.List;
 
 class Solution {
     public List<Integer> findAnagrams(String s, String p) {
-        ArrayList<Integer> ans = new ArrayList<Integer>();
-        HashMap<Character, Integer> map = new HashMap<>();//用来维护目标数量
-        char[] charArray = p.toCharArray();
-        for (char ch : charArray) {//初始化
-            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        List<Integer> ans = new ArrayList<>();
+        if (s.length() < p.length()) return ans;
+
+        int[] map = new int[26];
+        for (char ch : p.toCharArray()) {
+            map[ch - 'a']++;
         }
-        int dept = p.length();//记录子串个数
-        int l = 0;
-        for (int r = 0; r < s.length(); r++) {
-            char c = s.charAt(r);
-            if (map.containsKey(c)) {
-                map.put(c, map.get(c) - 1);
-                if (map.get(c) >= 0) {//说明需求并未达到
-                    dept--;
-                }
+
+        int left = 0, right = 0, count = p.length();
+        while (right < s.length()) {
+            if (map[s.charAt(right) - 'a'] > 0) {
+                count--;
             }
-            while (dept == 0) {
-                if (r - l + 1 == p.length()) {
-                    ans.add(l);
+            map[s.charAt(right) - 'a']--;
+            right++;
+
+            if (count == 0) {
+                ans.add(left);
+            }
+
+            if (right - left == p.length()) {
+                if (map[s.charAt(left) - 'a'] >= 0) {
+                    count++;
                 }
-                char leftChar = s.charAt(l);
-                if (map.containsKey(leftChar)) {
-                    map.put(leftChar, map.get(leftChar) + 1);
-                    if (map.get(leftChar) > 0) {
-                        dept++;
-                    }
-                }
-                l++;
+                map[s.charAt(left) - 'a']++;
+                left++;
             }
         }
         return ans;
