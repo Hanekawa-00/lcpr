@@ -11,14 +11,13 @@
 // @lc code=start
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
 
 class Solution {
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> ans = new ArrayList<>();
-        if (s.length() < p.length()) return ans;
+        if (s.length() < p.length())
+            return ans;
 
         int[] map = new int[26];
         for (char ch : p.toCharArray()) {
@@ -48,9 +47,7 @@ class Solution {
         return ans;
     }
 
-   
 }
-
 
 // @lc code=end
 
