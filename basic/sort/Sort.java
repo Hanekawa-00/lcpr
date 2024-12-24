@@ -25,6 +25,20 @@ public class Sort {
         }
     }
 
+    private static void selectionSort(int[] nums) {
+        int length = nums.length;
+        for (int i = 0; i < length - 1; i++) {
+            // k是区间内最小元素索引
+            int k = i;
+            for (int j = i + 1; j < length; j++) {
+                if (nums[j] < nums[k]) {
+                    k = j;// 更新索引
+                }
+            }
+            swap(nums, i, k);//将最小元素和区间最左元素交换
+        }
+    }
+
     /**
      * 交换
      * 
