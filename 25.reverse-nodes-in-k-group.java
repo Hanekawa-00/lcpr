@@ -24,49 +24,38 @@ class Solution {
         if (k == 1 || head == null) {
             return head;
         }
-        // 创建头节点
         ListNode dummy = new ListNode();
         dummy.next = head;
-        // 前置节点
         ListNode prev = dummy;
-        ListNode curr = head;
+
+        // 计算链表长度
         int count = 0;
+        ListNode curr = head;
         while (curr != null) {
             count++;
             curr = curr.next;
         }
-        // 此时curr指向最后一个节点
+
+        // K个一组反转
         while (count >= k) {
-            curr = prev.next;
-            // 此时curr指向head
-            ListNode next = curr.next;
-            // 反转链表
+            curr = prev.next; // 当前组的第一个节点
+            ListNode tail = curr; // 保存当前组反转后的尾节点
+            ListNode next = curr.next; // 
+
+            // 反转k-1次
             for (int i = 1; i < k; i++) {
                 curr.next = next.next;
                 next.next = prev.next;
                 prev.next = next;
                 next = curr.next;
             }
-            // 更新
-            prev = curr;
+
+            // 更新指针
+            prev = tail; // 移动到下一组的前置节点
             count -= k;
         }
         return dummy.next;
     }
-
-    // 反转链表
-    // ate ListNode reverseList(ListNode head) {
-    // ListNode prev = null;
-    // ListNode curr = head;
-
-    // e (curr != null) {
-    // ListNode next = curr.next; // 保存下一个节点
-    // curr.next = prev; // 反转当前节点指针
-    // prev = curr; // 移动prev指针
-    // curr = next; // 移动curr指针
-    // }
-    // return prev;
-    // }
 }
 // @lc code=end
 
