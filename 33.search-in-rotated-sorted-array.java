@@ -10,8 +10,6 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.Arrays;
-
 class Solution {
     public int search(int[] nums, int target) {
         int n = nums.length;
@@ -22,21 +20,29 @@ class Solution {
             return nums[0] == target ? 0 : -1;
         }
         int l = 0, r = n - 1;
+        // 使用循环进行二分，每次缩小区间
+        // 根据有序的部分来判断目标值是否在有序的那部分里。如果在，就缩小搜索范围到有序的那部分；否则，就去另一部分继续搜索。(相当于在子数组中继续进行查找)
         while (l <= r) {
             int mid = (l + r) / 2;
             if (nums[mid] == target) {
                 return mid;
             }
+            // 二分数组，总有一边的区间是有序区间
+            // 如果[0,mid]（左半部分）是有序区间
             if (nums[0] <= nums[mid]) {
                 if (nums[0] <= target && target < nums[mid]) {
+                    // target在有序区间[0,mid]内
                     r = mid - 1;
                 } else {
+                    // target在区间[mid,n-1]内
                     l = mid + 1;
                 }
-            } else {
+            } else {// 如果[mid,n-1]（右半部分）是有序区间
                 if (nums[mid] < target && target <= nums[n - 1]) {
+                    // 如果target在有序区间[mid,n-1]内，l右移缩小区间
                     l = mid + 1;
                 } else {
+                    // 如果target在区间[0,mid]
                     r = mid - 1;
                 }
             }
