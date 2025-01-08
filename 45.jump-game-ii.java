@@ -25,12 +25,14 @@ class Solution {
         if (nums.length == 1) {
             return 0;
         }
-        if (nums.length == 2 || nums[0] >= nums.length-1) {
+        if (nums.length == 2 || nums[0] >= nums.length - 1) {
             return 1;
         }
         int jumps = 0; // 记录最小跳跃次数
         int currentEnd = 0; // 当前跳跃能到达的最远位置
         int farthest = 0; // 下一次跳跃能到达的最远位置
+        // 在循环中一直更新当前能够到达最远的索引边界，因为是不断更新的，
+        // 如果达到这个边界说明一定就是按照最优解来进行跳跃的
         for (int i = 0; i < nums.length; i++) {
             // 更新当前能到达的最远位置
             farthest = Math.max(farthest, i + nums[i]);
