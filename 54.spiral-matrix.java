@@ -5,9 +5,12 @@
  * [54] 螺旋矩阵
  */
 
+<<<<<<< HEAD
 // @lcpr-template-start
 
 // @lcpr-template-end
+=======
+>>>>>>> 9a8679c (螺旋矩阵)
 // @lc code=start
 
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.List;
 
 class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
+<<<<<<< HEAD
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
             return new ArrayList<Integer>();
         }
@@ -50,6 +54,24 @@ class Solution {
             right--;
             top++;
             bottom--;
+=======
+        int length = matrix[0].length;
+        int width = matrix.length;
+        List<Integer> res = new ArrayList<Integer>();
+        for (int i = 0; i < length / 2; i++) {
+            for (int j = i; j < length - 2 * i; j++) {
+                res.add(matrix[i][j]);
+            }
+            for (int j = i + 1; j < width - 2 * i; j++) {
+                res.add(matrix[j][length - 1 - i]);
+            }
+            for (int j = length - 2 * i; j >= i; j--) {
+                res.add(matrix[width - 1 - i][j]);
+            }
+            for (int j = width - 2 * i; j >= i + 1; j--) {
+                res.add(matrix[j - 1][i]);
+            }
+>>>>>>> 9a8679c (螺旋矩阵)
         }
         return res;
     }
