@@ -11,25 +11,26 @@
 // @lc code=start
 class Solution {
     public int uniquePaths(int m, int n) {
-        // TODO 
+        // dp用来维护这个矩阵中每个位置的路径条数
         int[][] dp = new int[m][n];
-        
-        // 初始化第一行和第一列
+
+        // 初始化第一行和第一列,即第一行和第一列每个位置都只有1中走法
         for (int i = 0; i < m; i++) {
             dp[i][0] = 1;
         }
         for (int j = 0; j < n; j++) {
             dp[0][j] = 1;
         }
-        
+
         // 填充dp数组
         for (int i = 1; i < m; i++) {
             for (int j = 1; j < n; j++) {
-                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+                // 我们可以根据数学规律得知，每个位置的路径条数是该坐标位置上面和左面的坐标路径之和
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
             }
         }
-        
-        return dp[m-1][n-1];
+
+        return dp[m - 1][n - 1];
     }
 }
 // @lc code=end
