@@ -9,6 +9,8 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+
 class Solution {
     public int minPathSum(int[][] grid) {
         int m = grid.length;
@@ -30,7 +32,9 @@ class Solution {
         for (int i = 1; i < m; i++) {
             for (int j = 1; j < n; j++) {
                 // 每个节点的最短路径根据该节点上面的和左面的节点的最小路径计算而得（上一个节点的最小路径）
-                dp[i][j] = (dp[i - 1][j] > dp[i][j - 1] ? dp[i][j - 1] : dp[i - 1][j]) + grid[i][j];
+                // dp[i][j] = (dp[i - 1][j] > dp[i][j - 1] ? dp[i][j - 1] : dp[i - 1][j]) +
+                // grid[i][j];
+                dp[i][j] = Math.min(dp[i][j - 1], dp[i - 1][j]) + grid[i][j];
             }
         }
         return dp[m - 1][n - 1];
