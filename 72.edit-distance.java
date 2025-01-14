@@ -29,12 +29,14 @@ class Solution {
                 // 如果word1的第i个字符和word2的第j个字符相同
                 if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
                     // 不需要操作
+                    // 为什么是(i - 1)和(j - 1)？因为word1的前i-1个字符变为word2的前j-1个字符的编辑距离已经计算
+                    // 而第i个字符和第j个字符相同，所以不需要操作
                     dp[i][j] = dp[i - 1][j - 1];
                 } else {
                     // 否则，取三种操作的最小值，+1是因为需要操作一次
-                    // dp[i - 1][j - 1]：替换
-                    // dp[i - 1][j]：删除
-                    // dp[i][j - 1]：插入
+                    // dp[i - 1][j - 1]+1：替换（word1的第i个字符替换为word2的第j个字符）
+                    // dp[i - 1][j]+1：删除
+                    // dp[i][j - 1]+1：插入
                     dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + 1;
                 }
             }
