@@ -11,33 +11,28 @@
 // @lc code=start
 
 import java.util.HashSet;
+import java.util.Set;
 
 class Solution {
     public int longestConsecutive(int[] nums) {
-        HashSet<Integer> set = new HashSet<>();
+        if (nums.length == 0 || nums.length == 1) {
+            return nums.length;
+        }
+        Set<Integer> set = new HashSet<Integer>();
         for (int i = 0; i < nums.length; i++) {
             set.add(nums[i]);
         }
-        // Arrays.sort(nums);
-        // for (int i = 0; i < nums.length; i++) {
-        // if (set.contains(nums[i] + 1)) {
-        // ArrayList<Object> list = new ArrayList<>();
-        // list.add(nums[i]);
-        // for (int j = 1; j < nums.length; j++) {
-
-        // }
-        // }
-        // }
-        int count = 0;
-        int res = 0;
-        for (Integer n : set) {
-            if (!set.contains(n - 1)) {
-                count = 1;
-                while (set.contains(n + 1)) {
+        int res = 1;
+        int count = 1;
+        for (Integer item : set) {
+            // 如果不含有前一个元素，说明这是这个序列中最小的一个元素，如果不做判断的话会有很多多余的遍历
+            if (!set.contains(item - 1)) {
+                while (set.contains(item + 1)) {
                     count++;
-                    n += 1;
+                    res = Math.max(res, count);
+                    item++;
                 }
-                res = Math.max(count, res);
+                count = 1;
             }
         }
         return res;
