@@ -20,7 +20,6 @@ class Solution {
         dfs(s, 0, n, res, new ArrayList<String>());
         return res;
     }
-
     /**
      * 判断[left,right]区间内的子串是否为回文字符串
      * 
