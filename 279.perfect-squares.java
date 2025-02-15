@@ -22,6 +22,7 @@ class Solution {
             // 一个一个进行尝试
             for (int j = 1; j * j <= i; j++) {
                 // 这里的dp[i - j * j]肯定比i小，所以成立
+                // 与上一个值作对比，取小的
                 dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
             }
         }
