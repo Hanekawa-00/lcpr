@@ -37,6 +37,7 @@ class Solution {
         if (node == null) {
             return 0;
         }
+        
         int L = dep(node.left);
         int R = dep(node.right);
         ans = Math.max(ans, L + R + 1);
