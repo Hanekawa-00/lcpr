@@ -42,7 +42,9 @@ class Solution {
         }
         // 中序遍历
         dfs(root);
+        // head当前为第一个节点
         head.left = prev;
+        // 此时prev已经到最后一个节点了
         prev.right = head;
         return head;
     }
