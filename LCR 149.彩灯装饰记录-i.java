@@ -41,10 +41,12 @@ class Solution {
                 add(root);
             }
         };
+        // 层序遍历
         List<Integer> resList = new ArrayList<>();
         while (!queue.isEmpty()) {
             TreeNode node = queue.poll();
             resList.add(node.val);
+            // 左右节点入队
             if (node.left != null) {
                 queue.add(node.left);
             }
