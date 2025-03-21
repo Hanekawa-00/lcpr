@@ -33,14 +33,14 @@ class Solution {
                 }
             }
         }
-         // 计算概率
-         double totalCases = Math.pow(6, num); // 总的可能情况数
-         double[] probabilities = new double[5 * num + 1]; // 概率数组长度为 5*num + 1
-         for (int j = num; j <= 6 * num; j++) {
-             probabilities[j - num] = dp[num][j] / totalCases;
-         }
- 
-         return probabilities;
+        // 计算概率,每个骰子有 6 种可能的结果（1, 2, 3, 4, 5, 6）。num 个骰子相互独立，因此总的可能性是每个骰子可能性的乘积。
+        double totalCases = Math.pow(6, num); // 总的可能情况数
+        double[] probabilities = new double[5 * num + 1]; // 概率数组长度为 6 * num - num + 1 = 5 * num + 1
+        for (int j = num; j <= 6 * num; j++) {
+            probabilities[j - num] = dp[num][j] / totalCases;
+        }
+
+        return probabilities;
     }
 }
 // @lc code=end
