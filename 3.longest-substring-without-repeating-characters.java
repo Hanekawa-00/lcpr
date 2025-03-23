@@ -10,29 +10,33 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.Arrays;
 
 class Solution {
     /**
-     * @see https://flowus.cn/hanekawa/f12b06b1-4611-443a-bb1c-3a52302b69d4
      * @param s
      * @return
      */
     public int lengthOfLongestSubstring(String s) {
-        // 最多又可能有256个字符 0——255
-        int[] lastIndex = new int[256];
-        // 初始化每个字符的索引为-1
-        Arrays.fill(lastIndex, -1);
-        int ans = 0;
-        for (int l = 0, r = 0; r < s.length(); r++) {
-            // 3. l向右移(对应字符靠r的移动来维护，如果在r的移动过程中中含有重复字符，则l要跳到重复字符的后面)
-            l = Math.max(l, lastIndex[s.charAt(r)] + 1);
-            // 1.
-            ans = Math.max(ans, r - l + 1);
-            // 2.记录上一次字符出现的位置
-            lastIndex[s.charAt(r)] = r;
+        // 哈希集合，记录每个字符是否出现过
+        Set<Character> charSet = new HashSet<>();
+        // 左指针
+        int left = 0;
+        // 最长无重复字符子串的长度
+        int maxLength = 0;
+        // 右指针
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            // 如果字符已经出现过，则移动左指针，直到窗口中不再包含重复字符（这个窗口已经不能移动了，所以要创建新窗口）
+            while (charSet.contains(c)) {
+                charSet.remove(s.charAt(left));
+                left++;
+            }
+            // 将当前字符加入哈希集合
+            charSet.add(c);
+            // 更新最长无重复字符子串的长度
+            maxLength = Math.max(maxLength, right - left + 1);
         }
-        return ans;
+        return maxLength;
     }
 }
 // @lc code=end
