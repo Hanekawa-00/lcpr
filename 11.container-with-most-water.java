@@ -11,20 +11,20 @@
 // @lc code=start
 class Solution {
     public int maxArea(int[] height) {
-        int l = 0;
-        int r = height.length - 1;
-        int res = 0;
-        while (l < r) {
-            // 该题有短板效应
-            int area = Math.min(height[l], height[r]) * (r - l);
-            res = Math.max(area, res);
-            if (height[l] < height[r]) {
-                l++;
+        int left = 0;
+        int right = height.length - 1;
+        int maxArea = 0;
+        while (left < right) {
+            int width = right - left;
+            int heighth = Math.min(height[left], height[right]);
+            maxArea = Math.max(maxArea, width * heighth);
+            if (height[left] < height[right]) {
+                left++;
             } else {
-                r--;
+                right--;
             }
         }
-        return res;
+        return maxArea;
     }
 }
 // @lc code=end
