@@ -5,19 +5,25 @@
  * [1] 两数之和
  */
 
+// @lcpr-template-start
+
+// @lcpr-template-end
 // @lc code=start
 
 import java.util.HashMap;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-        HashMap<Integer, Integer> map = new HashMap<>();
+        int[] ans = new int[2];
+        HashMap<Integer, Integer> cacheMap = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            int diff = target - nums[i];
-            if (map.containsKey(diff)) {
-                return new int[] { i, map.get(diff) };
+            int newTarget = target - nums[i];
+            if (cacheMap.containsKey(newTarget)) {
+                ans[0] = i;
+                ans[1] = cacheMap.get(newTarget);
+                return ans;
             }
-            map.put(nums[i], i);
+            cacheMap.put(nums[i], i);
         }
         return null;
     }
