@@ -45,7 +45,7 @@ class Solution {
         // 创建哑结点
         ListNode dummyHead = new ListNode();
         ListNode curr = dummyHead;
-
+        // 其实就是把所有节点取出来顺便排序，即两步合成一步
         while (!minHeap.isEmpty()) {
             // 最优先（最小）出队
             ListNode smallestNode = minHeap.poll();
