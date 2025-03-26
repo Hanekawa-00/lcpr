@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
+    private List<String> result;
+
+    private int targetN;
+
     /**
      * 一共有n对括号（左右都为n）
      * 
@@ -21,43 +25,33 @@ class Solution {
      * @return
      */
     public List<String> generateParenthesis(int n) {
-        List<String> result = new ArrayList<>();
-        backtrack(result, "", n, n);
+        this.targetN = n;
+        this.result = new ArrayList<>();
+        backtrack(new StringBuilder(), 0, 0);
         return result;
     }
 
-    /**
-     * @param result 结果
-     * @param current 当前串
-     * @param left 缺少的左括号数
-     * @param right 缺少的右括号数
-     */
-    private void backtrack(List<String> result, String current, int left, int right) {
-        if (left == 0 && right == 0) {
-            result.add(current);
+    private void backtrack(StringBuilder str, int openCount, int closeCount) {
+        // 递归退出
+        if (openCount == targetN && closeCount == targetN) {
+            result.add(str.toString());
             return;
         }
-        if (left > 0) {
-            backtrack(result, current + "(", left - 1, right);
+        // 以下过程就相当于回溯的的过程
+        // 一共两个路径，在路径多的情况下，一般使用for循环加if判断
+        if (openCount < targetN) {
+            str.append('(');
+            backtrack(str, openCount + 1, closeCount);
+            str.deleteCharAt(str.length() - 1);
         }
-        if (right > left) {
-            backtrack(result, current + ")", left, right - 1);
+        // 闭括号数量要严格小于开括号数量
+        if (closeCount < openCount) {
+            str.append(')');
+            backtrack(str, openCount, closeCount + 1);
+            str.deleteCharAt(str.length() - 1);
         }
+        return;
     }
-//   决策树：
-//                                          ""(left=3,right=3)
-//                                          /
-//                                     "("(2,3) 
-//                                     /        \
-//                               "(("(1,3)      "()"(2,2)
-//                               /      \         /      \
-//                         "((("(0,3)  "(()"(1,2) "()("(1,2)  
-//                             |           /           \
-//                       "((())"(0,2)  "(()("(0,2)   "()(("(0,2)
-//                             |           |              |
-//                       "((()))"(0,1)  "(())()"(0,1)  "()(()"(0,1)
-//                             |           |              |
-//                       "((()))"(0,0)  "(()())"(0,0)  "()(())"(0,0)
 }
 // @lc code=end
 
