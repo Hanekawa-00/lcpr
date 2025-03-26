@@ -11,6 +11,7 @@
 // @lc code=start
 
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Definition for singly-linked list.
@@ -33,52 +34,28 @@ class Solution {
         if (lists == null || lists.length == 0) {
             return null;
         }
-        return merge(lists, 0, lists.length - 1);
-    }
+        // 创建最小堆（优先队列）,并且传入comparator
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((node1, node2) -> node1.val - node2.val);
+        // 将所有头节点加入最小堆
+        for (ListNode head : lists) {
+            if (head != null) {
+                minHeap.offer(head);
+            }
+        }
+        // 创建哑结点
+        ListNode dummyHead = new ListNode();
+        ListNode curr = dummyHead;
 
-    /**
-     * @param lists
-     * @param left
-     * @param right
-     * @return
-     */
-    private ListNode merge(ListNode[] lists, int left, int right) {
-        // 如果数组只有一个链表
-        if (left == right)
-            return lists[left];
-        // 错误调用
-        if (left > right)
-            return null;
-        // 取中点（中间的那个链表），目的是分割左右的两个链表数组
-        int mid = (right + left) / 2;
-        // 以下是对两个子数组merge
-        ListNode l1 = merge(lists, left, mid);
-        ListNode l2 = merge(lists, mid + 1, right);
-        // 合并两个链表后进行递归
-        return mergeTwoLists(l1, l2);
-    }
-
-    /**
-     * 为两个有序链表排序并合并
-     * 
-     * @param l1
-     * @param l2
-     * @return 合并后的链表的头节点
-     */
-    private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
+        while (!minHeap.isEmpty()) {
+            // 最优先（最小）出队
+            ListNode smallestNode = minHeap.poll();
+            curr.next = smallestNode;
+            curr = curr.next;
+            if (smallestNode.next != null) {
+                minHeap.offer(smallestNode.next);
+            }
         }
-        if (l2 == null) {
-            return l1;
-        }
-        if (l1.val < l2.val) {
-            l1.next = mergeTwoLists(l1.next, l2);
-            return l1;
-        } else {
-            l2.next = mergeTwoLists(l1, l2.next);
-            return l2;
-        }
+        return dummyHead.next;
     }
 }
 // @lc code=end
