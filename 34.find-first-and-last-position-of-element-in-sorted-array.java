@@ -9,41 +9,43 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+import java.util.Arrays;
+
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int[] index = {-1, -1};
-        if (nums.length == 0 || (nums.length == 1 && nums[0] != target)) {
-            return index;
-        }
-        if (nums.length == 1) {
-            index[0] = 0;
-            index[1] = 0;
-            return index;
-        }
-        int l = 0, r = nums.length - 1, first = -1, last = -1;
-        while (l <= r) {
-            int mid = nums[(r + l) / 2];
-            if (target == mid) {
-                int temp = (r + l) / 2;
-                while (temp <= nums.length - 1 && nums[temp] == target) {
-                    last = temp;
-                    temp += 1;
-                }
-                temp = (r + l) / 2;
-                while (temp >= 0 && nums[temp] == target) {
-                    first = temp;
-                    temp -= 1;
-                }
+        int[] ans = new int[2];
+        Arrays.fill(ans, -1);
+        int left = 0;
+        int right = nums.length - 1;
+        int index = -1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] == target) {
+                index = mid;
                 break;
-            } else if (target > mid) {
-                l = (r + l) / 2 + 1;
+            }
+            if (nums[mid] < target) {
+                left = mid + 1;
             } else {
-                r = (r + l) / 2 - 1;
+                right = mid - 1;
             }
         }
-        index[0] = first;
-        index[1] = last;
-        return index;
+        if (index == -1) {
+            return ans;
+        }
+        left = index;
+        right = index;
+        // 防止越界
+        while (left >= 0 && nums[left] == target) {
+            left--;
+        }
+        while (right < nums.length && nums[right] == target) {
+            right++;
+        }
+        ans[0] = left + 1;
+        ans[1] = right - 1;
+        return ans;
     }
 }
 // @lc code=end
