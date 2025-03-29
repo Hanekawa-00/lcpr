@@ -11,26 +11,20 @@
 // @lc code=start
 class Solution {
     public int searchInsert(int[] nums, int target) {
-        if (target <= nums[0]) {
-            return 0;
-        }
-        if (target > nums[nums.length - 1]) {
-            return nums.length;
-        }
-        int l = 0, r = nums.length - 1;
-        while (l < r) {
-            int midIndex = (l + r) / 2;
-            int mid = nums[midIndex];
-            if (mid == target) {
-                return midIndex;
-            } else if (mid < target) {
-                l = midIndex + 1;
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            if (nums[mid] < target) {
+                left = mid + 1;
             } else {
-                r = midIndex - 1;
+                right = mid - 1;
             }
         }
-        // 此时的l和r是相等的，因为在最后一次循环退出时l和r相等，这次的mid并未计算，也就是l和r的位置上的值并未和target进行比较 
-        return nums[l] >= target ? l : l + 1;
+        return left;
     }
 }
 // @lc code=end
