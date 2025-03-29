@@ -15,27 +15,27 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Solution {
+    List<List<Integer>> res;
+
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> res = new ArrayList<>();
-        List<Integer> path = new ArrayList<>();
-        // Arrays.sort(candidates); // 可选，排序以便剪枝
-        backtrack(res, path, candidates, target, 0);
+        res = new ArrayList<>();
+        backtrack(new ArrayList<>(), 0, candidates, target);
         return res;
     }
 
-    private void backtrack(List<List<Integer>> res, List<Integer> path, int[] candidates, int target, int startIndex) {
+    private void backtrack(List<Integer> path, int index, int[] candidates, int target) {
         if (target == 0) {
             res.add(new ArrayList<>(path));
             return;
         }
-        for (int i = startIndex; i < candidates.length; i++) {
-            if (candidates[i] > target) {
-                continue; // 可剪枝，当前元素大于目标值，直接跳过
-            }
-            path.add(candidates[i]); // 选择当前元素
-            // zhu'r
-            backtrack(res, path, candidates, target - candidates[i], i); // 递归，i 不变，允许重复选择
-            path.remove(path.size() - 1); // 取消选择，回溯
+        if (target < 0) {
+            return;
+        }
+        for (int i = index; i < candidates.length; i++) {
+            path.add(candidates[i]);
+            // 因为允许重复选择某个元素，所以传入i
+            backtrack(path, i, candidates, target - candidates[i]);
+            path.remove(path.size() - 1);
         }
     }
 }
