@@ -14,37 +14,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
+    private List<List<Integer>> res;
+
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        List<Integer> path = new ArrayList<>();
-        if (nums.length == 1) {
-            path.add(nums[0]);
-            res.add(path);
-            return res;
-        }
-        backtrack(nums, res, path);
+        res = new ArrayList<>();
+        backtrack(nums, new ArrayList<>());
         return res;
     }
 
-    /**
-     * @param nums 源数组
-     * @param res  最终结果集
-     * @param path 路径
-     */
-    private void backtrack(int[] nums, List<List<Integer>> res, List<Integer> path) {
-        if (path.size() == nums.length) {
+    private void backtrack(int[] nums, List<Integer> path) {
+        if (path.size() >= nums.length) {
             res.add(new ArrayList<>(path));
             return;
         }
         for (int i = 0; i < nums.length; i++) {
-            if (path.contains(nums[i])) {
+            if (path.contains(nums[i]))
                 continue;
-            }
             path.add(nums[i]);
-            backtrack(nums, res, path);
-            path.remove(path.size() - 1);// 退步，回溯，进入下一条路径
+            backtrack(nums, path);
+            path.remove(path.size() - 1);
         }
-        return;
     }
 }
 // @lc code=end
