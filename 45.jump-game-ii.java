@@ -25,30 +25,24 @@ class Solution {
         if (nums.length == 1) {
             return 0;
         }
-        if (nums.length == 2 || nums[0] >= nums.length - 1) {
+        // dp维护不同步数所能达到的最大距离
+        int[] dp = new int[nums.length];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        if (dp[1] >= nums.length - 1) {
             return 1;
         }
-        int jumps = 0; // 记录最小跳跃次数
-        int currentEnd = 0; // 当前跳跃能到达的最远位置
-        int farthest = 0; // 下一次跳跃能到达的最远位置
-        // 在循环中一直更新当前能够到达最远的索引边界，因为是不断更新的，
-        // 如果达到这个边界说明一定就是按照最优解来进行跳跃的
-        for (int i = 0; i < nums.length; i++) {
-            // 更新当前能到达的最远位置
-            farthest = Math.max(farthest, i + nums[i]);
-            // 如果到达当前跳跃的边界
-            if (i == currentEnd) {
-                // 必须进行一次跳跃
-                jumps++;
-                // 更新下一次跳跃的边界
-                currentEnd = farthest;
-                // 如果已经可以到达终点，提前结束
-                if (currentEnd >= nums.length - 1) {
-                    break;
-                }
+        for (int i = 2; i < dp.length; i++) {
+            int maxReach = 0; // maxReach维护在[dp[i-2],dp[i-1]]区间内所能达到的最远距离
+            for (int j = dp[i - 2]; j <= dp[i - 1]; j++) {
+                maxReach = Math.max(maxReach, j + nums[j]);
             }
+            if (maxReach >= nums.length - 1) {
+                return i;
+            }
+            dp[i] = maxReach;
         }
-        return jumps;
+        return -1;
     }
 }
 // @lc code=end
