@@ -17,19 +17,32 @@ import java.util.List;
 
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> res = new ArrayList<>();
+        if (strs.length == 1) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add(strs[0]);
+            res.add(list);
+            return res;
+        }
         HashMap<String, List<String>> map = new HashMap<>();
         for (String str : strs) {
-            char[] charArray = str.toCharArray();
-            Arrays.sort(charArray);
-            String sortKey = new String(charArray);
-            if (map.containsKey(sortKey)) {
-                map.get(sortKey).add(str);
+            char[] chars = str.toCharArray();
+            // 排序字符
+            Arrays.sort(chars);
+            String key = String.valueOf(chars);
+            // 使用hash进行分组
+            if (map.containsKey(key)) {
+                map.get(key).add(str);
             } else {
-                map.put(sortKey, new ArrayList<String>());// 这里重复put会覆盖原来的value值，故用if
-                map.get(sortKey).add(str);
+                ArrayList<String> list = new ArrayList<>();
+                list.add(str);
+                map.put(key, list);
             }
         }
-        return new ArrayList<>(map.values());
+        for (List<String> valueList : map.values()) {
+            res.add(valueList);
+        }
+        return res;
     }
 }
 // @lc code=end
