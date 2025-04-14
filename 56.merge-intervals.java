@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /*
@@ -15,37 +16,37 @@ import java.util.List;
 // @lc code=start
 class Solution {
     public int[][] merge(int[][] intervals) {
-        // 如果区间数量小于等于1，直接返回
-        if (intervals.length <= 1) {
-            return intervals;
+        // 边界条件：如果数组为空或 null，返回空数组
+        if (intervals == null || intervals.length == 0) {
+            return new int[0][];
         }
-        // 按区间起始点升序排序
+
+        // Step 1: 按起始点 start 升序排序
         Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
-        // 使用List存储结果，方便动态添加
+
+        // Step 2: 初始化结果列表
         List<int[]> result = new ArrayList<>();
-        // 初始化当前区间为第一个区间
+
+        // Step 3: 将第一个区间作为当前区间
         int[] currentInterval = intervals[0];
-        result.add(currentInterval);
-        // 遍历所有区间
-        for (int[] interval : intervals) {
-            // 当前区间的end
-            int currentEnd = currentInterval[1];
-            // 下一个区间的start
-            int nextStart = interval[0];
-            // 下一个区间的end
-            int nextEnd = interval[1];
-            // 如果当前区间与下一个区间有重叠
-            if (currentEnd >= nextStart) {
-                // 合并区间，取最大的结束点（当前区间的end有可能比下一个区间的end要大）
-                currentInterval[1] = Math.max(currentEnd, nextEnd);
+
+        // Step 4: 遍历剩余区间，合并重叠区间
+        for (int i = 1; i < intervals.length; i++) {
+            // 如果当前区间的 start 小于或等于 currentInterval 的 end，说明重叠
+            if (intervals[i][0] <= currentInterval[1]) {
+                // 更新 currentInterval 的 end 为两者的最大值
+                currentInterval[1] = Math.max(currentInterval[1], intervals[i][1]);
             } else {
-                // 没有重叠，将当前区间加入结果，并更新当前区间（假如选择的是数组，可以使用index来维护当前位置的元素）
-                currentInterval = interval;
+                // 不重叠，将 currentInterval 加入结果，并更新 currentInterval 为当前区间
                 result.add(currentInterval);
+                currentInterval = intervals[i];
             }
         }
 
-        // 将List转换为二维数组返回
+        // Step 5: 别忘了将最后一个 currentInterval 加入结果
+        result.add(currentInterval);
+
+        // Step 6: 将 List<int[]> 转换为 int[][]
         return result.toArray(new int[result.size()][]);
     }
 }
