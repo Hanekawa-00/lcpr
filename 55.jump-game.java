@@ -17,31 +17,26 @@ class Solution {
      * @return
      */
     public boolean canJump(int[] nums) {
-        // 维护当前能够到达的最远位置
-        int maxReach = 0;
-
-        // 遍历数组中的每个位置
-        for (int i = 0; i < nums.length; i++) {
-            // 如果当前位置已经超过了最远可达位置，说明无法到达
-            // 例如：nums = [3,2,1,0,4], i = 4时
-            // maxReach = 3 (从位置0最多跳到位置3)
-            // 但i = 4 > maxReach = 3，说明无法到达位置4
-            // 这个判断是必要的提前终止条件，虽然去掉后最终结果相同，
-            // 但会多执行一些不必要的循环
-            if (i > maxReach) {
-                return false;
+        if (nums.length == 1) {
+            return true;
+        }
+        // dp[i]用来维护跳跃i步数所能达到的最远距离
+        int[] dp = new int[nums.length];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        if (dp[1] >= nums.length - 1) {
+            return true;
+        }
+        for (int i = 2; i < dp.length; i++) {
+            int maxReach = dp[i - 1];
+            for (int j = dp[i - 2]; j <= dp[i - 1]; j++) {
+                maxReach = Math.max(maxReach, nums[j] + j);
             }
-
-            // 更新最远可达位置
-            maxReach = Math.max(maxReach, i + nums[i]);
-
-            // 如果最远可达位置已经超过或等于最后一个位置，返回true
             if (maxReach >= nums.length - 1) {
                 return true;
             }
+            dp[i] = maxReach;
         }
-
-        // 遍历结束后仍未到达最后一个位置，返回false
         return false;
     }
 }
