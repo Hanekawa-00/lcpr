@@ -5,15 +5,9 @@
  * [54] 螺旋矩阵
  */
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 // @lcpr-template-start
 
 // @lcpr-template-end
-=======
->>>>>>> 9a8679c (螺旋矩阵)
-=======
->>>>>>> 9a8679c (螺旋矩阵)
 // @lc code=start
 
 import java.util.ArrayList;
@@ -21,68 +15,48 @@ import java.util.List;
 
 class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
-            return new ArrayList<Integer>();
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return new ArrayList<>();
         }
-        int rows = matrix.length, cols = matrix[0].length;
-        List<Integer> res = new ArrayList<Integer>();
-
-        int left = 0, right = cols - 1, top = 0, bottom = rows - 1;
-
-        while (left <= right && top <= bottom) {
-            // 向右遍历（top行）
-            for (int col = left; col <= right; col++) {
-                res.add(matrix[top][col]);
+        // 初始化上下左右边界值
+        int top = 0;
+        int bottom = matrix.length - 1;
+        int left = 0;
+        int right = matrix[0].length - 1;
+        List<Integer> resList = new ArrayList<>();
+        // 螺旋遍历一直缩小边界，直至重合
+        while (top <= bottom && left <= right) {
+            // top行
+            for (int i = left; i <= right; i++) {
+                resList.add(matrix[top][i]);
             }
-
-            // 向下遍历（right列）
-            for (int row = top + 1; row <= bottom; row++) {
-                res.add(matrix[row][right]);
-            }
-            
-            // 当矩阵只剩一行或一列时，不需要进行向左和向上的遍历
-            if (left < right && top < bottom) {
-                // 向左遍历（bottom行）
-                for (int col = right - 1; col >= left; col--) {
-                    res.add(matrix[bottom][col]);
-                }
-                // 向上遍历（left列）
-                for (int row = bottom - 1; row > top; row--) {
-                    res.add(matrix[row][left]);
-                }
-            }
-
-            left++;
-            right--;
+            // 更新top
             top++;
-            bottom--;
-=======
-=======
->>>>>>> 9a8679c (螺旋矩阵)
-        int length = matrix[0].length;
-        int width = matrix.length;
-        List<Integer> res = new ArrayList<Integer>();
-        for (int i = 0; i < length / 2; i++) {
-            for (int j = i; j < length - 2 * i; j++) {
-                res.add(matrix[i][j]);
+            if (top <= bottom && left <= right) {// 这里的=很关键，top是刚刚更新的
+                // right列
+                for (int i = top; i <= bottom; i++) {// 因为这里top已经++了，所以直接从top开始
+                    resList.add(matrix[i][right]);
+                }
+                right--;
             }
-            for (int j = i + 1; j < width - 2 * i; j++) {
-                res.add(matrix[j][length - 1 - i]);
+            // 检查bottom行是否还有数字
+            if (top <= bottom && left <= right) {
+                // bottom行
+                for (int i = right; i >= left; i--) {
+                    resList.add(matrix[bottom][i]);
+                }
+                bottom--;
             }
-            for (int j = length - 2 * i; j >= i; j--) {
-                res.add(matrix[width - 1 - i][j]);
+            // 检查是left列是否还有数字
+            if (top <= bottom && left <= right) {
+                // left列
+                for (int i = bottom; i >= top; i--) {
+                    resList.add(matrix[i][left]);
+                }
+                left++;
             }
-            for (int j = width - 2 * i; j >= i + 1; j--) {
-                res.add(matrix[j - 1][i]);
-            }
-<<<<<<< HEAD
->>>>>>> 9a8679c (螺旋矩阵)
-=======
->>>>>>> 9a8679c (螺旋矩阵)
         }
-        return res;
+        return resList;
     }
 }
 // @lc code=end
