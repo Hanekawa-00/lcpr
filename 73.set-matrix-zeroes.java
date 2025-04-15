@@ -11,42 +11,54 @@
 // @lc code=start
 class Solution {
     public void setZeroes(int[][] matrix) {
-        if (matrix == null || matrix.length == 0) {
-            return;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        // 用来处理[0,0]这个特殊位置，到底是列置零还是行
+        boolean isFirstRowZero = false;
+        boolean isFirstColZero = false;
+        // 遍历第一列
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                isFirstColZero = true;
+            }
         }
-        
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-        
-        // 布尔数组记录需要置为0的行和列，达到去重记录的效果
-        boolean[] rowZero = new boolean[rows];
-        boolean[] colZero = new boolean[cols];
-        
-        // 遍历矩阵，记录包含0的行和列
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < n; i++) {
+            if (matrix[0][i] == 0) {
+                isFirstRowZero = true;
+            }
+        }
+        // 将第一行第一列作为标志位
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
                 if (matrix[i][j] == 0) {
-                    rowZero[i] = true;
-                    colZero[j] = true;
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
                 }
             }
         }
-        
-        // 根据记录设置行和列
-        // 设置行
-        for (int i = 0; i < rows; i++) {
-            if (rowZero[i]) {
-                for (int j = 0; j < cols; j++) {
+        // 开始置零
+        for (int i = 1; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                for (int j = 0; j < n; j++) {
                     matrix[i][j] = 0;
                 }
             }
         }
-        // 设置列
-        for (int j = 0; j < cols; j++) {
-            if (colZero[j]) {
-                for (int i = 0; i < rows; i++) {
-                    matrix[i][j] = 0;
+        for (int i = 1; i < n; i++) {
+            if (matrix[0][i] == 0) {
+                for (int j = 0; j < m; j++) {
+                    matrix[j][i] = 0;
                 }
+            }
+        }
+        if (isFirstColZero) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+        if (isFirstRowZero) {
+            for (int i = 0; i < n; i++) {
+                matrix[0][i] = 0;
             }
         }
     }
