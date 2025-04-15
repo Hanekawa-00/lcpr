@@ -10,31 +10,23 @@
 // @lcpr-template-end
 // @lc code=start
 
-
 class Solution {
     public int minPathSum(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        // 维护每一个节点的最小路径
+        int m = grid.length;// 行数
+        int n = grid[0].length; // 列数
+        // dp[i][j]表示到[i,j]位置的最小路径和
         int[][] dp = new int[m][n];
-        int sum = 0;
-        // 初始化 第一列和第一行
-        for (int i = 0; i < m; i++) {
-            sum = sum + grid[i][0];
-            dp[i][0] = sum;
+        dp[0][0] = grid[0][0];
+        // 初始化第一行第一列
+        for (int i = 1; i < n; i++) {
+            dp[0][i] = dp[0][i - 1] + grid[0][i];
         }
-        sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum = sum + grid[0][i];
-            dp[0][i] = sum;
+        for (int i = 1; i < m; i++) {
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
         }
-        // 逐行计算最短路径
         for (int i = 1; i < m; i++) {
             for (int j = 1; j < n; j++) {
-                // 每个节点的最短路径根据该节点上面的和左面的节点的最小路径计算而得（上一个节点的最小路径）
-                dp[i][j] = (dp[i - 1][j] > dp[i][j - 1] ? dp[i][j - 1] : dp[i - 1][j]) +
-                grid[i][j];
-                // dp[i][j] = Math.min(dp[i][j - 1], dp[i - 1][j]) + grid[i][j];
+                dp[i][j] = grid[i][j] + Math.min(dp[i - 1][j], dp[i][j - 1]);
             }
         }
         return dp[m - 1][n - 1];
