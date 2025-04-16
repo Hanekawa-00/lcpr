@@ -11,56 +11,26 @@
 // @lc code=start
 class Solution {
     public void sortColors(int[] nums) {
-        quickSort(nums, 0, nums.length - 1);
-    }
-
-    /**
-     * 快排
-     * 
-     * @param nums
-     * @param left
-     * @param right
-     */
-    private void quickSort(int[] nums, int left, int right) {
-        if (left >= right) {
-            return;
-        }
-        int pivot = partition(nums, left, right);
-        quickSort(nums, left, pivot - 1);
-        quickSort(nums, pivot + 1, right);
-    }
-
-    /**
-     * 分割数组，左边为小于基准数的数组，右边为大于基准数的数组
-     * 
-     * @param nums
-     * @param left
-     * @param right
-     * @return
-     */
-    private int partition(int[] nums, int left, int right) {
-        // 以nums[left]为基准数
-        int i = left, j = right;
-        // 分割
-        while (i < j) {
-            while (i < j && nums[j] >= nums[left]) {
-                j--;
+        int left = 0; // left的左边全是0
+        int index = 0;
+        int right = nums.length - 1; // right右边全是2
+        while (index <= right) {
+            if (nums[index] == 0) {
+                swap(nums, index, left++);
+                // 这里index为什么可以++？
+                index++; 
+            } else if (nums[index] == 2) {
+                swap(nums, index, right--);
+            } else {
+                index++;
             }
-            while (i < j && nums[i] <= nums[left]) {
-                i++;
-            }
-            // 找到第一个小于基准数和第一个大于基准数的元素
-            swap(nums, i, j);
         }
-        // 为什么可以交换这两个元素
-        swap(nums, left, i);
-        return i;
     }
 
-    private void swap(int[] nums, int i, int j) {
-        int tmp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = tmp;
+    private void swap(int[] nums, int index1, int index2) {
+        int temp = nums[index1];
+        nums[index1] = nums[index2];
+        nums[index2] = temp;
     }
 }
 // @lc code=end
