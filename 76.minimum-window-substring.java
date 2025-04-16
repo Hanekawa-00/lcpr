@@ -12,40 +12,57 @@
 
 class Solution {
     public String minWindow(String s, String t) {
-        // 如果字符串长度小于目标则直接返回空
-        if (s.length() < t.length()) {
+        if (s == null || t == null || s.length() == 0 || t.length() == 0 || s.length() < t.length()) {
             return "";
         }
-        // 用来记录所有字符的情况 ，若目标含有 n个，则设置为-n
-        int[] cnts = new int[256];
-        for (char ch : t.toCharArray()) {
-            cnts[ch]--;
+        int[] need = new int[128]; // 统计每个字符出现的次数
+        int[] window = new int[128];// 统计窗口中目标字符的数量
+        int tLen = t.length(); // 目标字符串长度
+        // 统计需求量
+        for (int i = 0; i < tLen; i++) {
+            need[t.charAt(i)]++;
         }
-        int len = Integer.MAX_VALUE;
-        int start = 0;// 因为是返回子串，所以记录子串起始位置
-        // debt为目标长度
-        for (int l = 0, r = 0, debt = t.length(); r < s.length(); r++) {
-            if (cnts[s.charAt(r)]++ < 0) {// 小于零就说明是目标中的字符串
-                debt--;
-            }
-            // 当包含全部目标时
-            if (debt == 0) {
-                // 大于0就说明是多于的，直接去掉（索引向右）
-                while (cnts[s.charAt(l)] > 0) {
-                    cnts[s.charAt(l++)]--;
-                }
-                // 计算len
-                if (r - l + 1 < len) {
-                    len = r - l + 1;
-                    start = l;
-                }
+        int needCnt = 0; // 记录需要字符的种类数量
+        for (int count : need) {
+            if (count > 0) {
+                needCnt++;
             }
         }
-        // 关于为什么一次性就能找到最小字串：因为r走过整个字符串，遍历了所有字符，并没有找到全部目标就返回
-        // 输入：s = "ADOBECODEBANC", t = "ABC"
-        // 输出："BANC"
-        // 解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。
-        return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
+        int left = 0; // 窗口左边界
+        int right = 0;
+        int vaildCount = 0; // 窗口中已经满足条件的字符种类数量
+        int sLen = s.length();
+        int minLen = Integer.MAX_VALUE;
+        int minStart = 0;
+        while (right < sLen) {
+            char charRight = s.charAt(right);
+            right++;
+            if (need[charRight] > 0) {
+                window[charRight]++; // 统计数加一
+                if (window[charRight] == need[charRight]) {
+                    vaildCount++;
+                }
+            }
+            // 尝试缩小窗口
+            while (vaildCount == needCnt) {
+                // 更新最小窗口参数
+                if (right - left < minLen) {
+                    minStart = left;
+                    minLen = right - left;
+                }
+                // 左指针右移
+                char charLeft = s.charAt(left);
+                left++;
+                // 如果是需要的字符，那么要更新vailCount和window[charLeft]
+                if (need[charLeft] > 0) {
+                    if (window[charLeft] == need[charLeft]) {
+                        vaildCount--;
+                    }
+                    window[charLeft]--;
+                }
+            }
+        }
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);
     }
 }
 // @lc code=end
