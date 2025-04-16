@@ -14,18 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
+    List<List<Integer>> res;
+
     public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        backtrack(new ArrayList<Integer>(), res, 0, nums);
-        return res;
+        this.res = new ArrayList<>();
+        backtrack(nums, new ArrayList<>(), 0);
+        return this.res;
     }
 
-    private void backtrack(List<Integer> path, List<List<Integer>> res, int startIndex, int[] nums) {
+    private void backtrack(int[] nums, List<Integer> path, int index) {
         res.add(new ArrayList<>(path));
-        for (int i = startIndex; i < nums.length; i++) {
+        for (int i = index; i < nums.length; i++) {
             path.add(nums[i]);
-            backtrack(path, res, i + 1, nums);
-            path.remove(path.size() - 1);
+            backtrack(nums, path, i + 1);
+            path.remove(path.size()-1);
         }
     }
 
