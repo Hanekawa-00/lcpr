@@ -9,6 +9,8 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -25,35 +27,29 @@
  * }
  */
 class Solution {
-    // 主方法，使用初始边界值开始BST验证
     public boolean isValidBST(TreeNode root) {
-        // 使用整个long值范围作为初始边界
-        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+        // 左右节点不仅有小于或者大于根节点的约束，还有二者都要在界限之间的约束（再上一层的根节点约束）
+        return validate(root, null, null);
     }
 
     /**
-     * 递归辅助方法，验证BST属性
-     * @param node 当前验证的节点
-     * @param lower 当前子树允许的最小值
-     * @param upper 当前子树允许的最大值
-     * @return 如果以'node'为根的子树是有效的BST则返回true
+     * @param node
+     * @param lower 下界
+     * @param upper 上界
+     * @return
      */
-    public boolean isValidBST(TreeNode node, long lower, long upper) {
-        // 基本情况：空树是有效的BST
+    private boolean validate(TreeNode node, Integer lower, Integer upper) {
         if (node == null) {
             return true;
         }
-        
-        // 检查当前节点值是否违反BST属性
-        if (node.val <= lower || node.val >= upper) {
+        if (lower != null && node.val <= lower) {
             return false;
         }
-        
-        // 递归验证左右子树：
-        // - 左子树的值必须小于当前节点值
-        // - 右子树的值必须大于当前节点值
-        return isValidBST(node.left, lower, node.val) && 
-               isValidBST(node.right, node.val, upper);
+        if (upper != null && node.val >= upper) {
+            return false;
+        }
+        return validate(node.left, lower, node.val)
+                && validate(node.right, node.val, upper);
     }
 }
 // @lc code=end
