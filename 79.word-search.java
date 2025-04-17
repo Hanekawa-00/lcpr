@@ -11,66 +11,51 @@
 // @lc code=start
 class Solution {
     public boolean exist(char[][] board, String word) {
-        if (word.isEmpty()) {
-            return true;
-        }
-        if (board == null || board.length == 0 || board[0].length == 0) {
-            return false;
-        }
-        int rows = board.length, cols = board[0].length;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                // 找到首字母
-                if (board[i][j] == word.charAt(0)) {
-                    // 维护已经访问的路径，相当于path
-                    boolean[][] visited = new boolean[rows][cols];
-                    // 初始化第一个字符为true
-                    visited[i][j] = true;
-                    if (backtrack(board, i, j, 1, word, visited)) {
-                        return true;
-                    }
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        // 每个位置都有可能是起始点
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                boolean flag = check(board, visited, i, j, word, 0);
+                if (flag) {
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    /**
-     * @param board
-     * @param x
-     * @param y
-     * @param nextIndex   下一个即将遍历到word的第nextIndex个字符
-     * @param word
-     * @param visited
-     * @return
-     */
-    private boolean backtrack(char[][] board, int x, int y, int nextIndex, String word, boolean[][] visited) {
-        // 如果已经到最后一个字符了，则直接返回true
-        if (nextIndex == word.length()) {
+    private boolean check(char[][] board, boolean[][] visited, int i, int j, String word, int index) {
+        // 尝试路径上的字符不匹配
+        if (board[i][j] != word.charAt(index)) {
+            return false;
+        } else if (index == word.length() - 1) {// 最终成功结果，会逐步递归到最上层
             return true;
         }
-        int rows = board.length, cols = board[0].length;
-        // 定义四个方向，分别为左右上下
-        int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-        // 分别对四个"方向"尝试
-        for (int[] dir : directions) {
-            // 下个字符的坐标
-            int nx = x + dir[0];
-            int ny = y + dir[1];
-            // 判断边界条件、这个方向的路径有没有被走过（路径有没有记录）、这个方向的字符是否正确
-            if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && !visited[nx][ny]
-                    && board[nx][ny] == word.charAt(nextIndex)) {
-                visited[nx][ny] = true;
-                // 如果路径正确，则进入下一层
-                if (backtrack(board, nx, ny, nextIndex + 1, word, visited)) {
-                    return true;
+        // 标记已经访问
+        visited[i][j] = true;
+        int[][] directions = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+        boolean res = false;
+        for (int[] direction : directions) {
+            int newi = i + direction[0], newj = j + direction[1];
+            // 控制新坐标范围
+            if (newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length) {
+                // 这部很关键，防止重复
+                if (!visited[newi][newj]) {
+                    boolean flag = check(board, visited, newi, newj, word, index + 1);// 递归点
+                    if (flag) {
+                        res = true;
+                        break;
+                    }
                 }
-                // 回退
-                visited[nx][ny] = false;
             }
         }
-        return false;
+        // 回溯
+        visited[i][j] = false;
+        return res;
     }
+
 }
 // @lc code=end
 
