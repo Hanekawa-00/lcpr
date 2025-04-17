@@ -30,18 +30,18 @@ import java.util.List;
  */
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
-        List<Integer> res = new ArrayList<Integer>();
-        inorderTraversal(res, root);
-        return res;
+        List<Integer> resList = new ArrayList<>();
+        inorder(resList, root);
+        return resList;
     }
 
-    private void inorderTraversal(List<Integer> list, TreeNode root) {
+    private void inorder(List<Integer> res, TreeNode root) {
         if (root == null) {
             return;
         }
-        inorderTraversal(list, root.left);
-        list.add(root.val);
-        inorderTraversal(list, root.right);
+        inorder(res, root.left);
+        res.add(root.val);
+        inorder(res, root.right);
     }
 }
 // @lc code=end
