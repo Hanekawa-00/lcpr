@@ -10,6 +10,10 @@
 // @lcpr-template-end
 // @lc code=start
 
+import java.util.LinkedList;
+import java.util.Stack;
+
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -30,27 +34,26 @@ class Solution {
         if (root == null) {
             return;
         }
-        // 假设一个前置节点
-        TreeNode head = new TreeNode(-1);
-        preOrder(root, head);
-    }
-
-    private TreeNode preOrder(TreeNode root, TreeNode head) {
-        if (root == null) {
-            return head;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode prev = null;
+        while (!stack.isEmpty()) {
+            TreeNode curr = stack.pop();
+            if (prev != null) {
+                prev.left = null;
+                prev.right = curr;
+            }
+            TreeNode left = curr.left;
+            TreeNode right = curr.right;
+            // 前序遍历是根左右，因为stack是先进后出，要先遍历左，则后入栈
+            if (right != null) {
+                stack.push(right);
+            }
+            if (left != null) {
+                stack.push(left);
+            }
+            prev = curr;
         }
-        // 暂存左右子节点，方便递归子树
-        TreeNode left = root.left;
-        TreeNode right = root.right;
-        // 更新right
-        head.right = root;
-        // 移动head
-        head = head.right;
-        // 因为现在head指向的是root节点，存在左节点，这里更新左节点为null，由此可以知道前面为什么要暂存左右子节点
-        head.left = null;
-        head = preOrder(left, head);
-        head = preOrder(right, head);
-        return head;
     }
 }
 // @lc code=end
