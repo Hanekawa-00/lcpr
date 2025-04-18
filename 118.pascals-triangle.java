@@ -15,34 +15,26 @@ import java.util.List;
 
 class Solution {
     public List<List<Integer>> generate(int numRows) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (numRows <= 0) {
-            return res;
+        if (numRows == 0) {
+            return new ArrayList<>();
         }
-        // 添加第一行
-        res.add(new ArrayList<>());
-        res.get(0).add(1);
-        // 从第二行开始生成
-        for (int row = 2; row <= numRows; row++) {
-            List<Integer> current = new ArrayList<>();
-            res.add(current);
-            generateRow(row, res);
+        List<List<Integer>> resList = new ArrayList<>(numRows);
+        // 完成第一行
+        List<Integer> firstRow = new ArrayList<>(1);
+        firstRow.add(1);
+        resList.add(firstRow);
+        // 从第二行开始
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> preRow = resList.get(i - 1);
+            List<Integer> currRow = new ArrayList<>();
+            currRow.add(1);
+            for (int j = 1; j < i; j++) {
+                currRow.add(preRow.get(j - 1) + preRow.get(j));
+            }
+            currRow.add(1);
+            resList.add(currRow);
         }
-        return res;
-    }
-
-    private void generateRow(int currRow, List<List<Integer>> res) {
-        List<Integer> prev = res.get(currRow - 2); // 前一行
-        List<Integer> curr = res.get(currRow - 1); // 当前行
-        int currLength = currRow;
-        curr.add(1); // 添加首元素
-        // 中间元素,从第二个开始添加，添加到倒数第二个元素
-        for (int i = 1; i < currLength - 1; i++) {
-            curr.add(prev.get(i - 1) + prev.get(i));
-        }
-        // 尾元素
-        curr.add(1);
-
+        return resList;
     }
 }
 // @lc code=end
