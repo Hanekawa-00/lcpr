@@ -27,28 +27,17 @@
  */
 class Solution {
     public TreeNode sortedArrayToBST(int[] nums) {
-        return toBST(nums, 0, nums.length - 1);
+        return helper(nums, 0, nums.length - 1);
     }
 
-    /**
-     * 平衡二叉树->左右子树高度相等，可以想到要二分
-     * 因为是排序数组，则任何一个元素的左区间的任何一个元素都小于这个元素，右区间则全部大于，满足搜索二叉树的左右区间
-     * 我们可以根据这两个点构造平衡二叉搜索树
-     * 
-     * 
-     * @param nums
-     * @param leftIndex
-     * @param rightIndex
-     * @return
-     */
-    private TreeNode toBST(int[] nums, int leftIndex, int rightIndex) {
-        if (leftIndex > rightIndex) {
+    private TreeNode helper(int[] nums, int left, int right) {
+        if (left > right) {
             return null;
         }
-        int rootIndex = (leftIndex + rightIndex) / 2;
+        int rootIndex = (left + right) / 2;
         TreeNode root = new TreeNode(nums[rootIndex]);
-        root.left = toBST(nums, leftIndex, rootIndex - 1);
-        root.right = toBST(nums, rootIndex + 1, rightIndex);
+        root.left = helper(nums, left, rootIndex - 1);
+        root.right = helper(nums, rootIndex + 1, right);
         return root;
     }
 }
