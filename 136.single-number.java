@@ -10,28 +10,15 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 class Solution {
     public int singleNumber(int[] nums) {
-        Map<Integer, Integer> hashMap = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (!hashMap.containsKey(nums[i])) {
-                hashMap.put(nums[i], 1);
-            } else {
-                hashMap.put(nums[i], hashMap.get(nums[i]) + 1);
-            }
+        // 0与任何数异或结果为任何数
+        int res = 0;
+        // 异或运算满足交换律和结合律，相同的两个异或运算结果为0
+        for (int num : nums) {
+            res ^= num;
         }
-        Set<Entry<Integer, Integer>> entrySet = hashMap.entrySet();
-        for (Entry<Integer, Integer> itemEntry : entrySet) {
-            if (itemEntry.getValue().equals(1)) {
-                return itemEntry.getKey();
-            }
-        }
-        return -1;
+        return res;
     }
 }
 // @lc code=end
