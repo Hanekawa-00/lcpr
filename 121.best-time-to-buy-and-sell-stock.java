@@ -11,18 +11,15 @@
 // @lc code=start
 class Solution {
     public int maxProfit(int[] prices) {
-        // 初始化最小售价（为了计算最小买入价）
-        int minprice = Integer.MAX_VALUE;
-        // 初始化最大利润
-        int maxprofit = 0;
-        for (int i = 0; i < prices.length; i++) {
-            if (prices[i] < minprice) {
-                minprice = prices[i];
-            } else if (prices[i] - minprice > maxprofit) {
-                maxprofit = prices[i] - minprice;
-            }
+        // dp[i]维护前i天最大利润
+        int[] dp = new int[prices.length];
+        dp[0] = 0;
+        int minPrice = prices[0];
+        for (int i = 1; i < dp.length; i++) {
+            dp[i] = Math.max(dp[i - 1], prices[i] - minPrice);
+            minPrice = Math.min(minPrice, prices[i]);
         }
-        return maxprofit;
+        return dp[dp.length - 1];
     }
 }
 // @lc code=end
