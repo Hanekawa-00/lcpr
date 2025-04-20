@@ -27,33 +27,28 @@ class Node {
 import java.util.HashMap;
 import java.util.Map;
 
+
 class Solution {
     public Node copyRandomList(Node head) {
-        // 哈希表用来存储旧链表和新链表的对应关系
-        Map<Node, Node> catchedMap = new HashMap<>();
-        return deepCopy(head, catchedMap);
-    }
-
-    /**
-     * @param targetNode 需要复制的目标节点
-     * @param cachedMap
-     * @return
-     */
-    private Node deepCopy(Node targetNode, Map<Node, Node> cachedMap) {
-        if (targetNode == null) {
-            // 递归到最后则为null
-            return null;
+        // key为原链表的节点，val为新链表的节点
+        HashMap<Node, Node> map = new HashMap<>();
+        Node node = head;
+        // 先构建哈希映射
+        while (node != null) {
+            map.put(node, new Node(node.val));
+            node = node.next;
         }
-        // 这里是为了防止random导致节点重复
-        if (!cachedMap.containsKey(targetNode)) {
-            Node newHead = new Node(targetNode.val);
-            cachedMap.put(targetNode, newHead);
-            // 递归获取新的next和random
-            newHead.next = deepCopy(targetNode.next, cachedMap);
-            newHead.random = deepCopy(targetNode.random, cachedMap);
+        // 构建新节点之间的关系
+        node = head;
+        while (node != null) {
+            Node random = node.random;
+            Node next = node.next;
+            Node newNode = map.get(node);
+            newNode.next = map.get(next);
+            newNode.random = map.get(random);
+            node = node.next;
         }
-        // 如果map中含有目标节点（已经保存到map中，但可能没有处理完成next或者random,所以必须要返回map中的指针）则直接返回
-        return cachedMap.get(targetNode);
+        return map.get(head);
     }
 }
 // @lc code=end
