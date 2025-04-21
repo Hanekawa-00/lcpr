@@ -28,16 +28,15 @@ public class Solution {
      * @return
      */
     public boolean hasCycle(ListNode head) {
-        if (head == null) {
-            return false;
-        }
-        Set<ListNode> cachedSet = new HashSet<ListNode>();
-        while (head.next != null) {
-            if (cachedSet.contains(head.next)) {
+        ListNode low = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            low = low.next;
+            // low ,fast的初始值都是head,所以要先移动指针再判断
+            if (low == fast) {
                 return true;
             }
-            cachedSet.add(head);
-            head = head.next;
         }
         return false;
     }
