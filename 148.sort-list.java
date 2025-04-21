@@ -9,6 +9,7 @@
 
 // @lcpr-template-end
 // @lc code=start
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -21,62 +22,77 @@
  */
 class Solution {
     public ListNode sortList(ListNode head) {
+        // 递归终止条件：链表为空或只有一个节点，已经有序
         if (head == null || head.next == null) {
             return head;
         }
-        // 类似二分查找
-        ListNode head2 = getMiddleNode(head);
-        // 递归排序
-        head = sortList(head);
-        head2 = sortList(head2);
-        // 最终递归到只有两个节点，这样排序成为一个新的链表返回到上一层递归，以达到排序链表
-        return mergeTwoLists(head2, head);
+
+        // 1. 找到链表中间节点的前一个节点，并分割链表
+        ListNode midPrev = findMiddlePrev(head);
+        ListNode rightHead = midPrev.next; // 后半部分的头节点
+        midPrev.next = null; // 断开链表
+
+        // 2. 递归排序左右两部分
+        ListNode leftSorted = sortList(head);      // 前半部分 head 到 midPrev
+        ListNode rightSorted = sortList(rightHead); // 后半部分 rightHead 到末尾
+
+        // 3. 合并两个有序链表
+        return mergeTwoLists(leftSorted, rightSorted);
     }
 
     /**
-     * 使用快慢指针获取链表中间节点
-     * 
-     * @param head
-     * @return
+     * 快慢指针找到链表中间节点的前一个节点。
+     * 对于 [1,2,3,4], 返回 2。
+     * 对于 [1,2,3,4,5], 返回 2。
+     * 这样可以保证分割后左半部分长度 <= 右半部分长度。
      */
-    private ListNode getMiddleNode(ListNode head) {
+    private ListNode findMiddlePrev(ListNode head) {
+        if (head == null || head.next == null) {
+            return head; // 或 null，取决于调用者如何处理，这里返回 head 避免空指针
+        }
         ListNode slow = head;
-        ListNode fast = head;
-        while (fast.next != null && fast.next.next != null) {
+        // fast 初始化为 head.next.next，这样 slow 最终会停在中间节点的前一个
+        // 或者 fast 初始化为 head，循环条件改为 fast.next != null && fast.next.next != null
+        ListNode fast = head.next.next;
+        while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
-        // 这里其实是中间节点的下一个节点
-        ListNode mid = slow.next;
-        // 断开与前面的连接
-        slow.next = null;
-        return mid;
+        return slow;
     }
+
 
     /**
      * 合并两个有序链表
-     * 
-     * @param list1
-     * @param list2
-     * @return
      */
     private ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        ListNode dummy = new ListNode();
-        ListNode curr = dummy;
-        // 如果其中有一个遍历完成，则直接拼接另一个链表即可
+        // 创建一个哨兵节点，简化合并逻辑
+        ListNode dummy = new ListNode(-1);
+        ListNode current = dummy; // current 指针用于构建新链表
+
+        // 遍历两个链表，比较节点值，将较小的节点连接到 current 后面
         while (list1 != null && list2 != null) {
-            if (list1.val < list2.val) {
-                curr.next = list1;
+            if (list1.val <= list2.val) { // 注意使用 <= 保持稳定性（可选）
+                current.next = list1;
                 list1 = list1.next;
             } else {
-                curr.next = list2;
+                current.next = list2;
                 list2 = list2.next;
             }
-            curr = curr.next;
+            current = current.next; // 移动 current 指针
         }
-        curr.next = list1 != null ? list1 : list2;
+
+        // 循环结束后，最多还有一个链表有剩余节点，将其连接到新链表末尾
+        if (list1 != null) {
+            current.next = list1;
+        } else { // list2 != null or list2 == null
+            current.next = list2;
+        }
+
+        // 返回哨兵节点的下一个节点，即合并后链表的头节点
         return dummy.next;
     }
+
 }
 // @lc code=end
 
