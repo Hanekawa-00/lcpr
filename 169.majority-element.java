@@ -10,26 +10,23 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.HashMap;
-
 class Solution {
     public int majorityElement(int[] nums) {
-        if (nums.length == 1) {
-            return nums[0];
-        }
-        HashMap<Integer, Integer> cacheMap = new HashMap<>();
-        int n = nums.length;
-        for (int i = 0; i < n; i++) {
-            if (cacheMap.containsKey(nums[i])) {
-                cacheMap.put(nums[i], cacheMap.get(nums[i]) + 1);
-                if (i >= n / 2 && cacheMap.get(nums[i]) > n / 2) {
-                    return nums[i];
-                }
+        // 多数元素肯定是大于nums.length/2，那么选票抵消最后剩下的肯定是多数元素
+        int candidate = -1; // 候选元素
+        int count = 0; // 选票
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;
+            }
+            // 无论是count++还是--,都可以看为数组内部抵消
+            if (num == candidate) {
+                count++;
             } else {
-                cacheMap.put(nums[i], 1);
+                count--;
             }
         }
-        return -1;
+        return candidate;
     }
 }
 // @lc code=end
