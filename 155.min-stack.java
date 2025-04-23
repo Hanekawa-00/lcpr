@@ -9,49 +9,40 @@
 
 // @lcpr-template-end
 // @lc code=start
-class MinStack {
-    class ListNode {
-        int val;
-        ListNode next;
-        ListNode pre;
 
-        ListNode(int val) {
+class MinStack {
+    private class Node {
+        int val;
+        Node next;
+        Node prev; // 协助出栈
+        int currentMin; // 在入栈时的整个链表的最小值,在出栈时候，最小值自动切换为新top入栈时最小值
+
+        public Node(int val, int currentMin) {
             this.val = val;
+            this.currentMin = currentMin;
         }
     }
 
-    ListNode min;
-    ListNode top;
+    public Node top;
 
     public MinStack() {
-        min = null;
-        top = null;
+        top = new Node(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     public void push(int val) {
-        if (top == null) {
-            top = new ListNode(val);
-        } else {
-            ListNode pre = top;
-            top.next = new ListNode(val);
-            top = top.next;
-            top.pre = pre;
-        }
-        checkMin();
-    }
-
-    private void checkMin() {
-        min = top;
-        ListNode curr = top;
-        while (curr != null) {
-            min = curr.val <= min.val ? curr : min;
-            curr = curr.pre;
-        }
+        int min = val < top.currentMin ? val : top.currentMin;
+        Node newNode = new Node(val, min);
+        newNode.prev = top;
+        top.next = newNode;
+        top = newNode;
     }
 
     public void pop() {
-        top = top.pre;
-        checkMin();
+        Node oldTop = this.top;
+        Node newTop = oldTop.prev;
+        newTop.next = null;
+        oldTop.prev = null;
+        this.top = newTop;
     }
 
     public int top() {
@@ -59,7 +50,7 @@ class MinStack {
     }
 
     public int getMin() {
-        return min.val;
+        return this.top.currentMin;
     }
 }
 
