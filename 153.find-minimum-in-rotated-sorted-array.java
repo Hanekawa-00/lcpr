@@ -11,10 +11,13 @@ class Solution {
         int left = 0, right = nums.length - 1;
         while (left < right) {
             int mid = (left + right) / 2;
-            if (nums[mid] < nums[right]) {
-                right = mid;
-            } else {
+            // 要找最小值并缩小区间，必须与right对比
+            // 如果与left作对比，则只能说明[left,mid]是升序的，即使最小值在这个区间也同样成立，所以会导致误判
+            if (nums[mid] > nums[right]) {
                 left = mid + 1;
+            } else {
+                // 如果中间这个值小于right，则不能排除这个mid是目标值的可能性
+                right = mid;
             }
         }
         return nums[left];
