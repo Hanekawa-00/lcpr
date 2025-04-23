@@ -10,7 +10,6 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.HashSet;
 
 /**
  * Definition for singly-linked list.
@@ -25,18 +24,14 @@ import java.util.HashSet;
  */
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        HashSet<ListNode> cache = new HashSet<>();
-        while (headA != null) {
-            cache.add(headA);
-            headA = headA.next;
-        }
-        while (headB != null) {
-            if (cache.contains(headB)) {
-                return headB;
-            }
-            headB = headB.next;
-        }
-        return null;
+        ListNode ptrA = headA;
+        ListNode ptrB = headB;
+        while (ptrA != ptrB) {
+            // 两个指针走的步数是相同的，切换头部能够消除步数差
+            ptrA = ptrA == null ? headB : ptrA.next;
+            ptrB = ptrB == null ? headA : ptrB.next;
+        } // 结果是要么两个相遇，要么两个都为null
+        return ptrA;
     }
 }
 // @lc code=end
