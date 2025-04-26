@@ -29,33 +29,30 @@ import java.util.List;
  * }
  */
 class Solution {
-    public List<Integer> rightSideView(TreeNode root) {
-        if (root == null) {
-            return new ArrayList<>();
+    private List<Integer> res;
 
+    public List<Integer> rightSideView(TreeNode root) {
+        this.res = new ArrayList<>();
+        if (root == null) {
+            return res;
         }
-        List<Integer> res = new ArrayList<>();
-        rightSideViewHelper(root, res, 0); // 调用辅助函数，传入初始深度 0
+        rightSideViewHelper(root, 0);
         return res;
     }
 
-    /**
-     * @param root      当前节点
-     * @param res       结果集
-     * @param currDepth 当前遍历的深度
-     */
-    private void rightSideViewHelper(TreeNode root, List<Integer> res, int currDepth) {
+    private void rightSideViewHelper(TreeNode root, int deepth) {
         if (root == null) {
-            return; // 递归终止条件
+            return;
         }
-        // 如果当前深度在 res 中还没有元素，说明这是当前深度的最右节点 (因为我们先遍历右子树)
-        if (res.size() == currDepth) {// 如果size等于当前深度则说明当前深度并没有添加节点
-            res.add(root.val); // 将当前节点值添加到 res 列表中
+        // 如果当前深度deepth在 res 中还没有元素，说明这是当前深度的最右节点 (因为我们先遍历右子树)
+        if (res.size() == deepth) {
+            res.add(root.val);
         }
-        // 优先遍历右子树，保证右子树的节点先被访问到
-        rightSideViewHelper(root.right, res, currDepth + 1);
-        rightSideViewHelper(root.left, res, currDepth + 1);
+        // 优先遍历right子树，保证right的节点先被访问到
+        rightSideViewHelper(root.right, deepth + 1);
+        rightSideViewHelper(root.left, deepth + 1);
     }
+
 }
 // @lc code=end
 
