@@ -21,14 +21,12 @@
  */
 class Solution {
     public ListNode reverseList(ListNode head) {
-        // prev用来存储上一个节点，因为迭代反转过程中需要断开链表
         ListNode prev = null;
         ListNode curr = head;
         while (curr != null) {
-            ListNode next = curr.next;
+            ListNode next = curr.next; // 保存next节点
             curr.next = prev;
-            // 更新prev，为下次迭代做准备
-            prev = curr;
+            prev = curr; // 保存当前节点为后面遍历做准备
             curr = next;
         }
         return prev;
