@@ -5,44 +5,41 @@
  * [200] 岛屿数量
  */
 
+// @lcpr-template-start
+
+// @lcpr-template-end
 // @lc code=start
 class Solution {
     public int numIslands(char[][] grid) {
-        if (grid == null || grid.length == 0) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
             return 0;
         }
-        // 行数
-        int rows = grid.length;
-        // 列数
-        int cols = grid[0].length;
-        int islandCount = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                // 每次遇到1就会把它周围的（也就是整块陆地）所有1都更新为0,表示已经访问
+        int row = grid.length;
+        int col = grid[0].length;
+        int landCount = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                // 只要发现陆地，就开始dfs，将这一整块陆地全部变成 ‘0’
                 if (grid[i][j] == '1') {
-                    islandCount++;
-                    dfs(grid, i, j);
+                    landCount++;
+                    landHelper(grid, i, j);
                 }
             }
         }
-        return islandCount;
+        return landCount;
     }
 
-    private void dfs(char[][] grid, int row, int col) {
-        int rows = grid.length;
-        int cols = grid[0].length;
-        // 遍历到边界或者达到陆地边界，即下一个为0
-        if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col] == '0') {
+    private void landHelper(char[][] grid, int i, int j) {
+        // 边界条件：越界或者遇到海洋
+        if (i < 0 || j < 0 || i > grid.length - 1 || j > grid[0].length - 1 || grid[i][j] == '0') {
             return;
         }
-        // visited已访问，更新这个点为0, 下次不会被遍历（视为陆地）
-        grid[row][col] = '0';
-        // 每个点右四个路径，递归周围的陆地节点
-        dfs(grid, row + 1, col); // 下
-        dfs(grid, row - 1, col);// 上
-        dfs(grid, row, col + 1); // 右
-        dfs(grid, row, col - 1);// 左
-
+        grid[i][j] = '0';
+        // 上下左右暴力遍历
+        landHelper(grid, i - 1, j);
+        landHelper(grid, i + 1, j);
+        landHelper(grid, i, j - 1);
+        landHelper(grid, i, j + 1);
     }
 }
 // @lc code=end
