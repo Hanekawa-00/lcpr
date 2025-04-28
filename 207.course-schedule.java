@@ -17,41 +17,43 @@ import java.util.Queue;
 
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        // 邻接表，用来保存先修课程指向后修课程的有向边（对应关系，可以是一对多，即一个课程可以是多个课程的先修课程）
-        List<List<Integer>> adj = new ArrayList<>(numCourses);
-        // 入度数组，用来保存对应课程的先修课程数量
+        // 存储以课程i为前置课程的列表（i是前置课程）
+        List<List<Integer>> prereqListMap = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            prereqListMap.add(new ArrayList<>());
+        }
+        // 存储课程i的入度数量（前置课程数量）
         int[] inDegree = new int[numCourses];
-        // 初始化
-        for (int i = 0; i < numCourses; i++) {
-            adj.add(new ArrayList<Integer>());
+        for (int[] prereq : prerequisites) {
+            int course = prereq[0];
+            int preCourse = prereq[1];
+            // course以preCourse作为前置课程
+            prereqListMap.get(preCourse).add(course);
+            inDegree[course]++;
         }
-        for (int[] prerequisite : prerequisites) {
-            int course = prerequisite[0];// 后修课程 ‘a’
-            int preCourse = prerequisite[1]; // 先修课程’b'
-            adj.get(preCourse).add(course);// 从先修课程b 向 后修课程添加有向边
-            inDegree[course]++;// 后修课程a入度加1
-        }
-        // 保存不需要先修课程的课程队列，即图的头节点队列
+        // 用来维护前置课程已经修完的课程队列（当然也包括没有前置课程的课程）
         Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < numCourses; i++) {
+        for (int i = 0; i < inDegree.length; i++) {
             if (inDegree[i] == 0) {
                 queue.offer(i);
             }
         }
-        int count = 0;
+        int completedCount = 0;
         while (!queue.isEmpty()) {
-            int course = queue.poll();
-            count++;
-            // 遍历该节点的所有有向边
-            for (int neighbor : adj.get(course)) {
-                // 减少一个先修课程数量
-                inDegree[neighbor]--;
-                if (inDegree[neighbor] == 0) {
-                    queue.offer(neighbor);
+            // 出队标记已修
+            int curr = queue.poll();
+            // 更新以curr为前置课程的课程
+            List<Integer> reqList = prereqListMap.get(curr);
+            for (Integer req : reqList) {
+                // 前置课程已修，入度减一
+                inDegree[req]--;
+                if (inDegree[req]== 0) {
+                    queue.offer(req);
                 }
             }
+            completedCount ++;
         }
-        return count == numCourses;
+        return completedCount == numCourses;
     }
 }
 // @lc code=end
