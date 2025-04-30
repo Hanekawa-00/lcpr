@@ -19,44 +19,24 @@
  * }
  */
 class Solution {
-
-    /**
-     * 使用中序遍历，先遍历左右子树，找到目标节点就直接向上回溯
-     * 
-     * @param root
-     * @param p
-     * @param q
-     * @return
-     */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        return dfs(root, p, q);
-    }
-
-    private TreeNode dfs(TreeNode root, TreeNode p, TreeNode q) {
-        // 递归到最底层
-        if (root == null) {
+        // 遍历到底或者找到目标节点
+        if (root == null || root == p || root == q) {
             return root;
         }
-        // 找到目标节点
-        if (root == p || root == q) {
-            return root;
-        }
-        // 中序遍历
-        TreeNode left = dfs(root.left, p, q);
-        TreeNode right = dfs(root.right, p, q);
-        // 中
-        // 找到两个节点后返回根节点
+        // 尝试去左右子树分别寻找目标节点
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        /*
+         * 有三种情况：
+         * 1.分别在左右子树，又因为是深度遍历，所以当前节点root肯定是最近的祖先节点，然后返回到上一层，然后就变成第二种情况了
+         * 2.两个节点都在在一颗子树上，说明这个节点（left或者right，不一定是根节点，因为是上一层返回的）是上一层返回的结果，如此一直向上递归
+         * 3.只找到一个目标节点，说明当前子树只存在一个节点，直接向上递归返回
+         */
         if (left != null && right != null) {
             return root;
         }
-        // 只找到其中之一，则向上回溯
-        if (left == null && right != null) {
-            return right;
-        }
-        if (left != null && right == null) {
-            return left;
-        }
-        return null;
+        return left == null ? right : left;
     }
 }
 // @lc code=end
