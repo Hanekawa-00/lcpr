@@ -10,7 +10,6 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.ArrayList;
 
 /**
  * Definition for singly-linked list.
@@ -24,22 +23,44 @@ import java.util.ArrayList;
  */
 class Solution {
     public boolean isPalindrome(ListNode head) {
-        ArrayList<Integer> vars = new ArrayList<Integer>();
-        ListNode curr = head;
-        while (curr != null) {
-            vars.add(curr.val);
-            curr = curr.next;
+        if (head == null || head.next == null) {
+            return true; // 空链表或单个节点都是回文
         }
-        int front = 0;
-        int back = vars.size() - 1;
-        while (front < back) {
-            if (!vars.get(front).equals(vars.get(back))) {
+
+        // 1. 使用快慢指针找到链表中点（slow 指向前半部分最后一个节点）
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // 2. 反转后半部分链表（从 slow.next 开始）
+        ListNode secondHalf = reverseList(slow.next);
+        ListNode firstHalf = head;
+
+        // 3. 同步比较前半和反转后的后半部分
+        while (secondHalf != null) {
+            if (firstHalf.val != secondHalf.val) {
                 return false;
             }
-            front++;
-            back--;
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
         }
-        return true;
+
+        return true; // 所有节点值相同，是回文链表
+    }
+
+    // 辅助函数：反转链表
+    private ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode nextNode = head.next;
+            head.next = prev;
+            prev = head;
+            head = nextNode;
+        }
+        return prev;
     }
 }
 // @lc code=end
