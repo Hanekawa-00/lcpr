@@ -10,9 +10,6 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -29,25 +26,28 @@ import java.util.Deque;
  * }
  */
 class Solution {
+    private int k;
+
     public int kthSmallest(TreeNode root, int k) {
-        // 使用stack来保存路径节点
-        Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
-        // 中序遍历（在二叉搜索树中的排序就是按照中序遍历的顺序来的）
-        // 使用stack来辅助遍历
-        while (root != null || !stack.isEmpty()) {
-            while (root != null) {
-                stack.push(root);
-                root = root.left;
-            }
-            // 这里是遍历点
-            root = stack.pop();
-            --k;
-            if (k == 0) {
-                break;
-            }
-            root = root.right;
+        this.k = k;
+        int[] cache = new int[k];
+        dfs(root, cache);
+        return cache[0];
+    }
+
+    private void dfs(TreeNode root, int[] cache) {
+        // 中序遍历
+        if (root == null) {
+            return;
         }
-        return root.val;
+        dfs(root.left, cache);
+        //
+        if (k == 0) {
+            return;
+        }
+        cache[k-- - 1] = root.val;
+        //
+        dfs(root.right, cache);
     }
 }
 // @lc code=end
