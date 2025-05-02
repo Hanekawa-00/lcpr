@@ -11,29 +11,29 @@
 // @lc code=start
 class Solution {
     public boolean searchMatrix(int[][] matrix, int target) {
-        for (int[] row : matrix) {
-            int index = binarySearch(row, target);
-            if (index >= 0) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        /*
+         * 从左下角或者右上角寻找，因为这两个点开始寻找只有一个维度是单调的
+         * 左上角 (row = 0, col = 0): 这是最小值。如果 target >
+         * matrix[0][0]，你无法决定是向右移动还是向下移动，因为两个方向的值都会变大。
+         * 右下角 (row = m - 1, col = n - 1): 这是最大值。如果 target <
+         * matrix[m-1][n-1]，你无法决定是向上移动还是向左移动，因为两个方向的值都会变小。
+         * 对比二分查找，利用单调性能够实现
+         */
+        int i = rows - 1;
+        int j = 0;
+        while (i >= 0 && j < cols) {
+            int num = matrix[i][j];
+            if (num == target) {
                 return true;
+            } else if (target < num) {
+                i--;
+            } else {
+                j++;
             }
         }
         return false;
-    }
-
-    private int binarySearch(int[] nums, int target) {
-        int low = 0, high = nums.length - 1;
-        while (low <= high) {
-            int mid = (high + low) / 2;
-            int num = nums[mid];
-            if (num == target) {
-                return mid;
-            } else if (num > target) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return -1;
     }
 }
 // @lc code=end
