@@ -11,20 +11,15 @@
 // @lc code=start
 class Solution {
     public void moveZeroes(int[] nums) {
-        int index = 0;
+        int index = 0; // 记录非0元素需要写入的位置
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] == 0) {
-                // 等于0则跳过
                 continue;
             }
-            if (index < i) {
-                // 初次进入此代码块时，index必定是0,因此是无用数据，所以直接替换，无需交换
-                nums[index] = nums[i];
-            }
-            index++;
+            nums[index++] = nums[i];
         }
-        for (int j = index; j < nums.length; j++) {
-            nums[j] = 0;
+        for (int i = index; i < nums.length; i++) {
+            nums[i] = 0;
         }
     }
 }
