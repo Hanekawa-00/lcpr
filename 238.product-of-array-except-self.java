@@ -11,23 +11,22 @@
 // @lc code=start
 class Solution {
     public int[] productExceptSelf(int[] nums) {
-        int length = nums.length;
-        // L,R分别代表i位置的左右乘积
-        int[] L = new int[length];
-        int[] R = new int[length];
-        int[] answer = new int[length];
-        L[0] = 1;
-        for (int i = 1; i < length; i++) {
-            L[i] = nums[i - 1] * L[i - 1];
+        int[] res = new int[nums.length];
+        // leftdp[i]维护nums[0,i]的乘积，即nums[i]左边的元素乘积
+        int[] leftdp = new int[nums.length];
+        int[] rightdp = new int[nums.length];
+        leftdp[0] = 1;
+        rightdp[rightdp.length - 1] = 1;
+        for (int i = 1; i < nums.length; i++) {
+            leftdp[i] = leftdp[i - 1] * nums[i - 1];
         }
-        R[length - 1] = 1;
-        for (int i = length - 2; i >= 0; i--) {
-            R[i] = R[i + 1] * nums[i + 1];
+        for (int i = rightdp.length - 2; i >= 0; i--) {
+            rightdp[i] = rightdp[i + 1] * nums[i + 1];
         }
-        for (int i = 0; i < length; i++) {
-            answer[i] = L[i] * R[i];
+        for (int i = 0; i < rightdp.length; i++) {
+            res[i] = leftdp[i] * rightdp[i];
         }
-        return answer;
+        return res;
     }
 }
 // @lc code=end
