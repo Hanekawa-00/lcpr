@@ -14,31 +14,21 @@ import java.util.Arrays;
 
 class Solution {
     public int coinChange(int[] coins, int amount) {
-        if (amount == 0) {
-            // 金额为0则不需要零钱
-            return 0;
-        }
-        // dp用来维护i金额最少零钱数
         int[] dp = new int[amount + 1];
-        // 为了自洽，这里初始化为一个大值
-        Arrays.fill(dp, amount + 1);
-        // 金额为0，则为零
+        // 初始化
+        Arrays.fill(dp, Integer.MAX_VALUE);
         dp[0] = 0;
         for (int i = 1; i < dp.length; i++) {
-            for (int coin : coins) {
-                // 如果coin小于i则说明可以尝试
-                // 状态方程为min（dp[i],dp[i-coin]-1）
-                // 其中dp[i]为上一次尝试获得的结果，dp[i-coin]+1中的+1是使用这次的coin进行尝试
-                if (coin <= i) {
-                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            // 假设最后一个硬币为coin，不断尝试并更新
+            for (int j = 0; j < coins.length; j++) {
+                // 如果dp[i - coins[j]]为MAX则直接跳过。
+                // i >= coins[j]控制索引越界，越界说明不可能有这种组合实现，保留原来的值
+                if (i >= coins[j] && dp[i - coins[j]] != Integer.MAX_VALUE) {
+                    dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
                 }
             }
         }
-        if (dp[amount] > amount) {
-            return -1;
-        } else {
-            return dp[amount];
-        }
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
     }
 }
 // @lc code=end
