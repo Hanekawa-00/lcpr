@@ -9,24 +9,24 @@
 
 // @lcpr-template-end
 // @lc code=start
+
 class Solution {
     public int findDuplicate(int[] nums) {
-        // 阶段一： 找到快慢指针的相遇点 (环检测)
-        int tortoise = nums[0]; // 慢指针 (龟)
-        int hare = nums[0];    // 快指针 (兔)
+        // 将这个数组看作是一个链表
+        int slow = 0;
+        int fast = 0;
+        // 参照循环链表的鸽巢理论，必定存在环,环的入口就是重复元素
+        // 即转化为寻找链表的环入口
         do {
-            tortoise = nums[tortoise]; // 慢指针走一步
-            hare = nums[nums[hare]];    // 快指针走两步
-        } while (tortoise != hare); // 当快慢指针相遇时停止
-
-        // 阶段二： 找到环的入口点 (重复数字)
-        tortoise = nums[0]; // 将慢指针重置到起点
-        while (tortoise != hare) {
-            tortoise = nums[tortoise]; // 慢指针走一步
-            hare = nums[hare];        // 快指针也走一步 (同步走)
+            slow = nums[slow];
+            fast = nums[nums[fast]];
         }
-
-        return hare; // 或者 return tortoise;  它们相遇的地方就是环的入口点，即重复数字
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return slow;
     }
 }
 // @lc code=end
