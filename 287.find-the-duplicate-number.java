@@ -20,8 +20,9 @@ class Solution {
         do {
             slow = nums[slow];
             fast = nums[nums[fast]];
-        }
-        slow = nums[0];
+        } while (slow != fast);
+        // 重新初始化slow到起始点
+        slow = 0;
         while (slow != fast) {
             slow = nums[slow];
             fast = nums[fast];
