@@ -9,44 +9,45 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 class Solution {
     public String decodeString(String s) {
-        StringBuilder res = new StringBuilder();
-        int index = 0;
-        while (index < s.length()) {
-            char curr = s.charAt(index);
-            if (Character.isDigit(curr)) {
-                int repeatTimes = 0;
-                while (Character.isDigit(s.charAt(index))) {
-                    repeatTimes = repeatTimes * 10 + (s.charAt(index) - '0');
-                    index++;
+        Deque<Integer> countStack = new ArrayDeque<>();
+        Deque<StringBuilder> stringStack = new ArrayDeque<>();
+        StringBuilder currentString = new StringBuilder();// 当前[]中的字符串
+        int currentNum = 0;// 当前层重复次数
+        /*
+         * 当遇到 [ 时，我们需要保存当前的状态（重复次数和已经构建的字符串），然后开始处理括号内的内容。当遇到 ]
+         * 时，我们需要恢复之前的状态，并将括号内解码后的字符串重复相应次数，再拼接到之前的字符串上。
+         */
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) { // 处理数字
+                // 因为可能是多位数字,故这里并不插入栈中
+                currentNum = currentNum * 10 + (c - '0');
+            } else if (c == '[') {
+                // 重复次数入栈
+                countStack.push(currentNum);
+                // 外层字符串入栈
+                stringStack.push(currentString);
+                // 重置
+                currentNum = 0;
+                currentString = new StringBuilder();
+            } else if (c == ']') {
+                int k = countStack.pop(); // 弹出当前层数
+                StringBuilder preString = stringStack.pop();// 前一个字符串（可能为空串）
+                // 将当前括号中字符串*k加到上一个字符串后面
+                for (int i = 0; i < k; i++) {
+                    preString.append(currentString);
                 }
-                index++;
-                int brackCount = 1;
-                int startIndex = index;
-                while (index < s.length()) {
-                    if (s.charAt(index) == '[') {
-                        brackCount++;
-                    } else if (s.charAt(index) == ']') {
-                        brackCount--;
-                        if (brackCount == 0) {
-                            break;
-                        }
-                    }
-                    index++;
-                }
-                String encodeString = s.substring(startIndex, index);
-                String decodeString = decodeString(encodeString);// 递归解码
-                for (int i = 0; i < repeatTimes; i++) {
-                    res.append(decodeString);
-                }
-                index++;
-            } else if (Character.isLetter(curr)) {
-                res.append(curr);
-                index++;
+                currentString = preString;
+            } else { // 处理普通字符
+                currentString.append(c);
             }
         }
-        return res.toString();
+        return currentString.toString();
     }
 }
 // @lc code=end
