@@ -29,24 +29,24 @@ class Solution {
         if (root == null) {
             return 0;
         }
-        int ret = rootSum(root, targetSum);
-        ret += pathSum(root.left, targetSum);
-        ret += pathSum(root.right, targetSum);
-        return ret;
+        int res = dfs(root, targetSum);
+        res += pathSum(root.left, targetSum);
+        res += pathSum(root.right, targetSum);
+        return res;
     }
 
-    private int rootSum(TreeNode root, long targetSum) {
-        int ret = 0;
+    private int dfs(TreeNode root, long target) {
         if (root == null) {
             return 0;
         }
-        int val = root.val;
-        if (val == targetSum) {
-            ret++;
+        int res = 0;
+        // 找到目标节点，不过还需要继续遍历，因为可能有负数
+        if (root.val == target) {
+            res++;
         }
-        ret += rootSum(root.left, targetSum - val);
-        ret += rootSum(root.right, targetSum - val);
-        return ret;
+        res += dfs(root.left, target - root.val);
+        res += dfs(root.right, target - root.val);
+        return res;
     }
 }
 // @lc code=end
