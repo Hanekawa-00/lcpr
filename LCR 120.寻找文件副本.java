@@ -11,30 +11,18 @@
 // @lc code=start
 
 class Solution {
-    /**
-     * 文件id保持在documents.length之间
-     * 先尝试复位id到正确的位置，如果在复位的过程中出现有与该位置维护相同id的情况下说明找到了重复数据
-     * 
-     * @param documents
-     * @return
-     */
     public int findRepeatDocument(int[] documents) {
-        int i = 0;
-        while (i < documents.length) {
-            if (i == documents[i]) {
-                i++;
-                continue;
-            }
-            // 发现重复数据
-            if (documents[documents[i]] == documents[i]) {
-                return documents[i];
-            }
-            // 跳转i，然后交换索引位置上的数字
-            int tmp = documents[i];
-            documents[i] = documents[tmp];
-            documents[tmp] = tmp;
+        int fast = documents[0], slow = documents[0];
+        do {
+            slow = documents[slow];
+            fast = documents[documents[fast]];
+        } while (fast != slow);
+        fast = documents[0];
+        while (fast != slow) {
+            slow = documents[slow];
+            fast = documents[fast];
         }
-        return -1;
+        return fast;
     }
 }
 // @lc code=end
