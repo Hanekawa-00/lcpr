@@ -10,42 +10,31 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 class CQueue {
-    // 用来保存读者归还的书
-    private Deque<Integer> inStack;
-    // 用来保存图书管理员取出的书
-    private Deque<Integer> outStack;
+    private Queue<Integer> queue;
 
     public CQueue() {
-        inStack = new ArrayDeque<>();
-        outStack = new ArrayDeque<>();
+        queue = new LinkedList<>();
+    }
+
+    public void push(int bookId) {
+        appendTail(bookId);
+    }
+
+    public Integer pop() {
+        return deleteHead();
     }
 
     public void appendTail(int value) {
-        inStack.push(value);
+        queue.offer(value);
     }
 
-    public int deleteHead() {
-        if (outStack.isEmpty()) {
-            if (inStack.isEmpty()) {
-                return -1;
-            }
-            in2Out();
-        }
-        return outStack.pop();
-    }
-
-    /**
-     * 将输入栈中的数据转移到out栈中
-     * 因为读者归还的顺序是从下到上，管理员取书的顺序是从上往下，和出栈的顺序正好相反
-     */
-    private void in2Out() {
-        while (!inStack.isEmpty()) {
-            outStack.push(inStack.pop());
-        }
+    public Integer deleteHead() {
+        Integer res = queue.poll();
+        return res == null ? -1 : res;
     }
 }
 
