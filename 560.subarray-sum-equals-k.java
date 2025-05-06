@@ -9,19 +9,22 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+import java.util.HashMap;
+
 class Solution {
     public int subarraySum(int[] nums, int k) {
         int count = 0;
-        for (int i = 0; i < nums.length; i++) {
-            int current = 0;
-            for (int j = i; j < nums.length; j++) {
-                current = current + nums[j];
-                if (current == k) {
-                    count++;
-                    // 因为后面的元素还可能为则0，所以不能break
-                    // break;
-                }
+        int currSum = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        for (int num : nums) {
+            currSum += num;
+            int targetPrefixSum = currSum - k;
+            if (map.containsKey(targetPrefixSum)) {
+                count += map.get(targetPrefixSum);
             }
+            map.put(currSum, map.getOrDefault(currSum, 0) + 1);
         }
         return count;
     }
