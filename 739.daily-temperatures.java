@@ -20,21 +20,21 @@ class Solution {
      * @return
      */
     public int[] dailyTemperatures(int[] temperatures) {
-        int n = temperatures.length;
-        int[] answer = new int[temperatures.length];
-        // 这个栈用来保存日期
+        int[] res = new int[temperatures.length];
+        // 单调栈：维护一个“等待找到下一个更大元素”的元素的集合
         Stack<Integer> stack = new Stack<>();
-        for (int i = 0; i < n; i++) {
-            int currTemperature = temperatures[i];
-            // 如果找到了一个高温天气，则进入循环将前面的低温天气的answer设置
-            while (!stack.isEmpty()
-                    && currTemperature > temperatures[stack.peek()]) {
-                int topIndex = stack.pop();
-                answer[topIndex] = i - topIndex;
+        int curr;
+        for (int i = 0; i < temperatures.length; i++) {
+            curr = temperatures[i];
+            // 对于当前元素，我们需要知道它之前哪些元素的“下一个更大元素”就是当前元素
+            // 观察可得这个栈中的元素一直是单调递减的，这是因为在push之前都会把小的元素pop掉
+            while (!stack.isEmpty() && temperatures[stack.peek()] < curr) {
+                int pre = stack.pop();
+                res[pre] = i - pre;
             }
             stack.push(i);
         }
-        return answer;
+        return res;
     }
 }
 // @lc code=end
