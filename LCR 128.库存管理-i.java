@@ -11,19 +11,18 @@
 // @lc code=start
 class Solution {
     public int inventoryManagement(int[] stock) {
-        int low = 0;
-        int high = stock.length - 1;
-        while (low < high) {
-            int middle = (low + high) / 2;
-            if (stock[middle] < stock[high]) {// 如果mid小于high上的数说明最小数字区间在[low, mid](包括mid)
-                high = middle;
-            } else if (stock[middle] > stock[high]) {// mid大于high，说明mid后面存在降序（旋转点）
-                low = middle + 1;
+        int left = 0;
+        int right = stock.length - 1;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            int curr = stock[mid];
+            if (curr <= stock[right]) {
+                right = mid;
             } else {
-                high -= 1;
+                left = mid + 1;
             }
         }
-        return stock[low];
+        return stock[left];
     }
 }
 // @lc code=end
