@@ -11,37 +11,25 @@
 // @lc code=start
 class Solution {
     public boolean findTargetIn2DPlants(int[][] plants, int target) {
-        if (plants.length == 0 || plants[0].length == 0) {
+        if (plants == null || plants.length == 0 || plants[0].length == 0) {
             return false;
         }
-        boolean flag = false;
-        for (int i = 0; i < plants.length; i++) {
-            if (plants[i][0] > target) {
-                break;
-            }
-            flag = binaryQuery(plants[i], target);
-            if (flag) {
-                break;
-            }
-        }
-        return flag;
-    }
-
-    private boolean binaryQuery(int[] nums, int target) {
-        int l = 0, r = nums.length - 1;
-        while (l <= r) {
-            int middle = (l + r) / 2;
-            if (nums[middle] == target) {
+        int rows = plants.length;
+        int cols = plants[0].length;
+        int i = 0;
+        int j = cols - 1;
+        while (i < rows && j >= 0) {
+            if (plants[i][j] == target) {
                 return true;
-            }
-            if (nums[middle] > target) {
-                r = middle - 1;
+            } else if (plants[i][j] > target) {
+                j--;
             } else {
-                l = middle + 1;
+                i++;
             }
         }
         return false;
     }
+
 }
 // @lc code=end
 
