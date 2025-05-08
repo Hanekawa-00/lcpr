@@ -25,22 +25,18 @@ class Solution {
             return new int[0];
         }
         ListNode pre = null;
-        ListNode node = head;
         int count = 0;
-        // 反转链表的同时统计节点数
-        while (node != null) {
-            ListNode temp = node.next;
-            node.next = pre;
-            pre = node;
-            node = temp;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
             count++;
         }
-        // 此时 pre 指向反转后链表的头
         int[] res = new int[count];
-        node = pre; // 重置 node 指向反转后的链表头
-        for (int i = 0; i < count; i++) {
-            res[i] = node.val;
-            node = node.next;
+        for (int i = 0; i < res.length; i++) {
+            res[i] = pre.val;
+            pre = pre.next;
         }
         return res;
     }
