@@ -27,43 +27,26 @@
  */
 class Solution {
     public TreeNode deduceTree(int[] preorder, int[] inorder) {
-        int n = preorder.length;
-        return build(preorder, inorder, 0, n - 1, 0, n - 1);
+        return build(preorder, inorder, 0, preorder.length - 1, 0, inorder.length - 1);
     }
 
-    /**
-     * @param preorder
-     * @param inorder
-     * @param preStartIndex 前序遍历索引区间起始索引
-     * @param preEndIndex
-     * @param inStartIndex  中序遍历区间起始索引
-     * @param inEndIndex
-     * @return
-     */
-    private TreeNode build(int[] preorder, int[] inorder, int preStartIndex, int preEndIndex, int inStartIndex,
-            int inEndIndex) {
-        if (preStartIndex > preEndIndex) {
+    private TreeNode build(int[] preorder, int[] inorder, int preI, int preJ, int inI, int inJ) {
+        if (preI > preJ || inI > inJ) { // 越界则返回null
             return null;
         }
-        // 前序遍历是：根左右，所以该子树的root为前序遍历的首个值
-        int rootVal = preorder[preStartIndex];
+        int rootVal = preorder[preI];
         TreeNode root = new TreeNode(rootVal);
-        // 左子树节点个数
-        int leftSize = 0;
-        // 统计左子树数目
-        for (int i = inStartIndex; i < inorder.length; i++) {
-            // 中序遍历是左根右，即左子树，根节点，右子树
+        int inRootIndex = inI;
+        int subLeftLength = 0;
+        for (int i = inI; i <= inJ; i++) {
             if (inorder[i] == rootVal) {
+                inRootIndex = i;
+                subLeftLength = i - inI;
                 break;
             }
-            leftSize++;
         }
-        // 递归构建左子树区间为preorder[当前root节点位置所应+1,当前位置索引+左子树大小]inorder[依然是inStartIndex,+左子树大小]
-        root.left = build(preorder, inorder, preStartIndex + 1, preStartIndex + leftSize, inStartIndex,
-                inStartIndex + leftSize);
-        // 递归构建右子树
-        root.right = build(preorder, inorder, preStartIndex + leftSize + 1, preEndIndex, inStartIndex + leftSize + 1,
-                inEndIndex);
+        root.left = build(preorder, inorder, preI + 1, preI + subLeftLength, inI, inRootIndex - 1);
+        root.right = build(preorder, inorder, preI + subLeftLength + 1, preJ, inRootIndex + 1, inJ);
         return root;
     }
 }
