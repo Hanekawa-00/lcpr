@@ -8,28 +8,16 @@
 // @lc code=start
 class Solution {
     public int cuttingBamboo(int bamboo_len) {
-        if (bamboo_len < 2) {
-            return 0;
-        }
         int[] dp = new int[bamboo_len + 1];
-        dp[0] = 0;
-        dp[1] = 1;
-        // 统计dp其他状态
-        for (int i = 2; i <= bamboo_len; i++) {
-            // 初始化当前dp为0
-            int curMax = 0;
-            // 遍历每个可切分点，将长度为i的竹子切为j和(i-j)
-            for (int j = 1; j < i; j++) {
-                // 取不拆分时的整数值和继续拆分的最大乘积中的最大值
-                /*
-                 * 对于任意长度 i 来说，我们可以在每个合法位置 j（1 ≤ j < i）处做一次切割，
-                 * 将竹子分为两部分：长度为 j 和 i -j。这一步是一次切割操作，但对于每一部分，我们可以选择：
-                 * 不再切割：直接使用当前的段长，即使用 j 或 i - j；
-                 * 继续切割：利用前面已经求得的最优子解，即使用 dp[j] 或 dp[i - j]。
-                 */
-                curMax = Math.max(curMax, Math.max(j * (i - j), j * dp[i - j]));
+        dp[0] = 0;// 不存在，置零方便计算
+        dp[1] = 0;// 长度为1无法分割
+        dp[2] = 1;// 只能被分成1*1
+        for (int i = 3; i < dp.length; i++) {
+            // 假设分割点为j（这里为了方便计算控制其中一部分j长度不变，计算i-j这部分的最大乘积）
+            for (int j = 1; j <= i; j++) {
+                // i-j这段有两个选择：保留长度，或者切割
+                dp[i] = Math.max(dp[i], j * Math.max(i - j, dp[i - j]));
             }
-            dp[i] = curMax;
         }
         return dp[bamboo_len];
     }
