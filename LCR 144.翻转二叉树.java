@@ -29,13 +29,12 @@ class Solution {
         if (root == null) {
             return null;
         }
-        // 交换已经交换完成的子树
-        TreeNode tmp = root.left;
-        // left节点与翻转后的右子树交换
-        root.left = flipTree(root.right);
-        // right节点与翻转后的左子树（其实现在这个子树已经断掉了，tmp用来暂存左节点）
-        root.right = flipTree(tmp);
-        // 将翻转后的根节点返回
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        flipTree(left);
+        flipTree(right);
+        root.left = right;
+        root.right = left;
         return root;
     }
 }
