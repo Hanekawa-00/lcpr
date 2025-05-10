@@ -11,17 +11,18 @@
 // @lc code=start
 class Solution {
     public int[] trainingPlan(int[] actions) {
+        // i用来维护奇数的索引，j用来维护偶数的索引
         int i = 0, j = actions.length - 1;
         while (i < j) {
-            // 找到从当前索引开始首个偶数
+            // 从左往右找到第一个偶数
             while (i < j && actions[i] % 2 == 1) {
                 i++;
             }
-            // 从右往左找到首个奇数
+            // 从右往左找到第一个奇数
             while (i < j && actions[j] % 2 == 0) {
                 j--;
             }
-            // 交换两个奇偶位置
+            // 交换
             int temp = actions[i];
             actions[i] = actions[j];
             actions[j] = temp;
