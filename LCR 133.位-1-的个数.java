@@ -10,13 +10,19 @@
 // @lcpr-template-end
 // @lc code=start
 public class Solution {
-    // you need to treat n as an unsigned value
     public int hammingWeight(int n) {
         int count = 0;
-        // 与运算可以去除最低位的1
+        // 当 n 不为 0 时，说明 n 中至少还有一位是 1 (对于负数，其补码表示)
+        // 使用无符号右移 (>>>) 可以确保在处理负数时，左边补 0，
+        // 从而使循环在处理完所有32位后，n 最终变为 0。
         while (n != 0) {
-            n &= n - 1;
-            count++;
+            // 检查最低位是否为 1
+            // (n & 1) 的结果是 0 或 1,这样可以避免使用取模比较
+            if ((n & 1) == 1) {
+                count++;
+            }
+            // 无符号右移一位，处理下一位
+            n = n >>> 1;
         }
         return count;
     }
