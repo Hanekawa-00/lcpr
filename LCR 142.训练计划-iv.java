@@ -27,15 +27,13 @@ class Solution {
         if (l2 == null) {
             return l1;
         }
-        ListNode head = null;
-        if (l1.val > l2.val) {
-            head = l2;
-            head.next = trainningPlan(l1, l2.next);
+        // 取最小值作为头节点
+        if (l1.val <= l2.val) {
+            l1.next = trainningPlan(l1.next, l2);
         } else {
-            head = l1;
-            head.next = trainningPlan(l1.next, l2);
+            l2.next = trainningPlan(l1, l2.next);
         }
-        return head;
+        return l1.val <= l2.val ? l1 : l2;
     }
 }
 // @lc code=end
