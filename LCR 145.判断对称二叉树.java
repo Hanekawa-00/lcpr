@@ -29,19 +29,19 @@ class Solution {
         if (root == null) {
             return true;
         }
-        // 对两个子树进行深度遍历，而不是从根节点开始
-        return check(root.left, root.right);
+        return helper(root.left, root.right);
     }
 
-    private boolean check(TreeNode root1, TreeNode root2) {
-        if (root1 == null && root2 == null) {
+    private boolean helper(TreeNode node1, TreeNode node2) {
+        if (node1 == null && node2 == null) {
             return true;
         }
-        if (root1 == null || root2 == null) {
+        if (node1 == null || node2 == null) {
             return false;
         }
-        return (root1.val == root2.val) && check(root1.right, root2.left) && check(root1.left, root2.right);
+        return node1.val == node2.val && helper(node1.left, node2.right) && helper(node1.right, node2.left);
     }
+
 }
 // @lc code=end
 
