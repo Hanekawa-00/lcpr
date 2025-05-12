@@ -11,36 +11,26 @@
 // @lc code=start
 class Solution {
     public double myPow(double x, int n) {
-        if (n == 0) {
-            return 1;
-        }
-        // 处理n小于零的情况
-        long power = n;
-        if (power < 0) {
+        long N = n;
+        if (N < 0) {
             x = 1 / x;
-            power = -power;
+            N = -N;
         }
-        // 初始化
-        double res = 1.0;
-        while (power > 0) {
-            // 如果当前幂次方是奇数
-            if (power % 2 == 1) {
-                res *= x;
+        double ans = 1.0;
+        // 当前基数
+        double currX = x;
+        while (N != 0) {
+            // 说明当前位为1
+            if (N % 2 == 1) {
+                ans *= currX;
             }
-            // 平方指数减半
-            /*
-             * 为什么？
-             * 比如说原本是2^10
-             * 可以转化为 （2^2）^5
-             * 这就是快速幂
-             * 如果减半后变为奇数，那么上一层条件判断就起效果了
-             * 是奇数就先保存，更新res，即每次为奇数时将x乘到res中，直到刚好为1时，正好得到结果。
-             * 注意 1 右移一位变为0
-             */
-            x *= x;
-            power >>= 1;
+            // 右移一位
+            N /= 2;
+            // 如果幂次为1011，那么可以转化为2^1+2^2+2^4
+            // 这里的平方相当于记录并累加次数即2^i变为2^(i+1),并在遇到1的时候乘入结果中
+            currX = currX * currX;
         }
-        return res;
+        return ans;
     }
 }
 // @lc code=end
