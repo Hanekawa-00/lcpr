@@ -11,15 +11,15 @@
 // @lc code=start
 class Solution {
     public int[] countNumbers(int cnt) {
-        int j = 1;
-        for (int i = 0; i < cnt; i++) {
-            j *= 10;
+        int size = 1;
+        for (int i = 1; i <= cnt; i++) {
+            size = size * 10;
         }
-        int[] res = new int[j - 1];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = i + 1;
+        int[] ans = new int[size - 1];
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = i + 1;
         }
-        return res;
+        return ans;
     }
 }
 // @lc code=end
