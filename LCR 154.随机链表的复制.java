@@ -31,44 +31,30 @@ class Solution {
         if (head == null) {
             return null;
         }
-
-        // 使用 Map<Node, Node> 来记录旧节点 -> 新节点的映射关系
-        Map<Node, Node> map = new HashMap<>();
-
-        // 第一遍遍历：先把所有节点复制一遍，只处理节点本身和 next 指针
-        Node oldNode = head;
-        while (oldNode != null) {
-            // 创建一个新的节点(如果还没建过)
-            if (!map.containsKey(oldNode)) {
-                map.put(oldNode, new Node(oldNode.val));
+        Node node = head;
+        HashMap<Node, Node> map = new HashMap<>();
+        // 先遍历链表，复制前后顺序，并添加映射关系，方便使用random连接
+        Node pre = null; // 辅助节点
+        while (node != null) {
+            Node newNode = new Node(node.val);
+            if (pre != null) {
+                pre.next = newNode;
             }
-
-            // 处理 next
-            if (oldNode.next != null) {
-                if (!map.containsKey(oldNode.next)) {
-                    map.put(oldNode.next, new Node(oldNode.next.val));
-                }
-                // 令新节点的 next 指向 老节点的 next 对应的新节点
-                map.get(oldNode).next = map.get(oldNode.next);
-            }
-
-            oldNode = oldNode.next;
+            map.put(node, newNode);
+            pre = newNode;
+            node = node.next;
         }
-
-        // 第二遍遍历：处理 random 指针
-        oldNode = head;
-        while (oldNode != null) {
-            if (oldNode.random != null) {
-                // 新节点的 random = 老节点 random 对应的新节点
-                map.get(oldNode).random = map.get(oldNode.random);
+        node = head;
+        // 创建random连接关系
+        while (node != null) {
+            Node curr = map.get(node);
+            if (node.random == null) {
+                curr.random = null;
             } else {
-                // 如果原节点的 random 为 null，则新节点 random 也为 null
-                map.get(oldNode).random = null;
+                curr.random = map.get(node.random);
             }
-            oldNode = oldNode.next;
+            node = node.next;
         }
-
-        // 返回头结点对应的新节点
         return map.get(head);
     }
 }
