@@ -9,57 +9,40 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 class MinStack {
-    int min;
-    int[] stack;
-    int size;
+    private Deque<Integer> dataStack;
+    // 这个用来同步dataStack每个状态中的最小值
+    private Deque<Integer> minTrackerStack;
 
-    /** initialize your data structure here. */
     public MinStack() {
-        stack = new int[10];
-        min = Integer.MAX_VALUE;
-        size = 0;
+        dataStack = new ArrayDeque<>();
+        minTrackerStack = new ArrayDeque<>();
     }
 
-    private void checkAndResize() {
-        if (size < stack.length) {
-            return;
+    public void push(int val) {
+        dataStack.push(val);
+        if (minTrackerStack.isEmpty() || val <= minTrackerStack.peek()) {
+            minTrackerStack.push(val);
         } else {
-            int[] newStack = new int[stack.length * 2];
-            for (int i = 0; i < stack.length; i++) {
-                newStack[i] = stack[i];
-            }
-            stack = newStack;
+            minTrackerStack.push(minTrackerStack.peek());// 因为之前的最小值仍然是当前栈状态下的最小值
         }
-    }
-
-    public void push(int x) {
-        checkAndResize();
-        stack[size] = x;
-        size++;
-        min = Math.min(min, x);
     }
 
     public void pop() {
-        size--;
-        if (stack[size] == min) {
-            refreshMin();
-        }
-    }
-
-    private void refreshMin() {
-        min = Integer.MAX_VALUE;
-        for (int i = 0; i < size; i++) {
-            min = Math.min(min, stack[i]);
-        }
+        dataStack.pop();
+        minTrackerStack.pop();
     }
 
     public int top() {
-        return stack[size - 1];
+        return dataStack.peek();
     }
 
     public int getMin() {
-        return min;
+        return minTrackerStack.peek();
     }
 }
 
