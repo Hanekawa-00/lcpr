@@ -12,42 +12,40 @@
 class Solution {
 
     public int[] inventoryManagement(int[] stock, int cnt) {
-        if (stock == null) {
-            return null;
-        }
         quickSort(stock, 0, stock.length - 1);
         int[] res = new int[cnt];
-        for (int i = 0; i < cnt; i++) {
+        for (int i = 0; i < res.length; i++) {
             res[i] = stock[i];
         }
         return res;
     }
 
     private void quickSort(int[] nums, int left, int right) {
-        if (left >= right) {
-            return;
+        if (left < right) {
+            int pivotIndex = partition(nums, left, right); // 正确分区
+            quickSort(nums, left, pivotIndex - 1);
+            quickSort(nums, pivotIndex + 1, right);
         }
-        int bas = nums[left];
-        int start = left;
-        int end = right;
-        while (left < right) {
-            while (nums[right] > bas && left < right) {
-                right--;
-            }
-            while (nums[left] <= bas && left < right) {
-                left++;
-            }
-            if (left < right) {
-                int temp = nums[left];
-                nums[left] = nums[right];
-                nums[right] = temp;
-            }
+    }
+
+    private int partition(int[] nums, int left, int right) {
+        // 以 nums[left] 为基准数
+        int i = left, j = right;
+        while (i < j) {
+            while (i < j && nums[j] >= nums[left]) // 先判断i，j位置是否越界，否则数组会索引越界
+                j--; // 从右向左找首个小于基准数的元素
+            while (i < j && nums[i] <= nums[left])
+                i++; // 从左向右找首个大于基准数的元素
+            swap(nums, i, j); // 交换这两个元素
         }
-        int temp = nums[start];
-        nums[start] = nums[left];
-        nums[left] = temp;
-        quickSort(nums, start, left - 1);
-        quickSort(nums, left + 1, end);
+        swap(nums, i, left); // 将基准数交换至两子数组的分界线
+        return i; // 返回基准数的索引
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
     }
 }
 // @lc code=end
