@@ -11,10 +11,10 @@
 // @lc code=start
 
 import java.util.ArrayList;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
 
 /**
  * Definition for a binary tree node.
@@ -36,31 +36,23 @@ class Solution {
         if (root == null) {
             return new int[0];
         }
-        Queue<TreeNode> queue = new LinkedList<>() {
-            {
-                add(root);
-            }
-        };
-        // 层序遍历
+        Queue<TreeNode> queue = new LinkedList<>();
         List<Integer> resList = new ArrayList<>();
+        queue.offer(root);
         while (!queue.isEmpty()) {
-            TreeNode node = queue.poll();
-            resList.add(node.val);
-            // 左右节点入队
-            if (node.left != null) {
-                queue.add(node.left);
+            TreeNode poll = queue.poll();
+            resList.add(poll.val);
+            if (poll.left != null) {
+                queue.offer(poll.left);
             }
-            if (node.right != null) {
-                queue.add(node.right);
+            if (poll.right != null) {
+                queue.offer(poll.right);
             }
         }
-        int[] ans = new int[resList.size()];
-        int i = 0;
-        for (Integer item : resList) {
-            ans[i] = item;
-            i++;
-        }
-        return ans;
+        int[] res = resList.stream()
+                .mapToInt(Integer::intValue) // Integet.intValue()
+                .toArray();
+        return res;
     }
 }
 // @lc code=end
