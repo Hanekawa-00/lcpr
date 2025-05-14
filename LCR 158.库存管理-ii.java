@@ -11,18 +11,21 @@
 // @lc code=start
 class Solution {
     public int inventoryManagement(int[] stock) {
-        // 假设votes是对最多元素的投票（这种投票有赞成票和反对票，votes是抵消完成后的票数）
-        int x = 0, votes = 0;
-        for (int num : stock) {
-            // 如果当前没有候选商品
+        // 摩尔投票
+        int votes = 0;
+        int x = stock[0];
+        for (int i = 0; i < stock.length; i++) {
             if (votes == 0) {
-                // 假设当前商品是候选商品
-                x = num;
+                x = stock[i];
+                votes++;
+                continue;
             }
-            // 如果当前元素是等于x,认定为是投票，否则认定为是抵消
-            votes += num == x ? 1 : -1;
+            if (x == stock[i]) {
+                votes++;
+            } else {
+                votes--;
+            }
         }
-        // 最后存活下来的为最多票
         return x;
     }
 }
