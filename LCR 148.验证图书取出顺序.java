@@ -14,13 +14,11 @@ import java.util.Stack;
 
 class Solution {
     public boolean validateBookSequences(int[] putIn, int[] takeOut) {
-        Stack<Integer> stack = new Stack<Integer>();
+        Stack<Integer> stack = new Stack<>();
         int takeOutIndex = 0;
         for (int i = 0; i < putIn.length; i++) {
             stack.push(putIn[i]);
-            while (takeOutIndex <= takeOut.length - 1
-                    && !stack.isEmpty()
-                    && takeOut[takeOutIndex] == stack.peek()) {
+            while (!stack.isEmpty() && stack.peek() == takeOut[takeOutIndex]) {
                 stack.pop();
                 takeOutIndex++;
             }
