@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -33,29 +32,27 @@ import java.util.Queue;
  */
 class Solution {
     public List<List<Integer>> decorateRecord(TreeNode root) {
-        List<List<Integer>> resList = new ArrayList<>();
-        Queue<TreeNode> queue = new LinkedList<TreeNode>();
-        if (root != null) {
-            queue.add(root);
+        if (root == null) {
+            return new ArrayList<>();
         }
+        List<List<Integer>> res = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
         while (!queue.isEmpty()) {
-            List<Integer> temp = new ArrayList<>();
-            // 当队列添加元素时，queue大小会发生变化，所以一开始要保存size（当前层的元素数量）
-            for (int i = queue.size(); i > 0; i--) {
-                TreeNode node = queue.poll();
-                // 保存当前层节点
-                temp.add(node.val);
-                // 将子节点入队，此次循环不会保存(因为是下一层的节点)
-                if (node.left != null) {
-                    queue.add(node.left);
+            ArrayList<Integer> item = new ArrayList<>();
+            for (int i = queue.size() - 1; i >= 0; i--) {
+                TreeNode poll = queue.poll();
+                item.add(poll.val);
+                if (poll.left != null) {
+                    queue.offer(poll.left);
                 }
-                if (node.right != null) {
-                    queue.add(node.right);
+                if (poll.right != null) {
+                    queue.offer(poll.right);
                 }
             }
-            resList.add(temp);
+            res.add(item);
         }
-        return resList;
+        return res;
     }
 }
 // @lc code=end
