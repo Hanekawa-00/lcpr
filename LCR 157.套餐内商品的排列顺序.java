@@ -14,29 +14,32 @@ import java.util.HashSet;
 import java.util.Set;
 
 class Solution {
+    private Set<String> set;
+
     public String[] goodsOrder(String goods) {
-        HashSet<String> resSet = new HashSet<String>();
-        backtrack(goods, resSet, new boolean[goods.length()], new StringBuilder());
-        return resSet.toArray(new String[0]);
+        set = new HashSet<>();
+        char[] charArray = goods.toCharArray();
+        backtrack(charArray, new boolean[goods.length()], new StringBuilder());
+        String[] res = set.toArray(new String[0]);
+        return res;
     }
 
-    private void backtrack(String goods, Set<String> resSet, boolean[] path, StringBuilder curr) {
-        if (curr.length() == goods.length()) {
-            resSet.add(curr.toString());
+    private void backtrack(char[] goods, boolean[] path, StringBuilder str) {
+        if (str.length() == goods.length) {
+            set.add(str.toString());
             return;
         }
-        for (int i = 0; i < goods.length(); i++) {
+        // 因为是全集合，所以要从0开始，而不是一个起点多路径选择，是多个起点多个选择
+        for (int i = 0; i < goods.length; i++) {
+            char curr = goods[i];
             if (!path[i]) {
-                // 尝试
-                curr.append(goods.charAt(i));
+                str.append(curr);
                 path[i] = true;
-                backtrack(goods, resSet, path, curr);
-                // 回退
-                curr.deleteCharAt(curr.length() - 1);
+                backtrack(goods, path, str);
+                str.deleteCharAt(str.length() - 1);
                 path[i] = false;
             }
         }
-        return;
     }
 }
 // @lc code=end
