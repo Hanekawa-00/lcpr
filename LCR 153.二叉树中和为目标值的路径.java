@@ -30,33 +30,33 @@ import java.util.List;
  * }
  */
 class Solution {
+    private List<List<Integer>> res;
 
     public List<List<Integer>> pathTarget(TreeNode root, int target) {
-        List<List<Integer>> res = new ArrayList<>();
-        backtrack(root, target, 0, new ArrayList<Integer>(), res);
+        res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        backtrack(root, new ArrayList<>(), target);
         return res;
     }
 
-    private void backtrack(TreeNode root, int target, int curr, List<Integer> item, List<List<Integer>> res) {
-        if (root == null) {
+    private void backtrack(TreeNode currNode, List<Integer> pathList, int target) {
+        if (currNode == null) {
             return;
         }
-        curr += root.val;
-        item.add(root.val);
-        // 处理叶子节点
-        if (root.left == null && root.right == null) {
-            // 注意这里题目要求的是到叶子节点的和
-            if (curr == target) {
-                res.add(new ArrayList<>(item));
-            }
-            // 虽然得到结果但是要把每个路径都要尝试一下，这里仍然需要回溯
-            item.remove(item.size() - 1);
-            return;
+        int currVal = currNode.val;
+        pathList.add(currVal);
+        // 遍历到叶子节点,并且已经找到target路径
+        if (currNode.left == null && currNode.right == null && target - currVal == 0) {
+            res.add(new ArrayList<>(pathList));
+            // pathList.remove(pathList.size() - 1);
+            // return;
         }
-        backtrack(root.left, target, curr, item, res);
-        backtrack(root.right, target, curr, item, res);
-        // 回溯到上一层（上一个节点）状态
-        item.remove(item.size() - 1);
+        backtrack(currNode.left, pathList, target - currVal);
+        backtrack(currNode.right, pathList, target - currVal);
+        pathList.remove(pathList.size() - 1);
+        return;
     }
 }
 // @lc code=end
