@@ -13,8 +13,6 @@
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 /**
  * Definition for a binary tree node.
@@ -33,52 +31,46 @@ import java.util.Queue;
  */
 class Solution {
     public List<List<Integer>> decorateRecord(TreeNode root) {
-        List<List<Integer>> resList = new ArrayList<>();
-        // 使用双端队列，既可以从头出，也可以从尾出
-        Deque<TreeNode> queue = new LinkedList<TreeNode>();
-        if (root != null) {
-            queue.add(root);
+        if (root == null) {
+            return new ArrayList<>();
         }
-        int row = 1;
-        while (!queue.isEmpty()) {// 每次循环都遍历两层（奇偶）想象成是一个s型遍历
-            ArrayList<Integer> tempList = new ArrayList<Integer>();
-            // 遍历奇数层
-            for (int i = queue.size(); i > 0; i--) {
-                // 普通顺序出队
-                TreeNode node = queue.removeFirst();
-                tempList.add(node.val);
-                // 下一层数据入队（从队尾）
+        List<List<Integer>> res = new ArrayList<>();
+        // 双端队列
+        Deque<TreeNode> deque = new LinkedList<>();
+        deque.addFirst(root);
+        while (!deque.isEmpty()) {
+            // 正序层
+            ArrayList<Integer> item1 = new ArrayList<>();
+            for (int i = deque.size(); i > 0; i--) {
+                TreeNode node = deque.removeFirst();
+                item1.add(node.val);
                 if (node.left != null) {
-                    queue.addLast(node.left);
+                    deque.addLast(node.left);
                 }
                 if (node.right != null) {
-                    queue.addLast(node.right);
+                    deque.addLast(node.right);
                 }
             }
-            // 保存
-            resList.add(tempList);
-            // 如果下一层没有数据则说明到达最后一层直接退出
-            if (queue.isEmpty()) {
-                break;
-            }
-            tempList = new ArrayList<>();
-            // 遍历偶数层
-            for (int i = queue.size(); i > 0; i--) {
-                // 由于偶数层要倒序，所以要从队尾出
-                TreeNode node = queue.removeLast();
-                tempList.add(node.val);
-                // 下一层入队（从队头入队）
-                // 注意这里从右边开始入队
+            // 逆序层
+            ArrayList<Integer> item2 = new ArrayList<>();
+            for (int i = deque.size(); i > 0; i--) {
+                TreeNode node = deque.removeLast();
+                item2.add(node.val);
                 if (node.right != null) {
-                    queue.addFirst(node.right);
+                    deque.addFirst(node.right);
                 }
                 if (node.left != null) {
-                    queue.addFirst(node.left);
+                    deque.addFirst(node.left);
                 }
             }
-            resList.add(tempList);
+            if (!item1.isEmpty()) {
+                res.add(item1);
+            }
+            if (!item2.isEmpty()) {
+                res.add(item2);
+            }
         }
-        return resList;
+        return res;
     }
 }
 // @lc code=end
