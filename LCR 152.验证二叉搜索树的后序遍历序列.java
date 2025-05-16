@@ -10,42 +10,36 @@
 // @lcpr-template-end
 // @lc code=start
 class Solution {
-    /**
-     * 二叉搜索树严格定义左子树全部大于root。，右子树严格小于root。
-     * 后序遍历结果中，root必定是最后一个元素
-     * 以此为突破口来验证
-     * 
-     * @param postorder
-     * @return
-     */
+
     public boolean verifyTreeOrder(int[] postorder) {
-        if (postorder == null || postorder.length <= 1) {
+        // 二叉搜索树的性质是左子树所有值都小于根节点，右子树则相反
+        if (postorder == null || postorder.length == 0) {
             return true;
         }
-        return verify(postorder, 0, postorder.length - 1);
+        return recur(postorder, 0, postorder.length - 1);
     }
 
-    private boolean verify(int[] postorder, int start, int end) {
-        if (start >= end) {
+    private boolean recur(int[] postorder, int i, int j) {
+        if (i >= j) {
             return true;
         }
-        // 设置该子树的root值
-        int rootVal = postorder[end];
-        // 找到首个大于根节点的值所在索引
-        // 这个子节点就是左右子树的分界线(如果是搜索树)
-        int rightStart = start;
-        while (rightStart < end && postorder[rightStart] < rootVal) {
-            rightStart++;
+        int rootVal = postorder[j];
+        int m = i;// 分割点
+        while (postorder[m] < rootVal) {
+            m++;
         }
-        // 检查右子树是否全部大于root值（这里左子树已经遍历过了）
-        for (int i = rightStart; i < end; i++) {
-            if (postorder[i] < rootVal) {
-                return false;// 违背搜索树的定义
+        int p = m;
+        // 初步判断,验证右子树，以当前rootVal为根节点的二叉树是否满足搜索二叉树的性质
+        while (p < j) {
+            if (postorder[p] < rootVal) {
+                return false;
             }
+            p++;
         }
-        // 递归判断左右子树
-        return verify(postorder, start, rightStart - 1) && verify(postorder, rightStart, end - 1);
+        // 验证左右子树
+        return recur(postorder, i, m - 1) && recur(postorder, m, j - 1);
     }
+
 }
 // @lc code=end
 
