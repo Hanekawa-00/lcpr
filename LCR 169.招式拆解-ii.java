@@ -10,21 +10,20 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-
 class Solution {
     public char dismantlingAction(String arr) {
-        // 有序哈希表
-        LinkedHashMap<Character, Boolean> linkedHashMap = new LinkedHashMap<Character, Boolean>();
-        char[] charArray = arr.toCharArray();
-        for (char ch : charArray) {
-            // 我们只注意两种状态，出现过一次，出现过多次
-            linkedHashMap.put(ch, linkedHashMap.containsKey(ch));
+        if (arr == null || arr.length() == 0) {
+            return ' ';
         }
-        for (Entry<Character, Boolean> entry : linkedHashMap.entrySet()) {
-            if (!entry.getValue()) {
-                return entry.getKey();
+        int[] count = new int[26]; // 用于统计字符出现次数
+        // 第一次遍历：统计每个字符的出现次数
+        for (char c : arr.toCharArray()) {
+            count[c - 'a']++;
+        }
+        // 第二次遍历：查找第一个只出现一次的字符
+        for (char c : arr.toCharArray()) {
+            if (count[c - 'a'] == 1) { // 因为是按顺序遍历的，所以肯定是返回首个只出现一次的字符
+                return c;
             }
         }
         return ' ';
