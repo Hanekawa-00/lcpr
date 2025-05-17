@@ -29,7 +29,7 @@ class Solution {
         if (root == null) {
             return 0;
         }
-        // 左右子树中最大深度加1
+        // 深度优先遍历
         return Math.max(calculateDepth(root.left), calculateDepth(root.right)) + 1;
     }
 }
