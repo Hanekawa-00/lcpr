@@ -11,26 +11,26 @@
 // @lc code=start
 class Solution {
     public void sortColors(int[] nums) {
-        int left = 0; // left的左边全是0
-        int index = 0;
-        int right = nums.length - 1; // right右边全是2
-        while (index <= right) {
-            if (nums[index] == 0) {
-                swap(nums, index, left++);
-                // 这里index为什么可以++？
-                index++; 
-            } else if (nums[index] == 2) {
-                swap(nums, index, right--);
+        // current用来遍历，left、right分别是1,即中间那段的左右边界
+        int left = 0, current = 0, right = nums.length - 1;
+        while (current <= right) {
+            if (nums[current] == 0) {
+                swap(nums, left, current);
+                left++;
+                current++;
+            } else if (nums[current] == 2) {
+                swap(nums, current, right);
+                right--;
             } else {
-                index++;
+                current++;
             }
         }
     }
 
-    private void swap(int[] nums, int index1, int index2) {
-        int temp = nums[index1];
-        nums[index1] = nums[index2];
-        nums[index2] = temp;
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
 // @lc code=end
