@@ -9,21 +9,20 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+import java.util.HashMap;
+
 class Solution {
     public int trainingPlan(int[] actions) {
-        int ans = 0;
-        for (int i = 0; i < 32; i++) {
-            int bitSum = 0;
-            for (int num : actions) {
-                // 取最后第i位累加
-                bitSum += (num >> i) & 1;
-            }
-            // 对三取余
-            int bitVal = bitSum % 3;
-            // 构造ans的每一位（先左移i位确定位置，再使用或运算更新ans，由于ans是一位一位计算的，第i位再此时肯定是0）
-            ans |= (bitVal << i);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int action : actions) {
+            map.put(action, map.getOrDefault(action, 0) + 1);
         }
-        return ans;
+        return map.entrySet().stream()
+                .filter(entry -> entry.getValue() == 1)
+                .findFirst()
+                .map(entry -> entry.getKey())
+                .orElse(-1);
     }
 }
 // @lc code=end
