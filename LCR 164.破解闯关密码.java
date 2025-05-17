@@ -11,27 +11,25 @@
 // @lc code=start
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 class Solution {
     public String crackPassword(int[] password) {
-        String[] arr = new String[password.length];
-        for (int i = 0; i < password.length; i++) {
-            arr[i] = String.valueOf(password[i]);
+        if (password == null || password.length == 0) {
+            return "";
         }
-        // 使用快速排序是不是更好？
-        Arrays.sort(arr, new Comparator<String>() {
-            @Override
-            public int compare(String a, String b) {
-                //先相加再比较相加后的值
-                String ab = a + b;
-                String ba = b + a;
-                return ab.compareTo(ba);// 使用字符串字典升序来排序
-            }
+        String[] passStr = new String[password.length];
+        for (int i = 0; i < password.length; i++) {
+            passStr[i] = String.valueOf(password[i]);
+        }
+        // 使用比较器规则来自动排序
+        Arrays.sort(passStr, (s1, s2) -> {
+            String order1 = s1 + s2;
+            String order2 = s2 + s1;
+            return order1.compareTo(order2);
         });
         StringBuilder stringBuilder = new StringBuilder();
-        for (String s : arr) {
-            stringBuilder.append(s);
+        for (String pass : passStr) {
+            stringBuilder.append(pass);
         }
         return stringBuilder.toString();
     }
