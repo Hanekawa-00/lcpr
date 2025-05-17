@@ -10,24 +10,27 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 class Solution {
     public int[] sockCollocation(int[] sockets) {
-        int[] ans = new int[2];
-        HashMap<Integer, Boolean> hashMap = new HashMap<>();
-        for (int i = 0; i < sockets.length; i++) {
-            hashMap.put(sockets[i], hashMap.containsKey(sockets[i]));
+        int xorSum = 0;// 两个撞色所异或的结果
+        for (int num : sockets) {
+            xorSum ^= num;
         }
-        int size = 0;
-        for (Entry<Integer, Boolean> entry : hashMap.entrySet()) {
-            if (!entry.getValue()) {
-                ans[size] = entry.getKey();
-                size++;
+        // xorSum & 补码(-xorSum) 可以得到 xorSum 的二进制表示中最低位的1所对应的值（不是最低位也是可以的，只要这一位是1就可以）
+        int diffBit = xorSum & (-xorSum);
+        int num1 = 0;
+        int num2 = 0;
+        // 将两个不同的数字分在不同的两组，因为只要这一个判断条件就可以区分他们
+        // 至于其他数字，两个相同的数字num & diffBit的结果是同样的，所以能够分到同一组
+        // 所以每个组分别异或就能找到唯一数
+        for (int num : sockets) {
+            if ((num & diffBit) == 0) {
+                num1 ^= num;
+            } else {
+                num2 ^= num;
             }
         }
-        return ans;
+        return new int[] { num1, num2 };
     }
 }
 // @lc code=end
