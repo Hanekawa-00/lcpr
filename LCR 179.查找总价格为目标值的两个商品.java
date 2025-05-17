@@ -9,28 +9,23 @@
 
 // @lcpr-template-end
 // @lc code=start
+
 class Solution {
     public int[] twoSum(int[] price, int target) {
-        int[] ans = new int[2];
-        int right = price.length - 1;
-        int left = 0;
-        while (left < right) {
-            int curr = price[left] + price[right];
-            if (curr == target) {
-                ans[0] = price[left];
-                ans[1] = price[right];
-                break;
-            }
-            //如果当前和偏大说明应该减小
-            // 为什么不是left--，因为之前计算过了。
-            //整个过程是left和right向中间靠
-            if (curr > target) {
-                right--;
-            } else {
+        int left = 0, right = price.length - 1;
+        while (left <= right) {
+            int i = price[left];
+            int j = price[right];
+            int sum = i + j;
+            if (sum == target) {
+                return new int[] { i, j };
+            } else if (sum < target) {
                 left++;
+            } else {
+                right--;
             }
         }
-        return ans;
+        return null;
     }
 }
 // @lc code=end
