@@ -22,15 +22,21 @@
  */
 class Solution {
     ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        // 双指针
-        ListNode pA = headA, pB = headB;
-        // 如果两个链表不相交，最终会在null处相遇
-        while (pA != pB) {
-            // 如果pA到达链表尾部，则从headB开始，以此类推，最终会在相交点相遇（规律）
-            pA = (pA == null) ? headB : pA.next;
-            pB = (pB == null) ? headA : pB.next;
+        ListNode l1 = headA, l2 = headB;
+        // 使用补偿法，两个指针走的步数是相同的，交换起点可以补偿链表长度差
+        while (l1 != l2) {
+            if (l1 == null) {
+                l1 = headB;
+            } else {
+                l1 = l1.next;
+            }
+            if (l2 == null) {
+                l2 = headA;
+            } else {
+                l2 = l2.next;
+            }
         }
-        return pA;
+        return l1;
     }
 }
 // @lc code=end
