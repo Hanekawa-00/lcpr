@@ -15,26 +15,35 @@ import java.util.List;
 
 class Solution {
     public int[][] fileCombination(int target) {
-        List<int[]> vec = new ArrayList<int[]>();
-        int sum = 0, limit = (target - 1) / 2;
-        for (int i = 1; i <= limit; i++) {
-            for (int j = i;; j++) {
-                sum += j;
-                if (sum > target) {
-                    sum = 0;
-                    break;
-                } else if (sum == target) {
-                    int[] res = new int[j - i + 1];
-                    for (int k = i; k <= j; k++) {
-                        res[k - i] = k;
-                    }
-                    vec.add(res);
-                    sum = 0;
-                    break;
+        List<int[]> result = new ArrayList<>();
+        int left = 1, right = 2;
+        
+        // 因为我们至少需要两个数字，且序列从1开始，所以 left 最大不会超过 target/2
+        while (left <= target / 2) {
+            // 使用等差数列公式计算从 left 到 right 的连续整数和
+            int sum = (left + right) * (right - left + 1) / 2;
+            
+            if (sum == target) {
+                // 找到一个符合条件的序列
+                int[] sequence = new int[right - left + 1];
+                for (int i = 0; i < sequence.length; i++) {
+                    sequence[i] = left + i;
                 }
+                result.add(sequence);
+                
+                // 继续查找下一个可能的序列
+                right++;
+            } else if (sum < target) {
+                // 如果和小于目标，增大窗口
+                right++;
+            } else {
+                // 如果和大于目标，收缩窗口
+                left++;
             }
         }
-        return vec.toArray(new int[vec.size()][]);
+        
+        // 转换为二维数组返回
+        return result.toArray(new int[result.size()][]);
     }
 }
 // @lc code=end
