@@ -10,38 +10,29 @@
 // @lcpr-template-end
 // @lc code=start
 class Solution {
-    /**
-     * 对于位置i，检查当前数字是否可以单独解码（不为0）
-     * 检查当前数字与前一个数字是否可以组合解码（10-25范围内）
-     * 累加这两种可能性得到总的解码方式数
-     * 
-     * @param ciphertext
-     * @return
-     */
     public int crackNumber(int ciphertext) {
-        String s = String.valueOf(ciphertext);
-        int n = s.length();
-        if (n == 0) {
-            return 0;
-        }
-        long[] dp = new long[n + 1];
+        String cipStr = String.valueOf(ciphertext);
+        int n = cipStr.length();
+        // dp[i] 表示密文的前i位
+        int[] dp = new int[n + 1];
         dp[0] = 1;
-        if (s.charAt(0) == '0') {
+        if (n > 0) {
+            dp[1] = 1;
+        } else {
             return 1;
         }
-        dp[1] = 1;
         for (int i = 2; i <= n; i++) {
-            char curr = s.charAt(i - 1);
-            char prev = s.charAt(i - 2);
-            if (curr != 0) {
-                dp[i] += dp[i - 1];
-            }
-            int twoDigit = (prev - '0') * 10 + (curr - '0');
-            if (twoDigit >= 10 && twoDigit <= 25) {
-                dp[i] += dp[i - 2];
+            // 情况1,i所在的字符可以和前一个字符进行组合（<25），单独解密+组合解密
+            String sub = cipStr.substring(i - 2, i);
+            int twoDigitVal = Integer.parseInt(sub);
+            if (twoDigitVal >= 10 && twoDigitVal <= 25) {// 可能出现0x的组合，还是小于10,所以要排除
+                dp[i] = dp[i - 2] + dp[i - 1];
+            } else {
+                // 情况2 单独解密
+                dp[i] = dp[i - 1];
             }
         }
-        return (int) dp[n];
+        return dp[n];
     }
 }
 // @lc code=end
