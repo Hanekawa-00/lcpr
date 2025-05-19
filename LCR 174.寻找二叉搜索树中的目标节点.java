@@ -26,33 +26,27 @@
  */
 class Solution {
     int count = 0;
-    int result = -1;
+    int cnt;
+    int res;
 
     public int findTargetNode(TreeNode root, int cnt) {
-        reverseInOrder(root, cnt);
-        return result;
+        this.cnt = cnt;
+        reverseIn(root);
+        return res;
     }
 
-    /**
-     * 反向中序遍历
-     * 
-     * @param root
-     * @param cnt
-     */
-    private void reverseInOrder(TreeNode root, int cnt) {
+    private void reverseIn(TreeNode root) {
         if (root == null) {
             return;
         }
-        reverseInOrder(root.right, cnt);
-        // 计数
+        reverseIn(root.right);
         count++;
         if (count == cnt) {
-            // 从大到小遍历获取到目标值
-            this.result = root.val;
-            // 剪枝
+            res = root.val;
+            // 可选剪枝
             return;
         }
-        reverseInOrder(root.left, cnt);
+        reverseIn(root.left);
     }
 }
 // @lc code=end
