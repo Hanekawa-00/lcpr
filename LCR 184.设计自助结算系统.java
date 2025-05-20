@@ -10,68 +10,48 @@
 // @lcpr-template-end
 // @lc code=start
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
+
 class Checkout {
-    int max;
-    Node head;
-    Node tail;
-
-    private class Node {
-        int val;
-        Node next;
-
-        public Node(int val) {
-            this.val = val;
-        }
-    }
+    Queue<Integer> queue;
+    /**
+     * 双端队列维护有序最大值
+     */
+    Deque<Integer> deque;
 
     public Checkout() {
-        this.max = Integer.MIN_VALUE;
-        head = null;
-        tail = null;
+        queue = new LinkedList<>();
+        deque = new LinkedList<>();
     }
 
     public int get_max() {
-        if (this.max > Integer.MIN_VALUE) {
-            return this.max;
+        if (deque.isEmpty()) {
+            return -1;
         }
-        return -1;
+        return deque.peekFirst();
     }
 
     public void add(int value) {
-        Node node = new Node(value);
-        this.max = Math.max(max, value);
-        if (head == null) {
-            head = node;
-            tail = node;
-            return;
+        while (!deque.isEmpty() && deque.peekLast() < value) {
+            // 由于队列先进先出的特性，这里出队并不会影响
+            // 队列是往后看来获取最大值
+            deque.pollLast();
         }
-        tail.next = node;
-        tail = node;
+        deque.offerLast(value);
+        queue.offer(value);
     }
 
     public int remove() {
-        if (head == null) {
+        if (queue.isEmpty()) {
             return -1;
         }
-        int targetVal = head.val;
-        head = head.next;
-        
-        // 如果队列为空，重置最大值
-        if (head == null) {
-            tail = null;
-            max = Integer.MIN_VALUE;
-        } 
-        // 如果移除的是最大值，重新计算最大值
-        else if (targetVal == max) {
-            max = Integer.MIN_VALUE;
-            Node current = head;
-            while (current != null) {
-                max = Math.max(max, current.val);
-                current = current.next;
-            }
+        int ans = queue.poll();
+        if (ans == deque.peekFirst()) {
+            deque.pollFirst();
         }
-        
-        return targetVal;
+        return ans;
     }
 }
 
