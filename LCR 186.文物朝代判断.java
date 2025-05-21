@@ -10,43 +10,33 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 class Solution {
     public boolean checkDynasty(int[] places) {
-        // 边界条件检查
-        if (places == null || places.length != 5) {
-            return false;
-        }
-        // 排序
-        Arrays.sort(places);
-        Set<Integer> set = new HashSet<Integer>();
-        // 遍历数组，统计未知朝代和去重（直接返回）
-        for (int i = 0; i < places.length; i++) {
-            if (places[i] == 0) {
-                continue;
-            } else {
-                if (set.contains(places[i])) {
-                    return false;
-                }
-                set.add(places[i]);
+        // 用来提取非元素
+        List<Integer> nonZeros = new ArrayList<>();
+        for (int place : places) {
+            if (place != 0) {
+                nonZeros.add(place);
             }
         }
-        // 如果已知朝代为0，或者只有一个已知朝代则直接返回
-        if (set.size() == 0 || set.size() == 1) {
+        if (nonZeros.isEmpty()) {
             return true;
         }
-        int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
-        for (Integer num : set) {
-            max = Math.max(max, num);
-            min = Math.min(min, num);
+        // 排序以便判断是否有重复元素和取得最大最小值
+        Collections.sort(nonZeros);
+        for (int i = 1; i < nonZeros.size(); i++) {
+            if (nonZeros.get(i) == nonZeros.get(i - 1)) {
+                return false;
+            }
         }
-        int maxRange = max - min;
-        // 最大差值<5，且无重复，那么就肯定可以连续
-        return maxRange < 5;
+        int min = nonZeros.get(0);
+        int max = nonZeros.get(nonZeros.size() - 1);
+        // 最大最小值相差大于则肯定无法连续
+        return max - min < 5;
     }
 }
 // @lc code=end
