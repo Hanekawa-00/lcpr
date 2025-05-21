@@ -11,11 +11,7 @@
 // @lc code=start
 class Solution {
     public int mechanicalAccumulator(int target) {
-        /*
-         * 这里的target>0可以看做是递归的出口(实际是target递归到0时就直接返回0了)
-         * 因为&&运算符前面是false的话后面就不会执行了
-         * 那么&&右边的可以看做是实际的递归方法体
-         */
+        // 利用短路特性
         boolean flag = target > 0 && (target += mechanicalAccumulator(target - 1)) > 0;
         return target;
     }
