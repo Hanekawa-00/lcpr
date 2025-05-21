@@ -20,22 +20,23 @@
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-         // 递归终止条件：当前节点为 null 或找到 p 或 q
-         if (root == null || root == p || root == q) {
+        if (root == null || root == p || root == q) {
             return root;
         }
-        
-        // 递归遍历左子树和右子树
-        TreeNode left = lowestCommonAncestor(root.left, p, q);
-        TreeNode right = lowestCommonAncestor(root.right, p, q);
-        
-        // 如果左右子树均不为空，当前节点为 LCA
-        if (left != null && right != null) {
+        // 尝试去子树寻找
+        TreeNode leftLCA = lowestCommonAncestor(root.left, p, q);
+        TreeNode rightLCA = lowestCommonAncestor(root.right, p, q);
+        if (leftLCA != null && rightLCA != null) {
+            // 分别在左右子树
             return root;
-        }
-        // 若只有其中之一为空，说明两个目标节点都在另一个子树上
-        // 否则返回非空的子树结果，若都为空则返回 null
-        return left != null ? left : right;
+        } else if (leftLCA != null) {
+            // 只在其中一个子树，并且找到了p或者q
+            return leftLCA;
+        } else if (rightLCA != null) {
+            return rightLCA;
+        } 
+        //按理说不会执行到这
+        return null;
     }
 }
 // @lc code=end
