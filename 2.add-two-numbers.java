@@ -21,26 +21,31 @@
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        // 存储进位信息
         int carry = 0;
-        ListNode head = new ListNode();
+        ListNode head = null;
         ListNode node = head;
         while (l1 != null || l2 != null) {
-            int num1, num2;
-            num1 = l1 == null ? 0 : l1.val;
-            num2 = l2 == null ? 0 : l2.val;
-            int curr = (num1 + num2 + carry) % 10;
-            carry = (num1 + num2 + carry) / 10;
-            l1 = l1 == null ? null : l1.next;
-            l2 = l2 == null ? null : l2.next;
-            node.val = curr;
-            // 防止多出一个值为0的节点
-            if (l1 != null || l2 != null) {
-                node.next = new ListNode();
+            int newVal;
+            if (l1 != null && l2 != null) {
+                newVal = l1.val + l2.val + carry;
+            } else if (l1 == null) {
+                newVal = l2.val + carry;
+            } else {
+                newVal = l1.val + carry;
+            }
+            carry = newVal / 10;
+            newVal %= 10;
+            ListNode newNode = new ListNode(newVal);
+            if (head == null) {
+                head = newNode;
+                node = head;
+            } else {
+                node.next = newNode;
                 node = node.next;
             }
+            l1 = l1 == null ? null : l1.next;
+            l2 = l2 == null ? null : l2.next;
         }
-        // 如果前面有进位则多出一位
         if (carry != 0) {
             node.next = new ListNode(carry);
         }
