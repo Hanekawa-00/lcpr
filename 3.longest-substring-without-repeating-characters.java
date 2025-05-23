@@ -10,30 +10,29 @@
 // @lcpr-template-end
 // @lc code=start
 
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
-    /**
-     * @param s
-     * @return
-     */
     public int lengthOfLongestSubstring(String s) {
-        // 哈希集合，记录每个字符是否出现过
-        Set<Character> charSet = new HashSet<>();
-        // 左指针
-        int left = 0;
-        // 最长无重复字符子串的长度
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
         int maxLength = 0;
-        // 右指针
+        int left = 0;
+        // 使用哈希来优化，可以达到跳跃索引的效果
+        Map<Character, Integer> map = new HashMap<>();
+        // 同样是移动right指针
         for (int right = 0; right < s.length(); right++) {
-            char c = s.charAt(right);
-            // 如果字符已经出现过，则移动左指针，直到窗口中不再包含重复字符（这个窗口已经不能移动了，所以要创建新窗口）
-            while (charSet.contains(c)) {
-                charSet.remove(s.charAt(left));
-                left++;
+            char curr = s.charAt(right);
+            // 窗口中存在curr
+            if (map.containsKey(curr)) {
+                // 更新左边界为那个重复的key的右边，使用哈希快速跳转而不是逐个遍历
+                left = Math.max(left, map.get(curr) + 1);
             }
-            // 将当前字符加入哈希集合
-            charSet.add(c);
-            // 更新最长无重复字符子串的长度
+            // 添加索引
+            map.put(curr, right);
+            // 更新max
             maxLength = Math.max(maxLength, right - left + 1);
         }
         return maxLength;
