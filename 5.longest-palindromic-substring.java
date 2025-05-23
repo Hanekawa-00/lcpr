@@ -11,39 +11,37 @@
 // @lc code=start
 class Solution {
     public String longestPalindrome(String s) {
-        int n = s.length();
-        // dp[i][j] 表示 s[i...j] 是否是回文串
-        boolean[][] dp = new boolean[n][n];
-        // 最长回文子串的长度
-        int maxLength = 1;
-        // 最长回文子串的起始位置
-        int start = 0;
-        // 所有长度为 1 的子串都是回文串
-        for (int i = 0; i < n; i++) {
+        if (s.length() == 1) {
+            return s;
+        }
+        int len = s.length();
+        // dp[i][j]表示s(i,j)是不是回文子串
+        boolean[][] dp = new boolean[len][len];
+        // 初始化
+        for (int i = 0; i < len; i++) {
             dp[i][i] = true;
         }
-        // 检查所有长度为 2 的子串
-        for (int i = 0; i < n - 1; i++) {
-            if (s.charAt(i) == s.charAt(i + 1)) {
-                dp[i][i + 1] = true;
-                start = i;
-                maxLength = 2;
-            }
-        }
-        // 检查所有长度大于 2 的子串
-        for (int len = 3; len <= n; len++) {
-            for (int i = 0; i <= n - len; i++) {
-                int j = i + len - 1;
-                // 如果 s[i] == s[j] 且 s[i+1...j-1] 是回文串，则 s[i...j] 也是回文串
-                if (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]) {
+        String res = s.substring(0, 1);
+        // 按照子串长度顺序遍历,这样可以避免长串未初始化的问题
+        for (int length = 2; length <= len; length++) {
+            // 左边界
+            for (int i = 0; i <= len - length; i++) {
+                // 右边界
+                int j = i + length - 1;
+                if (s.charAt(i) != s.charAt(j)) {
+                    dp[i][j] = false;
+                } else if (length == 2) {
                     dp[i][j] = true;
-                    start = i;
-                    maxLength = len;
+                } else {
+                    // 因为是按子串长度递增计算的，所以dp[i+1][j-1]必定已经计算
+                    dp[i][j] = dp[i + 1][j - 1];
+                }
+                if (dp[i][j]) {
+                    res = res.length() > length ? res : s.substring(i, j + 1);
                 }
             }
         }
-        // 返回最长回文子串
-        return s.substring(start, start + maxLength);
+        return res;
     }
 }
 // @lc code=end
