@@ -11,20 +11,21 @@
 // @lc code=start
 class Solution {
     public int maxArea(int[] height) {
-        int left = 0;
-        int right = height.length - 1;
-        int maxArea = 0;
+        int max = 0;
+        int left = 0, right = height.length - 1;
         while (left < right) {
-            int width = right - left;
-            int heighth = Math.min(height[left], height[right]);
-            maxArea = Math.max(maxArea, width * heighth);
+            int currWidth = (right - left);
+            int currArea;
             if (height[left] < height[right]) {
+                currArea = currWidth * height[left];
                 left++;
             } else {
+                currArea = currWidth * height[right];
                 right--;
             }
+            max = Math.max(max, currArea);
         }
-        return maxArea;
+        return max;
     }
 }
 // @lc code=end
