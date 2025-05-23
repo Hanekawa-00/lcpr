@@ -9,6 +9,8 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -26,29 +28,21 @@
  */
 class Solution {
     public boolean isBalanced(TreeNode root) {
+        // 二叉树中'任意'节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
         if (root == null) {
             return true;
         }
-        int leftHeight = getHeight(root.left);
-        int righHeight = getHeight(root.right);
-        if (Math.abs(leftHeight - righHeight) > 1) {
-            return false;
-        }
-        return isBalanced(root.left) && isBalanced(root.right);
+        int leftHeght = getHeight(root.left);
+        int rightHeght = getHeight(root.right);
+        int diff = leftHeght > rightHeght ? leftHeght - rightHeght : rightHeght - leftHeght;
+        return diff <= 1 && isBalanced(root.left) && isBalanced(root.right);
     }
 
-    /**
-     * 计算二叉树的高度
-     * 关键在于+1这步
-     * 
-     * @param root
-     * @return
-     */
     private int getHeight(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        return Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+        return 1 + Math.max(getHeight(root.left), getHeight(root.right));
     }
 }
 // @lc code=end

@@ -12,35 +12,42 @@
 class Solution {
     public double[] statisticsProbability(int num) {
         if (num == 0) {
-            return new double[] {};
+            return new double[0]; // 边界条件：num=0，返回空数组
         }
-        // dp[i][j] 表示骰子总和为i时，点数和为j的次数
-        int[][] dp = new int[num + 1][6 * num + 1];
-        // 初始化
-        // 骰子总数为1时，点数和范围为[1,6],次数都为1次
-        for (int i = 1; i <= 6; i++) { // 点数和不可能为0，所以不用考虑
-            dp[1][i] = 1;
+
+        final int faces = 6; // 每个骰子有6个面
+        double total = Math.pow(faces, num); // 有num个骰子，总可能结果数：6^num
+
+        // DP数组：dp[i][j] 表示投掷i个骰子，总和为j的次数
+        long[][] dp = new long[num + 1][faces * num + 1]; // dp[0..num][0..6*num]
+
+        // 初始化：第一个骰子
+        for (int j = 1; j <= faces; j++) {
+            dp[1][j] = 1; // 投1个骰子，总和j (1到6) 的次数是1
         }
-        // 动态规划
-        for (int i = 2; i <= num; i++) { // i维护骰子总数
-            for (int j = i * 1; j <= i * 6; j++) { // j维护点数和，范围为[1*i,6*i]
-                // 现在骰子总数i确定，点数和j确定，开始动态规划
-                // 每轮循环都是为了计算dp[i][j]
-                // 根据第i个骰子的点数可以有不同的结果（点数和为j的次数）
-                for (int k = 1; k <= 6 && k <= j; k++) {// 防止索引越界，即j-k>=0， k <= j
-                    // 当第i个骰子点数为k时，前面几个骰子的点数必定为j-k
-                    dp[i][j] += dp[i - 1][j - k];
+
+        // DP迭代：从第2个骰子开始
+        for (int i = 2; i <= num; i++) { // i: 骰子数
+            for (int j = i; j <= i * faces; j++) { // j: 可能总和，从i到i*6
+                dp[i][j] = 0; // 初始化
+                for (int k = 1; k <= faces && k <= j; k++) { // k: 新骰子的点数
+                    // 从前一个骰子(i-1)的总和(j-k) 转移
+                    if (j - k >= 0) { // 确保总和合法
+                        dp[i][j] += dp[i - 1][j - k];
+                    }
                 }
             }
         }
-        // 计算概率,每个骰子有 6 种可能的结果（1, 2, 3, 4, 5, 6）。num 个骰子相互独立，因此总的可能性是每个骰子可能性的乘积。
-        double totalCases = Math.pow(6, num); // 总的可能情况数
-        double[] probabilities = new double[5 * num + 1]; // 概率数组长度为 6 * num - num + 1 = 5 * num + 1
-        for (int j = num; j <= 6 * num; j++) {
-            probabilities[j - num] = dp[num][j] / totalCases;
+
+        // 现在，dp[num][j] 就是投num个骰子，总和为j的次数
+        double[] probabilities = new double[faces * num - num + 1]; // 数组长度：从num到6*num
+        int index = 0; // 概率数组的索引，从0开始对应总和num
+        for (int j = num; j <= num * faces; j++) { // j从num到6*num
+            probabilities[index] = (double) dp[num][j] / total; // 概率 = 次数 / 总结果数
+            index++;
         }
 
-        return probabilities;
+        return probabilities; // 返回概率数组
     }
 }
 // @lc code=end

@@ -12,14 +12,12 @@
 
 class Solution {
     public String dynamicPassword(String password, int target) {
-        // char[] charArray = password.toCharArray();
-        StringBuilder sb = new StringBuilder();
-        // for (int i = 0; i < charArray.length; i++) {
-        // sb.append(charArray[(i + target) % charArray.length]);
-        // }
-        // 前闭后开
-        sb.append(password.substring(target, password.length())).append(password.substring(0, target));
-        return sb.toString();
+       StringBuilder sb = new StringBuilder();
+       String sub1 = password.substring(0,target);
+       String sub2 = password.substring(target, password.length());
+       sb.append(sub2);
+       sb.append(sub1);
+       return sb.toString();
     }
 }
 // @lc code=end

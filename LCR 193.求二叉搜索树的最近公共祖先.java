@@ -20,45 +20,22 @@
  * }
  */
 class Solution {
-    /**
-     * 要找到公共祖先，那么就要找出两个节点的路径（根结点到目标节点）
-     * 这两条路径的交叉节点就是目标节点（最近公共祖先）
-     * 
-     * @param root
-     * @param p
-     * @param q
-     * @return
-     */
+
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        List<TreeNode> pPath = getPath(root, p);
-        List<TreeNode> qPath = getPath(root, q);
-        TreeNode ancestor = null;
-        for (int i = 0; i < qPath.size() && i < pPath.size(); i++) {
-            if (pPath.get(i) == qPath.get(i)) {
-                ancestor = pPath.get(i);
+        TreeNode curr = root;
+        while (curr != null) {
+            if (p.val < curr.val && q.val < curr.val) {
+                curr = curr.left;
+            } else if (p.val > curr.val && q.val > curr.val) {
+                curr = curr.right;
             } else {
-                break;
+                //根据二叉搜索树的特性，如果分在两颗子树上说明肯定是当前根结点
+                return curr;
             }
         }
-        return ancestor;
+        return curr;
     }
 
-    private List<TreeNode> getPath(TreeNode root, TreeNode target) {
-        List<TreeNode> pathList = new ArrayList<>();
-        TreeNode node = root;
-        while (node != target) {
-            pathList.add(node);
-            // 如果target的数值应该更小，那么应该向左子树选找
-            if (target.val < node.val) {
-                node = node.left;
-            } else {
-                node = node.right;
-            }
-        }
-        // 最后添加目标节点
-        pathList.add(node);
-        return pathList;
-    }
 }
 // @lc code=end
 

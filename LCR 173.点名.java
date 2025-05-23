@@ -14,11 +14,10 @@ class Solution {
         int left = 0, right = records.length - 1;
         while (left <= right) {
             int mid = (left + right) / 2;
-            //  如果位置上数据正确，那么缺少的那个肯定在后面的区间
-            if (records[mid] == mid) {
-                left = mid + 1;
-            } else {// 如果不正确，那么缺少的那个数据一定在前面的区间
+            if (records[mid] != mid) {
                 right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
         return left;
