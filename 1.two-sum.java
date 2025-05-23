@@ -14,16 +14,13 @@ import java.util.HashMap;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-        int[] ans = new int[2];
-        HashMap<Integer, Integer> cacheMap = new HashMap<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
             int newTarget = target - nums[i];
-            if (cacheMap.containsKey(newTarget)) {
-                ans[0] = i;
-                ans[1] = cacheMap.get(newTarget);
-                return ans;
+            if (map.containsKey(newTarget)) {
+                return new int[] { map.get(newTarget), i };
             }
-            cacheMap.put(nums[i], i);
+            map.put(nums[i], i);
         }
         return null;
     }
