@@ -9,6 +9,7 @@
 
 // @lcpr-template-end
 // @lc code=start
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -22,25 +23,22 @@
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode fast = head;
-
-        // 快指针先走 n 步
+        // 使用pre节点方便处理删除节点是头节点的情况
+        ListNode pre = new ListNode();
+        pre.next = head;
+        ListNode slow = pre;
         for (int i = 0; i < n; i++) {
             fast = fast.next;
         }
-        // 如果 fast 为空（fast已经走完整个链表），则说明要删除的是头节点
-        if (fast == null) {
-            return head.next;
-        }
-        ListNode low = head;
-        // 快慢指针同时走，直到 fast 到达链表末尾
-        while (fast.next != null) {
+        while (fast != null) {
             fast = fast.next;
-            low = low.next;
+            slow = slow.next;
         }
-        // 删除 low.next，即倒数第 n 个节点
-        ListNode target = low.next;
-        low.next = target.next;
-        return head;
+        ListNode target = slow.next;
+        ListNode next = target.next;
+        slow.next = next;
+        target.next = null;
+        return pre.next;
     }
 }
 // @lc code=end
