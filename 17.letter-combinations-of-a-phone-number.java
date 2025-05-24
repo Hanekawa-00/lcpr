@@ -16,12 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 class Solution {
+    List<String> res;
+
     public List<String> letterCombinations(String digits) {
-        List<String> combinations = new ArrayList<String>();
-        if (digits.length() == 0) {
-            return combinations;
+        res = new ArrayList<>();
+        if (digits == null || digits.length() == 0) {
+            return res;
         }
-        Map<Character, String> phoneMap = new HashMap<Character, String>() {
+        Map<Character, String> map = new HashMap<>() {
             {
                 put('2', "abc");
                 put('3', "def");
@@ -33,38 +35,23 @@ class Solution {
                 put('9', "wxyz");
             }
         };
-        backtrack(combinations, phoneMap, digits, 0, new StringBuffer());
-        return combinations;
+        backtrack(map, digits, new StringBuilder(), 0);
+        return res;
     }
 
-    /**
-     * @param combinations 结果集
-     * @param phoneMap     映射关系
-     * @param digits       输入的数字
-     * @param index        输入数字遍历到的索引
-     * @param combination
-     */
-    public void backtrack(List<String> combinations, Map<Character, String> phoneMap, String digits, int index,
-            StringBuffer combination) {
-        // 完成
-        if (index == digits.length()) {
-            // 添加到结果集
-            combinations.add(combination.toString());
-        } else {
-            // 提取数字
-            char digit = digits.charAt(index);
-            // 获取映射结果
-            String letters = phoneMap.get(digit);
-            // 并非所有数字的映射都是三个字符
-            int lettersCount = letters.length();
-            // 每个index都有所在位置数字所映射的字符的所有可能
-            for (int i = 0; i < lettersCount; i++) {
-                combination.append(letters.charAt(i));
-                backtrack(combinations, phoneMap, digits, index + 1, combination);
-                combination.deleteCharAt(index);
-            }
+    private void backtrack(Map<Character, String> map, String digits, StringBuilder path, int index) {
+        if (index >= digits.length()) {
+            res.add(path.toString());
+            return;
+        }
+        String str = map.get(digits.charAt(index));
+        for (int i = 0; i < str.length(); i++) {
+            path.append(str.charAt(i));
+            backtrack(map, digits, path, index + 1);
+            path.deleteCharAt(path.length() - 1);
         }
     }
+
 }
 // @lc code=end
 
