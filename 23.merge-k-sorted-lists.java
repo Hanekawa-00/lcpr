@@ -10,7 +10,6 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -24,35 +23,26 @@ import java.util.PriorityQueue;
  * }
  */
 class Solution {
-    /**
-     * 分割链表数组，化为小问题求解（将多个链表合并问题转化为两个链表合并问题）
-     * 
-     * @param lists
-     * @return 合并后的链表头节点
-     */
+
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) {
             return null;
         }
-        // 创建最小堆（优先队列）,并且传入comparator
-        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((node1, node2) -> node1.val - node2.val);
-        // 将所有头节点加入最小堆
+        PriorityQueue<ListNode> priorityQueue = new PriorityQueue<>((a, b) -> a.val - b.val);
         for (ListNode head : lists) {
             if (head != null) {
-                minHeap.offer(head);
+                priorityQueue.add(head);
             }
         }
-        // 创建哑结点
         ListNode dummyHead = new ListNode();
         ListNode curr = dummyHead;
-        // 其实就是把所有节点取出来顺便排序，即两步合成一步
-        while (!minHeap.isEmpty()) {
-            // 最优先（最小）出队
-            ListNode smallestNode = minHeap.poll();
+        while (!priorityQueue.isEmpty()) {
+            ListNode smallestNode = priorityQueue.poll();
             curr.next = smallestNode;
             curr = curr.next;
+            // 在构建新链表的同时添加节点到优先级队列，降低了时间复杂度
             if (smallestNode.next != null) {
-                minHeap.offer(smallestNode.next);
+                priorityQueue.add(smallestNode.next);
             }
         }
         return dummyHead.next;
