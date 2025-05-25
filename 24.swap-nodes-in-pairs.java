@@ -21,24 +21,26 @@
  */
 class Solution {
     public ListNode swapPairs(ListNode head) {
-        // 创建哑结点，防止第一个节点的特殊判断
-        ListNode dummpyHead = new ListNode(-1);
-        dummpyHead.next = head;
-        ListNode curr = dummpyHead;
-        // 目的是交换curr后面的两个节点,curr在这里相当于前置节点
-        while (curr.next != null && curr.next.next != null) {
-            ListNode node1 = curr.next;
-            ListNode node2 = node1.next;
-            // 获取这两个节点后面的那个节点
-            ListNode nextNode = node2.next;
-            // 交换
-            node2.next = node1;
-            node1.next = nextNode;
-            curr.next = node2;
-            // 更新
-            curr = node1;
+        if (head == null) {
+            return null;
         }
-        return dummpyHead.next;
+        ListNode dummyHead = new ListNode();
+        dummyHead.next = head;
+        ListNode curr = dummyHead;
+        while (curr != null && curr.next != null) {
+            ListNode node1 = curr.next;
+            ListNode node2 = curr.next.next;
+            if (node2 != null) {
+                ListNode next = node2.next;
+                curr.next = node2;
+                node2.next = node1;
+                node1.next = next;
+                curr = node1;
+            } else {// 链表为奇数，最后一个节点直接退出
+                break;
+            }
+        }
+        return dummyHead.next;
     }
 }
 // @lc code=end
