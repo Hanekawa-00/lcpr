@@ -14,43 +14,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
-    private List<String> result;
+    int maxPairs;
+    List<String> res;
 
-    private int targetN;
-
-    /**
-     * 一共有n对括号（左右都为n）
-     * 
-     * @param n
-     * @return
-     */
     public List<String> generateParenthesis(int n) {
-        this.targetN = n;
-        this.result = new ArrayList<>();
+        this.maxPairs = n;
+        this.res = new ArrayList<>();
         backtrack(new StringBuilder(), 0, 0);
-        return result;
+        return res;
     }
 
-    private void backtrack(StringBuilder str, int openCount, int closeCount) {
-        // 递归退出
-        if (openCount == targetN && closeCount == targetN) {
-            result.add(str.toString());
+    private void backtrack(StringBuilder currString, int leftCount, int rightCount) {
+        if (currString.length() == maxPairs * 2) {
+            res.add(currString.toString());
             return;
         }
-        // 以下过程就相当于回溯的的过程
-        // 一共两个路径，在路径多的情况下，一般使用for循环加if判断
-        if (openCount < targetN) {
-            str.append('(');
-            backtrack(str, openCount + 1, closeCount);
-            str.deleteCharAt(str.length() - 1);
+        // 每次有两种选择，这里可以直接使用两次if优化
+        char[] options = new char[] { '(', ')' };
+        for (char option : options) {
+            if (option == '(') {
+                // 左括号的限制是小于括号对数
+                if (leftCount == maxPairs) {
+                    continue;
+                } else {
+                    currString.append(option);
+                    backtrack(currString, leftCount + 1, rightCount);
+                }
+            } else {
+                // 右括号的限制是必须小于左括号数量(还有要小于总对数，因为上面的left已有限制，所以可以省略)，这里因为要++，所以一定要小于左括号数量
+                if (rightCount >= leftCount) {
+                    continue;
+                } else {
+                    currString.append(option);
+                    backtrack(currString, leftCount, rightCount + 1);
+                }
+            }
+            currString.deleteCharAt(currString.length() - 1);
         }
-        // 闭括号数量要严格小于开括号数量
-        if (closeCount < openCount) {
-            str.append(')');
-            backtrack(str, openCount, closeCount + 1);
-            str.deleteCharAt(str.length() - 1);
-        }
-        return;
     }
 }
 // @lc code=end
