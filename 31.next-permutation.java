@@ -10,29 +10,43 @@
 // @lcpr-template-end
 // @lc code=start
 class Solution {
+    /**
+     * 如何找到第一个可以“增大”的位置？我们应该从右往左看。
+     * 如果 nums[i] < nums[i+1]，那么 nums[i] 就是一个可以被替换成更大数字从而使整个序列变大的“枢轴点”。我们希望这个 i
+     * 尽可能靠右，这样改变的幅度最小，得到的排列才是“下一个”更大的排列。
+     * 一旦找到了这样的 nums[i]，我们应该用它右边哪个数字来替换它呢？为了得到“下一个”更大的排列，我们应该用 nums[i] 右边所有大于
+     * nums[i] 的数中最小的那个数来替换。
+     * 替换之后，nums[i] 右边的部分应该调整成最小的可能排列（即升序），这样才能保证整个序列是“下一个”更大的。
+     * 
+     * @param nums
+     */
     public void nextPermutation(int[] nums) {
-        // 我们从右向左找可“增大”的位置，是因为要尽可能保持高权重位不变。
-        // 找到 i 后，在右边找大于 nums[i] 的最小的数来交换，是因为要让增大的幅度尽可能小。
+        if (nums == null || nums.length <= 1) {
+            return;
+        }
         int i = nums.length - 2;
-        // 从倒数第二个元素开始
+        // 从右向左找到第一个正升序对
         while (i >= 0 && nums[i] >= nums[i + 1]) {
             i--;
         }
-        // 这里i如果小于0 ，说明整个数组都是逆序的
         if (i >= 0) {
-            // 以i所在位置的数字为i基准，从后往前找到第一个大于这个数字的位置
             int j = nums.length - 1;
+            // 从右往左找到第一个大于nums[i]的数（从右往左是升序）
             while (j >= 0 && nums[j] <= nums[i]) {
                 j--;
             }
             swap(nums, i, j);
         }
-        /*
-         * 为什么要翻转？因为经过交换后，i 后面的序列已经没法保证是一个升序或者降序的状态了。为了保证 i 后面的权重位尽可能小，我们要把 i
-         * 后面的序列变成升序。而我们知道，在交换之前 i 后面的序列是一个降序的序列（否则在第2步的时候，我们就找不到 i
-         * 了），所以只需要把这个降序的序列翻转一下，就可以得到一个升序的序列。
-         */
+        // 翻转i后面的元素顺序，因为原来是降序排列的（即使是交换过元素）
         reverse(nums, i + 1, nums.length - 1);
+    }
+
+    private void reverse(int[] nums, int i, int j) {
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
+        }
     }
 
     private void swap(int[] nums, int i, int j) {
@@ -41,13 +55,6 @@ class Solution {
         nums[j] = temp;
     }
 
-    private void reverse(int[] nums, int start, int end) {
-        while (start < end) {
-            swap(nums, start, end);
-            start++;
-            end--;
-        }
-    }
 }
 // @lc code=end
 
