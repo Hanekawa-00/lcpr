@@ -19,11 +19,11 @@ public class Solution {
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         res = new ArrayList<>();
-        backtrack(new ArrayList<>(), 0, candidates, target);
+        backtrack(candidates, new ArrayList<>(), target, 0);
         return res;
     }
 
-    private void backtrack(List<Integer> path, int index, int[] candidates, int target) {
+    private void backtrack(int[] candidates, List<Integer> path, int target, int startIndex) {
         if (target == 0) {
             res.add(new ArrayList<>(path));
             return;
@@ -31,13 +31,14 @@ public class Solution {
         if (target < 0) {
             return;
         }
-        for (int i = index; i < candidates.length; i++) {
+        for (int i = startIndex; i < candidates.length; i++) {
             path.add(candidates[i]);
-            // 因为允许重复选择某个元素，所以传入i
-            backtrack(path, i, candidates, target - candidates[i]);
+            // 一个元素可以被多次选中，所以传入i
+            backtrack(candidates, path, target - candidates[i], i);
             path.remove(path.size() - 1);
         }
     }
+
 }
 // @lc code=end
 
