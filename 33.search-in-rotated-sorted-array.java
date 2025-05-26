@@ -11,36 +11,31 @@
 // @lc code=start
 
 class Solution {
+
     /**
-     * 虽然是在非正常的有序数组中二分查找
-     * 但是只要发现有序区间就非常好处理
-     * 总体思路就是：
-     * 1.先找到有序区间
-     * 2.判断是否在这个区间
-     * 3.是则缩小查找区间到这个子区间
-     * 4.否则继续在这个子区间之外的另一个区间内寻找
+     * 二分搜索基于有序序列
+     * 要控制在有序序列中搜索
      * 
      * @param nums
      * @param target
      * @return
      */
     public int search(int[] nums, int target) {
-        int left = 0;
-        int right = nums.length - 1;
+        int left = 0, right = nums.length - 1;
         while (left <= right) {
             int mid = (left + right) / 2;
             if (nums[mid] == target) {
                 return mid;
             }
-            // 如果这里写成 nums[mid] > nums[left]，在 left == mid 的情况下会判断错误。用 >= 包含了 left == mid
-            // 的情况，确保了当 mid 就是 left 时，[left, mid] 这段（实际上只有一个元素）被认为是“有序”的。
+            // 说明[left , mid ]这个区间是有序的
             if (nums[mid] >= nums[left]) {
-                if (target < nums[mid] && target >= nums[left]) {
+                // target 在这个区间内
+                if (target >= nums[left] && target < nums[mid]) {
                     right = mid - 1;
-                } else {
+                } else { // 不在这个有序区间内
                     left = mid + 1;
                 }
-            } else {
+            } else { // 如果左区间不有序，右区间一定有序
                 if (target <= nums[right] && target > nums[mid]) {
                     left = mid + 1;
                 } else {
