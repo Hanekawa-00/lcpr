@@ -10,42 +10,46 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.Arrays;
-
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int[] ans = new int[2];
-        Arrays.fill(ans, -1);
-        int left = 0;
-        int right = nums.length - 1;
+        if (nums == null || nums.length == 0) {
+            return new int[] { -1, -1 };
+        }
+        int left = 0, right = nums.length - 1;
         int index = -1;
         while (left <= right) {
             int mid = (left + right) / 2;
             if (nums[mid] == target) {
                 index = mid;
                 break;
-            }
-            if (nums[mid] < target) {
+            } else if (target > nums[mid]) {
                 left = mid + 1;
             } else {
                 right = mid - 1;
             }
         }
         if (index == -1) {
-            return ans;
+            return new int[] { -1, -1 };
         }
-        left = index;
-        right = index;
-        // 防止越界
-        while (left >= 0 && nums[left] == target) {
-            left--;
+        int firstPosition = findFirstPosition(nums, index, target);
+        int lastPosition = findLastPosition(nums, index, target);
+        return new int[] { firstPosition, lastPosition };
+    }
+
+    private int findFirstPosition(int[] nums, int index, int target) {
+        int i = index;
+        while (i >= 0 && nums[i] == target) {
+            i--;
         }
-        while (right < nums.length && nums[right] == target) {
-            right++;
+        return i + 1;
+    }
+
+    private int findLastPosition(int[] nums, int index, int target) {
+        int j = index;
+        while (j < nums.length && nums[j] == target) {
+            j++;
         }
-        ans[0] = left + 1;
-        ans[1] = right - 1;
-        return ans;
+        return j - 1;
     }
 }
 // @lc code=end
