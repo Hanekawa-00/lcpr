@@ -14,25 +14,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
-    private List<List<Integer>> res;
+    List<List<Integer>> res;
 
     public List<List<Integer>> permute(int[] nums) {
         res = new ArrayList<>();
-        backtrack(nums, new ArrayList<>());
+        backtrack(nums, new ArrayList<>(), new boolean[nums.length]);
         return res;
     }
 
-    private void backtrack(int[] nums, List<Integer> path) {
-        if (path.size() >= nums.length) {
+    private void backtrack(int[] nums, List<Integer> path, boolean[] isV) {
+        if (path.size() == nums.length) {
             res.add(new ArrayList<>(path));
             return;
         }
         for (int i = 0; i < nums.length; i++) {
-            if (path.contains(nums[i]))
-                continue;
-            path.add(nums[i]);
-            backtrack(nums, path);
-            path.remove(path.size() - 1);
+            if (!isV[i]) {
+                path.add(nums[i]);
+                isV[i] = true;
+                backtrack(nums, path, isV);
+                isV[i] = false;
+                path.remove(path.size() - 1);
+            }
         }
     }
 }
