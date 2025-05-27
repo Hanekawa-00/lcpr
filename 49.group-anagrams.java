@@ -14,35 +14,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
-        List<List<String>> res = new ArrayList<>();
-        if (strs.length == 1) {
-            ArrayList<String> list = new ArrayList<>();
-            list.add(strs[0]);
-            res.add(list);
-            return res;
+        if (strs == null || strs.length == 0) {
+            return new ArrayList<>();
         }
-        HashMap<String, List<String>> map = new HashMap<>();
+        Map<String,List<String>> map = new HashMap<>();
         for (String str : strs) {
-            char[] chars = str.toCharArray();
-            // 排序字符
-            Arrays.sort(chars);
-            String key = String.valueOf(chars);
-            // 使用hash进行分组
-            if (map.containsKey(key)) {
-                map.get(key).add(str);
-            } else {
-                ArrayList<String> list = new ArrayList<>();
-                list.add(str);
-                map.put(key, list);
-            }
+            char[] charArray = str.toCharArray();
+            Arrays.sort(charArray);
+            String key = new String(charArray);
+            // 如果不存在就创建并返回value值，否则直接返回已经存在的value
+            map.computeIfAbsent(key,k->new ArrayList<>()).add(str);
         }
-        for (List<String> valueList : map.values()) {
-            res.add(valueList);
-        }
-        return res;
+        return new ArrayList<>(map.values());
     }
 }
 // @lc code=end
