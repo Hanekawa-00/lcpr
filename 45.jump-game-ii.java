@@ -25,22 +25,21 @@ class Solution {
         if (nums.length == 1) {
             return 0;
         }
-        // dp维护不同步数所能达到的最大距离
-        int[] dp = new int[nums.length];
-        dp[0] = 0;
-        dp[1] = nums[0];
-        if (dp[1] >= nums.length - 1) {
-            return 1;
-        }
-        for (int i = 2; i < dp.length; i++) {
-            int maxReach = 0; // maxReach维护在[dp[i-2],dp[i-1]]区间内所能达到的最远距离
-            for (int j = dp[i - 2]; j <= dp[i - 1]; j++) {
-                maxReach = Math.max(maxReach, j + nums[j]);
+        int farthest = 0;
+        int currentEnd = 0;
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            // 更新farthest直到i达到边界条件currEnd,这个最终的farthest会成为新的currEnd
+            farthest = Math.max(farthest, i + nums[i]);
+
+            if (i == currentEnd) {
+                count++;
+                currentEnd = farthest;
+
+                if (currentEnd >= nums.length - 1) {
+                    return count;
+                }
             }
-            if (maxReach >= nums.length - 1) {
-                return i;
-            }
-            dp[i] = maxReach;
         }
         return -1;
     }
