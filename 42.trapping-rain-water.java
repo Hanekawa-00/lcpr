@@ -10,33 +10,28 @@
 // @lcpr-template-end
 // @lc code=start
 class Solution {
-    /**
-     * 每个区域的水量公式：min(leftMax,rightMax) - height[i]
-     * 
-     * @param height
-     * @return
-     */
+
     public int trap(int[] height) {
+        // 每个位置所能盛水量为左右最高的两个柱子中最矮的高度减去当前高度
         int len = height.length;
-        // 用来维护i左边最高的柱子高度
-        int[] leftMax = new int[len];
-        leftMax[0] = -1;
-        int[] rightMax = new int[len];
-        rightMax[len - 1] = -1;
-        for (int i = 1; i < leftMax.length; i++) {
-            leftMax[i] = Math.max(leftMax[i - 1], height[i - 1]);
+        int[] leftMaxDp = new int[len];
+        leftMaxDp[0] = 0;
+        int[] rightMaxDp = new int[len];
+        rightMaxDp[len - 1] = 0;
+        for (int i = 1; i < len; i++) {
+            leftMaxDp[i] = Math.max(leftMaxDp[i - 1], height[i - 1]);
         }
-        for (int i = rightMax.length - 2; i >= 0; i--) {
-            rightMax[i] = Math.max(rightMax[i + 1], height[i + 1]);
+        for (int i = len - 2; i >= 0; i--) {
+            rightMaxDp[i] = Math.max(rightMaxDp[i + 1], height[i + 1]);
         }
-        int ans = 0;
-        for (int i = 1; i < rightMax.length - 1; i++) {
-            int size = Math.min(leftMax[i], rightMax[i]) - height[i];
-            if (size > 0) {
-                ans += size;
+        int res = 0;
+        for (int i = 0; i < len; i++) {
+            int size = Math.min(leftMaxDp[i], rightMaxDp[i]) - height[i];
+            if (size >= 0) {
+                res += size;
             }
         }
-        return ans;
+        return res;
     }
 }
 // @lc code=end
