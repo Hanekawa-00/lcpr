@@ -20,11 +20,13 @@ class Solution {
         this.res = new ArrayList<>();
         // 初始化棋盘
         char[][] board = new char[n][n];
+        // .为空
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 board[i][j] = '.';
             }
         }
+        // 从第0行开始摆放
         backtrack(board, 0, n);
         return res;
     }
@@ -55,7 +57,7 @@ class Solution {
      * @return
      */
     private boolean isSafe(char[][] board, int row, int col, int n) {
-        // 检查行（略）
+        // 检查行（略），因为就是按行摆放的
         // 检查列(因为回溯法放置皇后的顺序是从上往下每行放置，所以不需要考虑row下面的行，下面两个判断同理)
         for (int i = 0; i < row; i++) {
             if (board[i][col] == 'Q') {
@@ -79,9 +81,9 @@ class Solution {
 
     private List<String> boardToStringList(char[][] board) {
         List<String> res = new ArrayList<>();
-       for (char[] chars : board) {
+        for (char[] chars : board) {
             res.add(String.valueOf(chars));
-       }
+        }
         return res;
     }
 }
