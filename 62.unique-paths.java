@@ -11,9 +11,8 @@
 // @lc code=start
 class Solution {
     public int uniquePaths(int m, int n) {
-        // dp[i][j]维护到达[i,j]坐标的路径和
         int[][] dp = new int[m][n];
-        // 初始化第一行和第一列
+        // 初始化第一行第一列，只有一种走法
         for (int i = 0; i < m; i++) {
             dp[i][0] = 1;
         }
