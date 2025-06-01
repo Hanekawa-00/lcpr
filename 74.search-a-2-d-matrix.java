@@ -11,43 +11,38 @@
 // @lc code=start
 class Solution {
     public boolean searchMatrix(int[][] matrix, int target) {
-        int t = 0;
-        int d = matrix.length - 1;
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int m = 0, n = rows - 1;
         int targetRow = -1;
-        // 找到目标所在行
-        while (t <= d) {
-            int midRow = (t + d) / 2;
-            if (matrix[midRow][0] == target) {
+        while (m < n) {
+            int mid = (m + n) / 2;
+            if (matrix[mid][0] == target) {
                 return true;
-            }
-            if (target > matrix[midRow][0]
-                    && target <= matrix[midRow][matrix[0].length - 1]) {
-                targetRow = midRow;
+            } else if (matrix[mid][0] > target) {
+                n = mid - 1;
+            } else if (matrix[mid][0] < target && matrix[mid][cols - 1] >= target) {
+                // 在区间内。找到目标行，target可能在这一行
+                m = mid;
                 break;
-            }
-            if (target > matrix[midRow][0]) {
-                t = midRow + 1;
             } else {
-                d = midRow - 1;
+                m = mid + 1;
             }
         }
-        if (targetRow == -1) {
-            return false;
-        }
-        int left = 0;
-        int right = matrix[0].length - 1;
-        while (left < right) {
-            int mid = (left + right) / 2;
+        targetRow = m;
+        m = 0;
+        n = cols - 1;
+        while (m <= n) {
+            int mid = (m + n) / 2;
             if (matrix[targetRow][mid] == target) {
                 return true;
-            }
-            if (matrix[targetRow][mid] > target) {
-                right = mid - 1;
+            } else if (matrix[targetRow][mid] > target) {
+                n = mid - 1;
             } else {
-                left = mid + 1;
+                m = mid + 1;
             }
         }
-        return matrix[targetRow][left] == target;
+        return false;
     }
 }
 // @lc code=end
