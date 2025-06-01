@@ -11,54 +11,31 @@
 // @lc code=start
 class Solution {
     public void setZeroes(int[][] matrix) {
-        int m = matrix.length;
-        int n = matrix[0].length;
-        // 用来处理[0,0]这个特殊位置，到底是列置零还是行
-        boolean isFirstRowZero = false;
-        boolean isFirstColZero = false;
-        // 遍历第一列
-        for (int i = 0; i < m; i++) {
-            if (matrix[i][0] == 0) {
-                isFirstColZero = true;
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            if (matrix[0][i] == 0) {
-                isFirstRowZero = true;
-            }
-        }
-        // 将第一行第一列作为标志位
-        for (int i = 1; i < m; i++) {
-            for (int j = 1; j < n; j++) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        // 记录行是否要置零
+        boolean[] rowIsZ = new boolean[rows];
+        boolean[] colsIsZ = new boolean[cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 if (matrix[i][j] == 0) {
-                    matrix[i][0] = 0;
-                    matrix[0][j] = 0;
+                    rowIsZ[i] = true;
+                    colsIsZ[j] = true;
                 }
             }
         }
-        // 开始置零
-        for (int i = 1; i < m; i++) {
-            if (matrix[i][0] == 0) {
-                for (int j = 0; j < n; j++) {
+        for (int i = 0; i < rows; i++) {
+            if (rowIsZ[i]) {
+                for (int j = 0; j < cols; j++) {
                     matrix[i][j] = 0;
                 }
             }
         }
-        for (int i = 1; i < n; i++) {
-            if (matrix[0][i] == 0) {
-                for (int j = 0; j < m; j++) {
+        for (int i = 0; i < cols; i++) {
+            if (colsIsZ[i]) {
+                for (int j = 0; j < rows; j++) {
                     matrix[j][i] = 0;
                 }
-            }
-        }
-        if (isFirstColZero) {
-            for (int i = 0; i < m; i++) {
-                matrix[i][0] = 0;
-            }
-        }
-        if (isFirstRowZero) {
-            for (int i = 0; i < n; i++) {
-                matrix[0][i] = 0;
             }
         }
     }
