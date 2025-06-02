@@ -17,9 +17,9 @@ class Solution {
     List<List<Integer>> res;
 
     public List<List<Integer>> subsets(int[] nums) {
-        this.res = new ArrayList<>();
+        res = new ArrayList<>();
         backtrack(nums, new ArrayList<>(), 0);
-        return this.res;
+        return res;
     }
 
     private void backtrack(int[] nums, List<Integer> path, int index) {
@@ -27,7 +27,7 @@ class Solution {
         for (int i = index; i < nums.length; i++) {
             path.add(nums[i]);
             backtrack(nums, path, i + 1);
-            path.remove(path.size()-1);
+            path.remove(path.size() - 1);
         }
     }
 
