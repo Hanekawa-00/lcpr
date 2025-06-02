@@ -10,7 +10,6 @@
 // @lcpr-template-end
 // @lc code=start
 
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -28,29 +27,19 @@
  */
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        // 左右节点不仅有小于或者大于根节点的约束，还有二者都要在界限之间的约束（再上一层的根节点约束）
-        return validate(root, null, null);
+        return validate(root, Long.MAX_VALUE, Long.MIN_VALUE);
     }
 
-    /**
-     * @param node
-     * @param lower 下界
-     * @param upper 上界
-     * @return
-     */
-    private boolean validate(TreeNode node, Integer lower, Integer upper) {
-        if (node == null) {
+    private boolean validate(TreeNode root, long up, long low) {
+        if (root == null) {
             return true;
         }
-        if (lower != null && node.val <= lower) {
+        if (root.val >= up || root.val <= low) {
             return false;
         }
-        if (upper != null && node.val >= upper) {
-            return false;
-        }
-        return validate(node.left, lower, node.val)
-                && validate(node.right, node.val, upper);
+        return validate(root.left,(long) root.val, low) && validate(root.right, up, (long) root.val);
     }
+
 }
 // @lc code=end
 
