@@ -11,51 +11,47 @@
 // @lc code=start
 class Solution {
     public boolean exist(char[][] board, String word) {
-        int m = board.length;
-        int n = board[0].length;
-        boolean[][] visited = new boolean[m][n];
-        // 每个位置都有可能是起始点
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                boolean flag = check(board, visited, i, j, word, 0);
-                if (flag) {
+        int rows = board.length;
+        int cols = board[0].length;
+        boolean[][] records = new boolean[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                records[i][j] = true;
+                if (backtrack(board, records, word, i, j, 1)) {
                     return true;
                 }
+                records[i][j] = false;
             }
         }
         return false;
     }
 
-    private boolean check(char[][] board, boolean[][] visited, int i, int j, String word, int index) {
-        // 尝试路径上的字符不匹配
-        if (board[i][j] != word.charAt(index)) {
+    private boolean backtrack(char[][] board, boolean[][] path, String word, int m, int n, int count) {
+        if (board[m][n] != word.charAt(count - 1)) {
             return false;
-        } else if (index == word.length() - 1) {// 最终成功结果，会逐步递归到最上层
+        }
+        if (count >= word.length()) {
             return true;
         }
-        // 标记已经访问
-        visited[i][j] = true;
-        int[][] directions = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
-        boolean res = false;
-        for (int[] direction : directions) {
-            int newi = i + direction[0], newj = j + direction[1];
-            // 控制新坐标范围
-            if (newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length) {
-                // 这部很关键，防止重复
-                if (!visited[newi][newj]) {
-                    boolean flag = check(board, visited, newi, newj, word, index + 1);// 递归点
-                    if (flag) {
-                        res = true;
-                        break;
-                    }
+        int[][] pos = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+        for (int[] posI : pos) {
+            int newM = m + posI[0];
+            int newN = n + posI[1];
+            if (newM >= 0
+                    && newM < board.length
+                    && newN >= 0
+                    && newN < board[0].length
+                    && !path[newM][newN]) {
+                path[newM][newN] = true;
+                if (backtrack(board, path, word, newM, newN, count + 1)) {
+                    path[newM][newN] = false;
+                    return true;
                 }
+                path[newM][newN] = false;
             }
         }
-        // 回溯
-        visited[i][j] = false;
-        return res;
+        return false;
     }
-
 }
 // @lc code=end
 
