@@ -11,6 +11,7 @@
 // @lc code=start
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -36,20 +37,20 @@ class Solution {
         if (root == null) {
             return new ArrayList<>();
         }
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
         List<List<Integer>> res = new ArrayList<>();
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
         while (!queue.isEmpty()) {
-            List<Integer> item = new ArrayList<>(queue.size());
+            List<Integer> item = new ArrayList<>();
             for (int i = queue.size() - 1; i >= 0; i--) {
                 TreeNode poll = queue.poll();
+                item.add(poll.val);
                 if (poll.left != null) {
-                    queue.add(poll.left);
+                    queue.offer(poll.left);
                 }
                 if (poll.right != null) {
-                    queue.add(poll.right);
+                    queue.offer(poll.right);
                 }
-                item.add(poll.val);
             }
             res.add(item);
         }
