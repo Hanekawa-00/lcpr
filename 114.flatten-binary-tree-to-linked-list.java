@@ -13,7 +13,6 @@
 import java.util.LinkedList;
 import java.util.Stack;
 
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -34,25 +33,34 @@ class Solution {
         if (root == null) {
             return;
         }
-        Stack<TreeNode> stack = new Stack<>();
-        stack.push(root);
-        TreeNode prev = null;
-        while (!stack.isEmpty()) {
-            TreeNode curr = stack.pop();
-            if (prev != null) {
-                prev.left = null;
-                prev.right = curr;
+
+        // 1. 递归地展开左子树和右子树
+        flatten(root.left);
+        flatten(root.right);
+
+        // 2. 保存已展开的左子树和右子树的头部
+        TreeNode flattenedLeftSubtree = root.left;
+        TreeNode flattenedRightSubtree = root.right;
+
+        // 3. 将当前节点的左指针置为null
+        root.left = null;
+
+        // 4. 如果存在已展开的左子树，则进行连接
+        if (flattenedLeftSubtree != null) {
+            // 将当前节点的右指针指向已展开的左子树
+            root.right = flattenedLeftSubtree;
+
+            // 找到已展开左子树的尾部节点
+            TreeNode currentTail = flattenedLeftSubtree;
+            while (currentTail.right != null) {
+                currentTail = currentTail.right;
             }
-            TreeNode left = curr.left;
-            TreeNode right = curr.right;
-            // 前序遍历是根左右，因为stack是先进后出，要先遍历左，则后入栈
-            if (right != null) {
-                stack.push(right);
-            }
-            if (left != null) {
-                stack.push(left);
-            }
-            prev = curr;
+            // 将左子树的尾部连接到已展开的右子树的头部
+            currentTail.right = flattenedRightSubtree;
+        } else {
+            // 如果没有左子树，则当前节点的右指针直接指向已展开的右子树
+            // (如果右子树也为空，则 root.right 会是 null)
+            root.right = flattenedRightSubtree;
         }
     }
 }
