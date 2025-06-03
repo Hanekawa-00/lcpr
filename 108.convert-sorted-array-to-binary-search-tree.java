@@ -27,19 +27,25 @@
  */
 class Solution {
     public TreeNode sortedArrayToBST(int[] nums) {
-        return helper(nums, 0, nums.length - 1);
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return buildTreeHelper(nums, 0, nums.length - 1);
     }
 
-    private TreeNode helper(int[] nums, int left, int right) {
+    private TreeNode buildTreeHelper(int[] nums, int left, int right) {
         if (left > right) {
             return null;
         }
-        int rootIndex = (left + right) / 2;
-        TreeNode root = new TreeNode(nums[rootIndex]);
-        root.left = helper(nums, left, rootIndex - 1);
-        root.right = helper(nums, rootIndex + 1, right);
+        // 平衡二叉树要左右子树都要尽量平衡
+        int mid = (left + right) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+        // nums天然有序，所以不用考虑构建搜索树的痛点
+        root.left = buildTreeHelper(nums, left, mid - 1);
+        root.right = buildTreeHelper(nums, mid + 1, right);
         return root;
     }
+
 }
 // @lc code=end
 
