@@ -26,34 +26,30 @@
  */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        TreeNode root = helpBuildTree(preorder, inorder, 0, preorder.length - 1, 0, inorder.length - 1);
-        return root;
+        return helpBuildTree(preorder, inorder, 0, preorder.length - 1, 0, inorder.length - 1);
     }
 
-    private TreeNode helpBuildTree(int[] preorder, int[] inorder, int preI, int preJ, int inI, int inJ) {
-        if (inI > inJ || preI > preJ) {
+    private TreeNode helpBuildTree(int[] preorder, int[] inorder, int preLeft, int preRight, int inLeft, int inRight) {
+        if (inLeft > inRight) {
             return null;
         }
-        // 前序遍历的第一个值为rootVal
-        int rootVal = preorder[preI];
-        // 构建根结点
+        int rootVal = preorder[preLeft];
         TreeNode root = new TreeNode(rootVal);
-        int inRootIndex = inI;
-        int leftTreeCount = 0;
-        for (int i = inI; i <= inJ; i++) {
+        int leftInSubEnd = inLeft, rightInSubStart = leftInSubEnd + 2;
+        for (int i = inLeft; i <= inRight; i++) {
             if (inorder[i] == rootVal) {
-                inRootIndex = i;
-                leftTreeCount = i - inI;
+                leftInSubEnd = i - 1;
+                rightInSubStart = i + 1;
                 break;
             }
         }
-        TreeNode leftTree = helpBuildTree(preorder, inorder, preI + 1, preI + leftTreeCount, inI, inRootIndex - 1);
-        TreeNode rightTree = helpBuildTree(preorder, inorder, preI + leftTreeCount + 1, preJ, inRootIndex + 1, inJ);
-        root.left = leftTree;
-        root.right = rightTree;
+        int leftSubCount = leftInSubEnd - inLeft + 1;
+        int leftPreSubEnd = preLeft + leftSubCount;
+        int rightPreSubStart = leftPreSubEnd + 1;
+        root.left = helpBuildTree(preorder, inorder, preLeft + 1, leftPreSubEnd, inLeft, leftInSubEnd);
+        root.right = helpBuildTree(preorder, inorder, rightPreSubStart, preRight, rightInSubStart, inRight);
         return root;
     }
-
 }
 // @lc code=end
 
