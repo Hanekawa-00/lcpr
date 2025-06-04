@@ -11,10 +11,10 @@
 // @lc code=start
 class Solution {
     public int maxProfit(int[] prices) {
-        // dp[i]维护前i天最大利润
+        // dp[i]维护第i天的最大利润=i天内最大卖出-最小购入
         int[] dp = new int[prices.length];
-        dp[0] = 0;
         int minPrice = prices[0];
+        dp[0] = 0;
         for (int i = 1; i < dp.length; i++) {
             dp[i] = Math.max(dp[i - 1], prices[i] - minPrice);
             minPrice = Math.min(minPrice, prices[i]);
