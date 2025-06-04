@@ -11,30 +11,30 @@
 // @lc code=start
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 class Solution {
     public List<List<Integer>> generate(int numRows) {
-        if (numRows == 0) {
-            return new ArrayList<>();
-        }
-        List<List<Integer>> resList = new ArrayList<>(numRows);
-        // 完成第一行
-        List<Integer> firstRow = new ArrayList<>(1);
-        firstRow.add(1);
-        resList.add(firstRow);
-        // 从第二行开始
-        for (int i = 1; i < numRows; i++) {
-            List<Integer> preRow = resList.get(i - 1);
-            List<Integer> currRow = new ArrayList<>();
-            currRow.add(1);
-            for (int j = 1; j < i; j++) {
-                currRow.add(preRow.get(j - 1) + preRow.get(j));
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> firstRow = new ArrayList<>() {
+            {
+                add(1);
             }
-            currRow.add(1);
-            resList.add(currRow);
+        };
+        res.add(firstRow);
+        List<Integer> pre = firstRow;
+        for (int i = 2; i <= numRows; i++) {
+            List<Integer> curr = new ArrayList<>();
+            curr.add(1);
+            for (int j = 1; j < i - 1; j++) {
+                curr.add(pre.get(j - 1) + pre.get(j));
+            }
+            curr.add(1);
+            pre = curr;
+            res.add(curr);
         }
-        return resList;
+        return res;
     }
 }
 // @lc code=end
