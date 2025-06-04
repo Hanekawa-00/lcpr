@@ -14,32 +14,29 @@ import java.util.HashSet;
 import java.util.Set;
 
 class Solution {
-    /**
-     * 并查集
-     * 
-     * @param nums
-     * @return
-     */
+
     public int longestConsecutive(int[] nums) {
-        // 使用集合，自动去重，还不需要排序就能判断是否有连续序列
+        if (nums == null && nums.length == 0) {
+            return 0;
+        }
         Set<Integer> set = new HashSet<>();
-        int longstStreak = 0;
         for (int num : nums) {
             set.add(num);
         }
-        // 这里不遍历set会超时
+        int res = 0;
         for (int num : set) {
-            if (!set.contains(num - 1)) {
-                int currentStreak = 1;
-                int currentNum = num;
-                while (set.contains(currentNum + 1)) {
-                    currentStreak++;
-                    currentNum++;
+            int curr = num;
+            // 关键点就是curr是否能否作为序列的开头
+            if (!set.contains(curr - 1)) {
+                int len = 1;
+                while (set.contains(curr + 1)) {
+                    len++;
+                    curr++;
                 }
-                longstStreak = Math.max(longstStreak, currentStreak);
+                res = Math.max(len, res);
             }
         }
-        return longstStreak;
+        return res;
     }
 }
 // @lc code=end
