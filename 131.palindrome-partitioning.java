@@ -17,37 +17,35 @@ class Solution {
     private List<List<String>> res;
 
     public List<List<String>> partition(String s) {
-        this.res = new ArrayList<>();
-        backtrack(s, 0, new ArrayList<>());
+        res = new ArrayList<>();
+        backtrack(s, new ArrayList<>(), 0);
         return res;
     }
 
-    private void backtrack(String s, int index, List<String> list) {
-        if (index > s.length() - 1) {
-            res.add(new ArrayList<>(list));
+    private void backtrack(String s, List<String> path, int index) {
+        if (index >= s.length()) {
+            res.add(new ArrayList<>(path));
             return;
         }
+        // 类似双指针
         for (int i = index; i < s.length(); i++) {
-            // 所分割的回文串必须从index开始，路径是从index不断向后面尝试不同的子串
-            if (isPalindrome(s, index, i)) {
-                list.add(s.substring(index, i + 1));
-                backtrack(s, i + 1, list);
-                list.remove(list.size() - 1);
+            String sub = s.substring(index, i + 1);
+            if (isPalindrome(sub)) {
+                path.add(sub);
+                backtrack(s, path, i + 1);
+                path.remove(path.size() - 1);
             }
         }
     }
 
-    private boolean isPalindrome(String s, int left, int right) {
-        if (left == right) {
-            return true;
-        }
+    private boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
         while (left < right) {
-            if (s.charAt(left) == s.charAt(right)) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            } else {
                 left++;
                 right--;
-                continue;
-            } else {
-                return false;
             }
         }
         return true;
