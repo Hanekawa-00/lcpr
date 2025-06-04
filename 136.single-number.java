@@ -12,9 +12,9 @@
 
 class Solution {
     public int singleNumber(int[] nums) {
-        // 0与任何数异或结果为任何数
+        // 0 ^ num = num
+        // num ^ num = 0
         int res = 0;
-        // 异或运算满足交换律和结合律，相同的两个异或运算结果为0
         for (int num : nums) {
             res ^= num;
         }
