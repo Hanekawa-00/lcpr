@@ -27,28 +27,31 @@ class Node {
 import java.util.HashMap;
 import java.util.Map;
 
-
 class Solution {
     public Node copyRandomList(Node head) {
-        // key为原链表的节点，val为新链表的节点
-        HashMap<Node, Node> map = new HashMap<>();
-        Node node = head;
-        // 先构建哈希映射
-        while (node != null) {
-            map.put(node, new Node(node.val));
-            node = node.next;
+        Map<Node, Node> map = new HashMap<>();
+        Node curr = head;
+        Node pre = new Node(-1);
+        Node resPre = pre;
+        while (curr != null) {
+            int val = curr.val;
+            Node node = new Node(val);
+            map.put(curr, node);
+            pre.next = node;
+            pre = pre.next;
+            curr = curr.next;
         }
-        // 构建新节点之间的关系
-        node = head;
-        while (node != null) {
-            Node random = node.random;
-            Node next = node.next;
-            Node newNode = map.get(node);
-            newNode.next = map.get(next);
-            newNode.random = map.get(random);
-            node = node.next;
+        curr = head;
+        while (curr != null) {
+            Node random = curr.random;
+            if (random == null) {
+                map.get(curr).random = null;
+            } else {
+                map.get(curr).random = map.get(random);
+            }
+            curr = curr.next;
         }
-        return map.get(head);
+        return resPre.next;
     }
 }
 // @lc code=end
