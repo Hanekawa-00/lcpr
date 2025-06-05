@@ -10,32 +10,26 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 class Solution {
-    private HashMap<String, Boolean> memo = new HashMap<>();
 
     public boolean wordBreak(String s, List<String> wordDict) {
-        if (s.length() == 0) {
-            return true;
-        }
-        for (String word : wordDict) {
-            if (s.startsWith(word)) {
-                boolean flag = false;
-                String sub = s.substring(word.length());
-                if (memo.containsKey(sub)) {
-                    flag = memo.get(sub);
-                } else {
-                    flag = wordBreak(sub, wordDict);
-                    memo.put(sub, flag);
-                }
-                if (flag == true) {
-                    return true;
+        HashSet<String> set = new HashSet<>(wordDict);
+        int len = s.length();
+        // dp[i] 维护前i个字符([0,i])组成的单词是否可以被拆分
+        boolean[] dp = new boolean[len + 1];
+        dp[0] = true;
+        for (int i = 1; i <= len; i++) {
+            // [0,i]有可能被分为[0,j][j,i]即可以被拆分(当然也包含了它本甚就是一个单词)
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && set.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
                 }
             }
         }
-        return false;
+        return dp[len];
     }
 
 }
