@@ -12,17 +12,25 @@
 class Solution {
 
     public int maxProduct(int[] nums) {
-        // dpMax[i]维护包含nums第i个元素（以nums[i]结尾）最大子数组乘积
-        int[] dpMax = new int[nums.length];
-        int[] dpMin = new int[nums.length];
-        dpMax[0] = nums[0];
-        dpMin[0] = nums[0];
-        int res = dpMax[0];
-        for (int i = 1; i < nums.length; i++) {
-            // 因为nums[i] 可能是负数，乘上一个最小值就成为了最大值，故作比较（有点无脑）
-            dpMax[i] = Math.max(nums[i], Math.max(nums[i] * dpMax[i - 1], nums[i] * dpMin[i - 1]));
-            dpMin[i] = Math.min(nums[i], Math.min(nums[i] * dpMin[i - 1], nums[i] * dpMax[i - 1]));
-            res = Math.max(res, dpMax[i]);
+        int len = nums.length;
+        // maxDp[i]维护以第i个数字结尾的最大乘积
+        int[] maxDp = new int[len];
+        // 最小乘积
+        int[] minDp = new int[len];
+        maxDp[0] = nums[0];
+        minDp[0] = nums[0];
+        int res = maxDp[0];
+        for (int i = 1; i < len; i++) {
+            // 一共三种情况：
+            /*
+             * 1.这个数字本生是最大/最小乘积（前一个dp是0的情况下）
+             * 2.这个数字与前一个最大乘积的乘积
+             * 3.这个数字与前一个最小乘积的乘积（负数参与）
+             * 通过这种手段相当于省略了多次判断
+             */
+            maxDp[i] = Math.max(nums[i], Math.max(maxDp[i - 1] * nums[i], minDp[i - 1] * nums[i]));
+            minDp[i] = Math.min(nums[i], Math.min(maxDp[i - 1] * nums[i], minDp[i - 1] * nums[i]));
+            res = Math.max(res, maxDp[i]);
         }
         return res;
     }
