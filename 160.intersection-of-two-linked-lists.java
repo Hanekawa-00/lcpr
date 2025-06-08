@@ -10,7 +10,6 @@
 // @lcpr-template-end
 // @lc code=start
 
-
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -24,14 +23,14 @@
  */
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        ListNode ptrA = headA;
-        ListNode ptrB = headB;
-        while (ptrA != ptrB) {
-            // 两个指针走的步数是相同的，切换头部能够消除步数差
-            ptrA = ptrA == null ? headB : ptrA.next;
-            ptrB = ptrB == null ? headA : ptrB.next;
-        } // 结果是要么两个相遇，要么两个都为null
-        return ptrA;
+        ListNode node1 = headA;
+        ListNode node2 = headB;
+        while (node1 != node2) {
+            // node1和node2走的步数是相同的，会在交点相遇要么都分别正好走完两个链表
+            node1 = node1 == null ? headB : node1.next;
+            node2 = node2 == null ? headA : node2.next;
+        }
+        return node1;
     }
 }
 // @lc code=end
