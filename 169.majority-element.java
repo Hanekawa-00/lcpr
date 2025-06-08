@@ -12,21 +12,21 @@
 
 class Solution {
     public int majorityElement(int[] nums) {
-        // 多数元素肯定是大于nums.length/2，那么选票抵消最后剩下的肯定是多数元素
-        int candidate = -1; // 候选元素
-        int count = 0; // 选票
+        int votes = 0;
+        int majorityElement = -1;
         for (int num : nums) {
-            if (count == 0) {
-                candidate = num;
-            }
-            // 无论是count++还是--,都可以看为数组内部抵消
-            if (num == candidate) {
-                count++;
+            if (votes == 0) {
+                majorityElement = num;
+                votes++;
             } else {
-                count--;
+                if (num != majorityElement) {
+                    votes--;
+                } else {
+                    votes++;
+                }
             }
         }
-        return candidate;
+        return majorityElement;
     }
 }
 // @lc code=end
