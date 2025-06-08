@@ -22,74 +22,45 @@
  */
 class Solution {
     public ListNode sortList(ListNode head) {
-        // 递归终止条件：链表为空或只有一个节点，已经有序
         if (head == null || head.next == null) {
             return head;
         }
-
-        // 1. 找到链表中间节点的前一个节点，并分割链表
-        ListNode midPrev = findMiddlePrev(head);
-        ListNode rightHead = midPrev.next; // 后半部分的头节点
-        midPrev.next = null; // 断开链表
-
-        // 2. 递归排序左右两部分
-        ListNode leftSorted = sortList(head);      // 前半部分 head 到 midPrev
-        ListNode rightSorted = sortList(rightHead); // 后半部分 rightHead 到末尾
-
-        // 3. 合并两个有序链表
-        return mergeTwoLists(leftSorted, rightSorted);
+        ListNode midNodePrev = findMidNodePrev(head);
+        ListNode nextHead = midNodePrev.next;
+        midNodePrev.next = null;
+        ListNode head1 = sortList(head);
+        ListNode head2 = sortList(nextHead);
+        return mergeTowSortedList(head1, head2);
     }
 
-    /**
-     * 快慢指针找到链表中间节点的前一个节点。
-     * 对于 [1,2,3,4], 返回 2。
-     * 对于 [1,2,3,4,5], 返回 2。
-     * 这样可以保证分割后左半部分长度 <= 右半部分长度。
-     */
-    private ListNode findMiddlePrev(ListNode head) {
-        if (head == null || head.next == null) {
-            return head; // 或 null，取决于调用者如何处理，这里返回 head 避免空指针
-        }
-        ListNode slow = head;
-        // fast 初始化为 head.next.next，这样 slow 最终会停在中间节点的前一个
-        // 或者 fast 初始化为 head，循环条件改为 fast.next != null && fast.next.next != null
-        ListNode fast = head.next.next;
+    private ListNode findMidNodePrev(ListNode head) {
+        ListNode fast = head;
+        ListNode low = head;
+        ListNode prev = null;
         while (fast != null && fast.next != null) {
-            slow = slow.next;
             fast = fast.next.next;
+            prev = low;
+            low = low.next;
         }
-        return slow;
+        return prev;
     }
 
-
-    /**
-     * 合并两个有序链表
-     */
-    private ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        // 创建一个哨兵节点，简化合并逻辑
+    private ListNode mergeTowSortedList(ListNode head1, ListNode head2) {
         ListNode dummy = new ListNode(-1);
-        ListNode current = dummy; // current 指针用于构建新链表
-
-        // 遍历两个链表，比较节点值，将较小的节点连接到 current 后面
-        while (list1 != null && list2 != null) {
-            if (list1.val <= list2.val) { // 注意使用 <= 保持稳定性（可选）
-                current.next = list1;
-                list1 = list1.next;
+        ListNode node = dummy;
+        while (head1 != null || head2 != null) {
+            if (head1 == null || head2 == null) {
+                node.next = head1 == null ? head2 : head1;
+                break;
+            } else if (head1 != null && head1.val < head2.val) {
+                node.next = head1;
+                head1 = head1.next;
             } else {
-                current.next = list2;
-                list2 = list2.next;
+                node.next = head2;
+                head2 = head2.next;
             }
-            current = current.next; // 移动 current 指针
+            node = node.next;
         }
-
-        // 循环结束后，最多还有一个链表有剩余节点，将其连接到新链表末尾
-        if (list1 != null) {
-            current.next = list1;
-        } else { // list2 != null or list2 == null
-            current.next = list2;
-        }
-
-        // 返回哨兵节点的下一个节点，即合并后链表的头节点
         return dummy.next;
     }
 
