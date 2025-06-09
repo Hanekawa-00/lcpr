@@ -11,35 +11,36 @@
 // @lc code=start
 class Solution {
     public int numIslands(char[][] grid) {
-        if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return 0;
-        }
-        int row = grid.length;
-        int col = grid[0].length;
-        int landCount = 0;
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                // 只要发现陆地，就开始dfs，将这一整块陆地全部变成 ‘0’
-                if (grid[i][j] == '1') {
-                    landCount++;
-                    landHelper(grid, i, j);
+        int rows = grid.length;
+        int cols = grid[0].length;
+        boolean[][] records = new boolean[rows][cols];
+        int count = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (records[i][j] || grid[i][j] == '0') {
+                    continue;
                 }
+                helper(grid, records, i, j);
+                count++;
             }
         }
-        return landCount;
+        return count;
     }
 
-    private void landHelper(char[][] grid, int i, int j) {
-        // 边界条件：越界或者遇到海洋
-        if (i < 0 || j < 0 || i > grid.length - 1 || j > grid[0].length - 1 || grid[i][j] == '0') {
+    private void helper(char[][] grid, boolean[][] records, int i, int j) {
+        if (j < 0
+                || j >= grid[0].length
+                || i < 0
+                || i >= grid.length
+                || grid[i][j] == '0'
+                || records[i][j]) {
             return;
         }
-        grid[i][j] = '0';
-        // 上下左右暴力遍历
-        landHelper(grid, i - 1, j);
-        landHelper(grid, i + 1, j);
-        landHelper(grid, i, j - 1);
-        landHelper(grid, i, j + 1);
+        records[i][j] = true;
+        helper(grid, records, i + 1, j);
+        helper(grid, records, i, j + 1);
+        helper(grid, records, i - 1, j);
+        helper(grid, records, i, j - 1);
     }
 }
 // @lc code=end
