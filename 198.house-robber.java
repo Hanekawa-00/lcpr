@@ -11,17 +11,24 @@
 // @lc code=start
 class Solution {
   public int rob(int[] nums) {
-    if (nums.length == 1) {
-      return nums[0];
+    if (nums.length == 0) {
+      return 0;
     }
+    // dp[i]是偷到第i个房屋所能得到的最大金额
     int[] dp = new int[nums.length];
     dp[0] = nums[0];
+    if (nums.length == 1) {
+      return dp[0];
+    }
     dp[1] = Math.max(nums[0], nums[1]);
     for (int i = 2; i < dp.length; i++) {
-      // dp[i - 2] + nums[i] 表示不偷前一个房子？可是dp[i-1]也有机率不偷第i-1这个房子？
-      dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+      // 这里为什么使用dp[i-2]
+      // 选择了nums[i],所以不能选nums[i-1]
+      // 而dp[i-1]又有可能不选择nums[i-1]
+      // 但是我们不妨想一下，不选择nums[i-1]时，dp[i-1] = dp[i-2]
+      dp[i] = Math.max(nums[i] + dp[i - 2], dp[i - 1]);
     }
-    return dp[nums.length - 1];
+    return dp[dp.length - 1];
   }
 }
 // @lc code=end
