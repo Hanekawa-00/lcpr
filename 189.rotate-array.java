@@ -11,18 +11,28 @@
 // @lc code=start
 class Solution {
     public void rotate(int[] nums, int k) {
-        int n = nums.length;
-        int[] tempArr = new int[n];
-        // 控制k的范围，因为k有可能大于数组长度
-        k = k % n;
+        int len = nums.length;
+        if (len == 0 || len == 1) {
+            return;
+        }
+        k = k % len;
         if (k == 0) {
             return;
         }
-        for (int i = 0; i < tempArr.length; i++) {
-            tempArr[i] = nums[(n - k + i) % n]; // 因为是右移，所以要使用n-k作为偏差值
-        }
-        for (int i = 0; i < n; i++) {
-            nums[i] = tempArr[i];
+        // 翻转整个数组
+        reverse(nums, 0, len - 1);
+        // 翻转前k个元素
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, len - 1);
+    }
+
+    private void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start++;
+            end--;
         }
     }
 }
