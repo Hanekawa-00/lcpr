@@ -11,6 +11,7 @@
 // @lc code=start
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,27 +33,22 @@ class Solution {
     private List<Integer> res;
 
     public List<Integer> rightSideView(TreeNode root) {
-        this.res = new ArrayList<>();
-        if (root == null) {
-            return res;
-        }
-        rightSideViewHelper(root, 0);
+        res = new ArrayList<>();
+        dfs(root, new HashSet<>(), 0);
         return res;
     }
 
-    private void rightSideViewHelper(TreeNode root, int deepth) {
+    private void dfs(TreeNode root, Set<Integer> set, int deepth) {
         if (root == null) {
             return;
         }
-        // 如果当前深度deepth在 res 中还没有元素，说明这是当前深度的最右节点 (因为我们先遍历右子树)
-        if (res.size() == deepth) {
+        if (!set.contains(deepth)) {
             res.add(root.val);
+            set.add(deepth);
         }
-        // 优先遍历right子树，保证right的节点先被访问到
-        rightSideViewHelper(root.right, deepth + 1);
-        rightSideViewHelper(root.left, deepth + 1);
+        dfs(root.right, set, deepth + 1);
+        dfs(root.left, set, deepth + 1);
     }
-
 }
 // @lc code=end
 
