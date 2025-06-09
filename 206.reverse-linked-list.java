@@ -21,15 +21,14 @@
  */
 class Solution {
     public ListNode reverseList(ListNode head) {
-        ListNode prev = null;
-        ListNode curr = head;
-        while (curr != null) {
-            ListNode next = curr.next; // 保存next节点
-            curr.next = prev;
-            prev = curr; // 保存当前节点为后面遍历做准备
-            curr = next;
+        ListNode dummy = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = dummy;
+            dummy = head;
+            head = next;
         }
-        return prev;
+        return dummy;
     }
 }
 // @lc code=end
