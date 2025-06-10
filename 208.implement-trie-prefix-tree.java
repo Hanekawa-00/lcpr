@@ -10,57 +10,56 @@
 // @lcpr-template-end
 // @lc code=start
 
-class Trie {
-    private class TrieNode {
-        TrieNode[] children;
 
+class Trie {
+    class TireNode {
+        TireNode[] subListNodes;
         boolean isEndOfWord;
 
-        public TrieNode() {
-            children = new TrieNode[26];
+        public TireNode() {
+            subListNodes = new TireNode[26];
             isEndOfWord = false;
         }
     }
 
-    private final TrieNode root;
+    private TireNode root;
 
     public Trie() {
-        root = new TrieNode();
+        root = new TireNode();
     }
 
     public void insert(String word) {
-        TrieNode currNode = root;
-        // 构建树
-        for (char ch : word.toCharArray()) {
-            int index = ch - 'a';
-            if (currNode.children[index] == null) { // 为空则创建新节点，否则复用
-                currNode.children[index] = new TrieNode();
+        TireNode curr = root;
+        char[] chs = word.toCharArray();
+        for (char ch : chs) {
+            if (curr.subListNodes[ch - 'a'] == null) {
+                curr.subListNodes[ch - 'a'] = new TireNode();
             }
-            currNode = currNode.children[index];
+            curr = curr.subListNodes[ch - 'a'];
         }
-        currNode.isEndOfWord = true;// isEndOfWord可以完美解决重复路径问题，从根节点到这个节点有且只有一条路径
+        curr.isEndOfWord = true;
     }
 
     public boolean search(String word) {
-        TrieNode node = searchPrefix(word);
+        TireNode node = searchPrefix(word);
         return node != null && node.isEndOfWord;
     }
 
     public boolean startsWith(String prefix) {
-        TrieNode node = searchPrefix(prefix);
+        TireNode node = searchPrefix(prefix);
         return node != null;
     }
 
-    public TrieNode searchPrefix(String str) {
-        TrieNode currNode = root;
-        for (char ch : str.toCharArray()) {
-            int index = ch - 'a';
-            if (currNode.children[index] == null) { // 如果为null则说明没有被insert
+    private TireNode searchPrefix(String prefix) {
+        TireNode curr = root;
+        char[] chs = prefix.toCharArray();
+        for (char ch : chs) {
+            if (curr.subListNodes[ch - 'a'] == null) {
                 return null;
             }
-            currNode = currNode.children[index];// 深度遍历
+            curr = curr.subListNodes[ch - 'a'];
         }
-        return currNode;// 便利完成说明找到完整目标str
+        return curr;
     }
 }
 
