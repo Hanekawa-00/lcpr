@@ -9,6 +9,9 @@
 
 // @lcpr-template-end
 // @lc code=start
+
+import java.util.PriorityQueue;
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -20,23 +23,18 @@
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        // 遍历到底或者找到目标节点
+        // 找到其中之一，另外一个可能在另一个子树上，或者在当前节点的子树
         if (root == null || root == p || root == q) {
             return root;
         }
-        // 尝试去左右子树分别寻找目标节点
-        TreeNode left = lowestCommonAncestor(root.left, p, q);
-        TreeNode right = lowestCommonAncestor(root.right, p, q);
-        /*
-         * 有三种情况：
-         * 1.分别在左右子树，又因为是深度遍历，所以当前节点root肯定是最近的祖先节点，然后返回到上一层，然后就变成第二种情况了
-         * 2.两个节点都在在一颗子树上，说明这个节点（left或者right，不一定是根节点，因为是上一层返回的）是上一层返回的结果，如此一直向上递归
-         * 3.只找到一个目标节点，说明当前子树只存在一个节点，直接向上递归返回
-         */
-        if (left != null && right != null) {
+        TreeNode leftNode = lowestCommonAncestor(root.left, p, q);
+        TreeNode rightNode = lowestCommonAncestor(root.right, p, q);
+        // 说明在两个子树上，当前root只能是最近公共祖先
+        if (leftNode != null && rightNode != null) {
             return root;
         }
-        return left == null ? right : left;
+        // 在一棵子树的情况，可能是上层递归而来（上层是在两颗子树上，然后把公共祖先返回了）
+        return leftNode == null ? rightNode : leftNode;
     }
 }
 // @lc code=end
