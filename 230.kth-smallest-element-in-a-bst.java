@@ -33,6 +33,7 @@ class Solution {
 
     public int kthSmallest(TreeNode root, int k) {
         this.kCounter = k;
+        
         // result 会在 inOrderTraversal 方法中被赋值
         inOrderTraversal(root);
         return this.result;
