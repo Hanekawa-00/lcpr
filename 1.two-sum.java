@@ -18,11 +18,11 @@ class Solution {
         for (int i = 0; i < nums.length; i++) {
             int newTarget = target - nums[i];
             if (map.containsKey(newTarget)) {
-                return new int[] { map.get(newTarget), i };
+                return new int[]{map.get(newTarget),i};
             }
             map.put(nums[i], i);
         }
-        return null;
+        return new int[0];
     }
 }
 // @lc code=end

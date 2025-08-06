@@ -10,32 +10,35 @@
 // @lcpr-template-end
 // @lc code=start
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 
 class Solution {
     public int lengthOfLongestSubstring(String s) {
         if (s == null || s.length() == 0) {
             return 0;
         }
-        int maxLength = 0;
+        int result = 1;
+        HashSet<Character> set = new HashSet<>();
+        char[] arr = s.toCharArray();
         int left = 0;
-        // 使用哈希来优化，可以达到跳跃索引的效果
-        Map<Character, Integer> map = new HashMap<>();
-        // 同样是移动right指针
-        for (int right = 0; right < s.length(); right++) {
-            char curr = s.charAt(right);
-            // 窗口中存在curr
-            if (map.containsKey(curr)) {
-                // 更新左边界为那个重复的key的右边，使用哈希快速跳转而不是逐个遍历
-                left = Math.max(left, map.get(curr) + 1);
+        int right = 0;
+        while (true) {
+            while (right < arr.length && !set.contains(arr[right])) {
+                set.add(arr[right]);
+                right++;
             }
-            // 添加索引
-            map.put(curr, right);
-            // 更新max
-            maxLength = Math.max(maxLength, right - left + 1);
+            int curr = right - left;
+            result = Math.max(curr, result);
+            if (right >= arr.length) {
+                break;
+            } else {
+                while (set.contains(arr[right])) {
+                    set.remove(arr[left]);
+                    left++;
+                }
+            }
         }
-        return maxLength;
+        return result;
     }
 }
 // @lc code=end
