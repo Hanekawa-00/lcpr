@@ -10,28 +10,35 @@
 // @lcpr-template-end
 // @lc code=start
 
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 class Solution {
     public boolean isValid(String s) {
-        Stack<Character> stack = new Stack<>();
-        char[] chArr = s.toCharArray();
-        for (char ch : chArr) {
-            if (ch == '(' || ch == '{' || ch == '[') {
+        if (s.length() % 2 == 1) {
+            return false;
+        }
+        Stack<Character> stack = new Stack();
+        Map<Character, Character> map = new HashMap<Character, Character>();
+        map.put('}', '{');
+        map.put(')', '(');
+        map.put(']', '[');
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (ch == '('
+                    || ch == '['
+                    || ch == '{') {
                 stack.push(ch);
-            } else if (stack.isEmpty()) {// 如果开始是右括号
-                return false;
-            } else if (ch == ')' && stack.peek() != '(') {
-                return false;
-            } else if (ch == '}' && stack.peek() != '{') {
-                return false;
-            } else if (ch == ']' && stack.peek() != '[') {
-                return false;
-            } else { // 成功匹配一对
-                stack.pop();
+            } else {
+                if (stack.isEmpty() || stack.peek() != map.get(ch)) {
+                    return false;
+                } else {
+                    stack.pop();
+                }
             }
         }
-        // 如果栈为空则全部匹配
         return stack.isEmpty();
     }
 }

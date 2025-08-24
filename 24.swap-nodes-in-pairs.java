@@ -24,23 +24,22 @@ class Solution {
         if (head == null) {
             return null;
         }
-        ListNode dummyHead = new ListNode();
-        dummyHead.next = head;
-        ListNode curr = dummyHead;
-        while (curr != null && curr.next != null) {
-            ListNode node1 = curr.next;
-            ListNode node2 = curr.next.next;
-            if (node2 != null) {
-                ListNode next = node2.next;
-                curr.next = node2;
-                node2.next = node1;
-                node1.next = next;
-                curr = node1;
-            } else {// 链表为奇数，最后一个节点直接退出
-                break;
-            }
+        if (head.next == null) {
+            return head;
         }
-        return dummyHead.next;
+        ListNode dummy = new ListNode(-1, head);
+        ListNode prev = dummy;
+        while (prev.next != null && prev.next.next != null) {
+            ListNode a = prev.next;
+            ListNode b = prev.next.next;
+            a.next = b.next;
+            b.next = a;
+            // 这里链表进入下次循环会断掉，要重新连接
+            prev.next = b;
+            // 移动prev
+            prev = a;
+        }
+        return dummy.next;
     }
 }
 // @lc code=end

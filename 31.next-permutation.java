@@ -21,7 +21,7 @@ class Solution {
      * @param nums
      */
     public void nextPermutation(int[] nums) {
-        if (nums == null || nums.length <= 1) {
+        if (nums == null || nums.length == 1 || nums.length == 0) {
             return;
         }
         int i = nums.length - 2;

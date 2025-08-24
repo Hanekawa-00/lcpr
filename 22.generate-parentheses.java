@@ -14,42 +14,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
-    int maxPairs;
-    List<String> res;
+    List<String> pairs;
+    String path;
 
     public List<String> generateParenthesis(int n) {
-        this.maxPairs = n;
-        this.res = new ArrayList<>();
-        backtrack(new StringBuilder(), 0, 0);
-        return res;
+        path = "()";
+        pairs = new ArrayList<>();
+        backtrack(n, 0, 0, new StringBuilder());
+        return pairs;
     }
 
-    private void backtrack(StringBuilder currString, int leftCount, int rightCount) {
-        if (currString.length() == maxPairs * 2) {
-            res.add(currString.toString());
+    private void backtrack(int n, int leftNums, int rightNums, StringBuilder sb) {
+        if (rightNums == n) {
+            pairs.add(sb.toString());
             return;
         }
-        // 每次有两种选择，这里可以直接使用两次if优化
-        char[] options = new char[] { '(', ')' };
-        for (char option : options) {
-            if (option == '(') {
-                // 左括号的限制是小于括号对数
-                if (leftCount == maxPairs) {
-                    continue;
-                } else {
-                    currString.append(option);
-                    backtrack(currString, leftCount + 1, rightCount);
+        // 关键-> rightNums <= leftNums <= n
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == ')') {
+                if (rightNums < leftNums) {
+                    sb.append(path.charAt(i));
+                    backtrack(n, leftNums, rightNums + 1, sb);
+                    sb.deleteCharAt(sb.length() - 1);
                 }
             } else {
-                // 右括号的限制是必须小于左括号数量(还有要小于总对数，因为上面的left已有限制，所以可以省略)，这里因为要++，所以一定要小于左括号数量
-                if (rightCount >= leftCount) {
-                    continue;
-                } else {
-                    currString.append(option);
-                    backtrack(currString, leftCount, rightCount + 1);
+                if (leftNums < n) {
+                    sb.append(path.charAt(i));
+                    backtrack(n, leftNums + 1, rightNums, sb);
+                    sb.deleteCharAt(sb.length() - 1);
                 }
             }
-            currString.deleteCharAt(currString.length() - 1);
         }
     }
 }

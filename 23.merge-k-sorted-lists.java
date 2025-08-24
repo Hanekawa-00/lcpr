@@ -28,19 +28,23 @@ class Solution {
         if (lists == null || lists.length == 0) {
             return null;
         }
+        // 这个优先队列存放每个链表的头节点（每个链表中的最小节点）
+        // 且按照这几个头节点的小大顺序排列
         PriorityQueue<ListNode> priorityQueue = new PriorityQueue<>((a, b) -> a.val - b.val);
         for (ListNode head : lists) {
             if (head != null) {
+                // 可以理解为添加到优先队列中后会自动排序
                 priorityQueue.add(head);
             }
         }
         ListNode dummyHead = new ListNode();
         ListNode curr = dummyHead;
         while (!priorityQueue.isEmpty()) {
+            // 队首出队，肯定是队列中（且是剩下元素中的）最小值
             ListNode smallestNode = priorityQueue.poll();
             curr.next = smallestNode;
             curr = curr.next;
-            // 在构建新链表的同时添加节点到优先级队列，降低了时间复杂度
+            // 在构建新链表的同时添加节点到优先级队列
             if (smallestNode.next != null) {
                 priorityQueue.add(smallestNode.next);
             }

@@ -35,20 +35,22 @@ class Solution {
                 put('9', "wxyz");
             }
         };
-        backtrack(map, digits, new StringBuilder(), 0);
+        backtrack(map, digits, 0, new StringBuilder());
         return res;
     }
 
-    private void backtrack(Map<Character, String> map, String digits, StringBuilder path, int index) {
+    private void backtrack(Map<Character, String> map, String digits, int index, StringBuilder sb) {
         if (index >= digits.length()) {
-            res.add(path.toString());
+            res.add(sb.toString());
             return;
         }
-        String str = map.get(digits.charAt(index));
+        char ch = digits.charAt(index);
+        String str = map.get(ch);
         for (int i = 0; i < str.length(); i++) {
-            path.append(str.charAt(i));
-            backtrack(map, digits, path, index + 1);
-            path.deleteCharAt(path.length() - 1);
+            sb.append(str.charAt(i));
+            backtrack(map, digits, index + 1, sb);
+            // 回溯
+            sb.deleteCharAt(sb.length() - 1);
         }
     }
 

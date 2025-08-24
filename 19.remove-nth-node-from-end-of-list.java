@@ -22,23 +22,20 @@
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode fast = head;
-        // 使用pre节点方便处理删除节点是头节点的情况
-        ListNode pre = new ListNode();
-        pre.next = head;
-        ListNode slow = pre;
-        for (int i = 0; i < n; i++) {
+        ListNode dummy = new ListNode(0, head);
+        ListNode fast = dummy, slow = dummy;
+        // 先走n+1步，目的是找到目标节点的前一节点
+        for (int i = 0; i < n + 1; i++) {
             fast = fast.next;
         }
         while (fast != null) {
             fast = fast.next;
             slow = slow.next;
         }
-        ListNode target = slow.next;
-        ListNode next = target.next;
-        slow.next = next;
-        target.next = null;
-        return pre.next;
+        if (slow.next != null) { // 防止空指针异常
+            slow.next = slow.next.next;
+        }
+        return dummy.next;
     }
 }
 // @lc code=end

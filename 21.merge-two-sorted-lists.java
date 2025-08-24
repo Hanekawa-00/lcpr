@@ -21,17 +21,19 @@
  */
 class Solution {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode prev = new ListNode();
         if (list1 == null) {
             return list2;
         } else if (list2 == null) {
             return list1;
         } else if (list1.val < list2.val) {
+            prev.next = list1;
             list1.next = mergeTwoLists(list1.next, list2);
-            return list1;
-        }else{
+        } else {
+            prev.next = list2;
             list2.next = mergeTwoLists(list1, list2.next);
-            return list2;
         }
+        return prev.next;
     }
 }
 // @lc code=end
