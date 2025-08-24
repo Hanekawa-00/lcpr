@@ -21,35 +21,34 @@
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        int up = 0;
-        ListNode prev = new ListNode(-1);
-        ListNode head = null;
-        while (l1 != null || l2 != null || up != 0) {
-            int val1 = 0;
-            int val2 = 0;
-            if (l1 != null) {
-                val1 = l1.val;
+        ListNode carry = new ListNode(0);
+        ListNode curr = new ListNode(-1);
+        ListNode head = curr;
+        while (l1 != null || l2 != null) {
+            // 两个链表都为null说明遍历结束
+            if (l1 == null && l2 == null) {
+                break;
             }
-            if (l2 != null) {
-                val2 = l2.val;
+            // 其中一个链表已经遍历结束，则视为0
+            if (l1 == null) {
+                l1 = new ListNode(0);
             }
-            int curr = (val1 + val2 + up) % 10;
-            up = (val1 + val2 + up) / 10;
-            if (head == null) {
-                head = new ListNode(curr);
-                prev.next = head;
-            } else {
-                head.next = new ListNode(curr);
-                head = head.next;
-            }
-            if (l1 != null) {
-                l1 = l1.next;
-            }
-            if (l2 != null) {
-                l2 = l2.next;
-            }
+            if (l2 == null) {
+                l2 = new ListNode(0);
+            } 
+            int currVal = (l1.val + l2.val + carry.val) % 10;
+            int carryVal = (l1.val + l2.val + carry.val) / 10;
+            curr.next = new ListNode(currVal);
+            carry.val = carryVal;
+            l1 = l1.next;
+            l2 = l2.next;
+            curr = curr.next;
         }
-        return prev.next;
+        // 进位可能还存在
+        if (carry.val != 0) {
+            curr.next = carry;
+        }
+        return head.next;
     }
 }
 // @lc code=end
