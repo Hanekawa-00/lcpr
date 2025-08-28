@@ -19,21 +19,22 @@ public class Solution {
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         res = new ArrayList<>();
-        backtrack(candidates, new ArrayList<>(), target, 0);
+        backtrack(candidates, new ArrayList<Integer>(), target, 0);
         return res;
     }
 
-    private void backtrack(int[] candidates, List<Integer> path, int target, int startIndex) {
+    private void backtrack(int[] candidates, List<Integer> path, int target, int index) {
+        if (target < 0) {
+            return;
+        }
         if (target == 0) {
             res.add(new ArrayList<>(path));
             return;
         }
-        if (target < 0) {
-            return;
-        }
-        for (int i = startIndex; i < candidates.length; i++) {
+        // 从索引 index 开始搜索，避免重复组合的产生，同时支持同一元素重复使用
+        for (int i = index; i < candidates.length; i++) {
             path.add(candidates[i]);
-            // 一个元素可以被多次选中，所以传入i
+            // 这里传入的是i，到下一层仍然可以重复使用i
             backtrack(candidates, path, target - candidates[i], i);
             path.remove(path.size() - 1);
         }

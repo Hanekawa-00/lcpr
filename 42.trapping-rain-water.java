@@ -12,23 +12,22 @@
 class Solution {
 
     public int trap(int[] height) {
-        // 每个位置所能盛水量为左右最高的两个柱子中最矮的高度减去当前高度
-        int len = height.length;
-        int[] leftMaxDp = new int[len];
-        leftMaxDp[0] = 0;
-        int[] rightMaxDp = new int[len];
-        rightMaxDp[len - 1] = 0;
-        for (int i = 1; i < len; i++) {
-            leftMaxDp[i] = Math.max(leftMaxDp[i - 1], height[i - 1]);
+        // leftDp[i]表示i左边最高的柱子高度
+        int[] leftDp = new int[height.length];
+        int[] rightDp = new int[height.length];
+        leftDp[0] = 0;
+        for (int i = 1; i < height.length; i++) {
+            leftDp[i] = Math.max(leftDp[i - 1], height[i - 1]);
         }
-        for (int i = len - 2; i >= 0; i--) {
-            rightMaxDp[i] = Math.max(rightMaxDp[i + 1], height[i + 1]);
+        rightDp[height.length - 1] = 0;
+        for (int i = height.length - 2; i >= 0; i--) {
+            rightDp[i] = Math.max(rightDp[i + 1], height[i + 1]);
         }
         int res = 0;
-        for (int i = 0; i < len; i++) {
-            int size = Math.min(leftMaxDp[i], rightMaxDp[i]) - height[i];
-            if (size >= 0) {
-                res += size;
+        for (int i = 0; i < height.length; i++) {
+            int curr = Math.min(leftDp[i], rightDp[i]) - height[i];
+            if (curr >= 0) {
+                res += curr;
             }
         }
         return res;

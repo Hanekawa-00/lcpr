@@ -11,35 +11,24 @@
 // @lc code=start
 
 class Solution {
-
-    /**
-     * 二分搜索基于有序序列
-     * 要控制在有序序列中搜索
-     * 
-     * @param nums
-     * @param target
-     * @return
-     */
     public int search(int[] nums, int target) {
         int left = 0, right = nums.length - 1;
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            if (nums[mid] == target) {
-                return mid;
-            }
-            // 说明[left , mid ]这个区间是有序的
-            if (nums[mid] >= nums[left]) {
-                // target 在这个区间内
-                if (target >= nums[left] && target < nums[mid]) {
-                    right = mid - 1;
-                } else { // 不在这个有序区间内
-                    left = mid + 1;
-                }
-            } else { // 如果左区间不有序，右区间一定有序
-                if (target <= nums[right] && target > nums[mid]) {
-                    left = mid + 1;
+        while (left <= right) { // 注意这里是 <=
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) return mid;
+
+            // 判断哪一段有序
+            if (nums[left] <= nums[mid]) { // 左半段有序
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1; // target 在左半段
                 } else {
-                    right = mid - 1;
+                    left = mid + 1; // target 在右半段
+                }
+            } else { // 右半段有序
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1; // target 在右半段
+                } else {
+                    right = mid - 1; // target 在左半段
                 }
             }
         }

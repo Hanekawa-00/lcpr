@@ -16,41 +16,32 @@ class Solution {
             return new int[] { -1, -1 };
         }
         int left = 0, right = nums.length - 1;
-        int index = -1;
-        while (left <= right) {
+        while (left < right) {
             int mid = (left + right) / 2;
             if (nums[mid] == target) {
-                index = mid;
+                left = mid;
                 break;
-            } else if (target > nums[mid]) {
+            }
+            if (nums[mid] < target) {
                 left = mid + 1;
             } else {
                 right = mid - 1;
             }
         }
-        if (index == -1) {
+        if (nums[left] != target) {
             return new int[] { -1, -1 };
         }
-        int firstPosition = findFirstPosition(nums, index, target);
-        int lastPosition = findLastPosition(nums, index, target);
-        return new int[] { firstPosition, lastPosition };
+        int start = left;
+        int end = left;
+        while (start >= 0 && nums[start] == target) {
+            start--;
+        }
+        while (end < nums.length && nums[end] == target) {
+            end++;
+        }
+        return new int[] { start + 1, end - 1 };
     }
 
-    private int findFirstPosition(int[] nums, int index, int target) {
-        int i = index;
-        while (i >= 0 && nums[i] == target) {
-            i--;
-        }
-        return i + 1;
-    }
-
-    private int findLastPosition(int[] nums, int index, int target) {
-        int j = index;
-        while (j < nums.length && nums[j] == target) {
-            j++;
-        }
-        return j - 1;
-    }
 }
 // @lc code=end
 

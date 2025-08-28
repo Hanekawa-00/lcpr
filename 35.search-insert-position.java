@@ -12,16 +12,18 @@
 class Solution {
     public int searchInsert(int[] nums, int target) {
         int left = 0, right = nums.length - 1;
-        while (left < right) {
-            int mid = (left + right) / 2;
-            if (nums[mid] < target) {
+        while (left <= right) { // 注意这里用 <=
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
                 left = mid + 1;
             } else {
                 right = mid - 1;
             }
         }
-        // 放在当前位置或者当前位置的后面
-        return nums[left] < target ? left + 1 : left;
+        // 没找到，left 就是插入位置:如果没找到，left 会停在第一个大于 target 的位置，也就是插入点。
+        return left;
     }
 }
 // @lc code=end

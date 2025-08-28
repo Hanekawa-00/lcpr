@@ -22,26 +22,45 @@
 // @lc code=start
 class Solution {
     public int jump(int[] nums) {
-        if (nums.length == 1) {
+        // 获取数组长度
+        int n = nums.length;
+
+        // 边界情况：如果数组只有一个元素，无需跳跃
+        if (n <= 1) {
             return 0;
         }
-        int farthest = 0;
-        int currentEnd = 0;
-        int count = 0;
-        for (int i = 0; i < nums.length; i++) {
-            // 更新farthest直到i达到边界条件currEnd,这个最终的farthest会成为新的currEnd
+
+        // 初始化变量
+        int jumps = 0; // 跳跃次数
+        int current_end = 0; // 当前跳跃能到达的最远边界
+        int farthest = 0; // 从当前区间出发，能到达的最最远的位置
+
+        // 遍历数组，注意我们只需要遍历到倒数第二个元素
+        // 因为当 i 到达 n-1 时，我们已经到达终点，不需要再跳了
+        for (int i = 0; i < n - 1; i++) {
+            // 1. 更新下一次跳跃能到达的最远距离
+            // 在当前位置 i，我们可以跳到 i + nums[i]，
+            // 我们要维护一个全局的 farthest，记录所有可能跳跃中的最大值
             farthest = Math.max(farthest, i + nums[i]);
 
-            if (i == currentEnd) {
-                count++;
-                currentEnd = farthest;
+            // 2. 判断是否需要进行下一次跳跃
+            // 当 i 到达了 current_end，意味着我们已经走完了当前这一跳所能覆盖的所有范围
+            // 此时，必须进行一次新的跳跃，来进入下一个覆盖范围
+            if (i == current_end) {
+                // 跳跃次数加 1
+                jumps++;
+                // 更新下一次跳跃的边界为我们之前计算出的 farthest
+                current_end = farthest;
 
-                if (currentEnd >= nums.length - 1) {
-                    return count;
+                // 一个小优化：如果新的边界已经能覆盖或超过终点，就可以提前结束了
+                if (current_end >= n - 1) {
+                    break;
                 }
             }
         }
-        return -1;
+
+        // 返回总的跳跃次数
+        return jumps;
     }
 }
 // @lc code=end
